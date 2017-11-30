@@ -1,0 +1,30 @@
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.deps.json
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.runtimeconfig.json
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.runtimeconfig.dev.json
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.dll
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.pdb
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.Data.dll
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.Data.pdb
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.Data.dll.config
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.csprojResolveAssemblyReference.cache
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.csproj.CoreCompileInputs.cache
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.AssemblyInfoInputs.cache
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.AssemblyInfo.cs
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.dll
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.pdb
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.deps.json
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.runtimeconfig.json
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.runtimeconfig.dev.json
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.dll
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.pdb
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.Data.dll
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.Data.pdb
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\bin\Debug\netcoreapp2.0\sbpc.Timesheet.Data.dll.config
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.csprojResolveAssemblyReference.cache
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.csproj.CoreCompileInputs.cache
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.AssemblyInfoInputs.cache
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.AssemblyInfo.cs
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.dll
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\sbpc.Timesheet.pdb
+C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
