@@ -9,6 +9,7 @@ using sbpc.Timesheet.Services;
 using sbpc.Timesheet.Data.Entity;
 using sbpc.Timesheet.Data.Repository;
 using AutoMapper;
+using sbpc.Timesheet.Helpers;
 
 namespace sbpc.Timesheet
 {
@@ -36,6 +37,10 @@ namespace sbpc.Timesheet
             services.AddTransient<ITimesheetRepository, TimesheetRepository>();
             services.AddAutoMapper();
             services.AddMvc();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminRole", policy => policy.Requirements.Add(new AdminRequirement()));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +65,7 @@ namespace sbpc.Timesheet
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Timesheet}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
             DbInitializer.Seed(app);
         }

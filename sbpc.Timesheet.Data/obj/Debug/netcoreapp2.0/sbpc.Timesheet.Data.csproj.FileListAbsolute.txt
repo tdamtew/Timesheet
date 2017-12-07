@@ -2,7 +2,6 @@ C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\sbpc.Time
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\sbpc.Timesheet.Data.deps.json
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\sbpc.Timesheet.Data.dll
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\sbpc.Timesheet.Data.pdb
-C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.csprojResolveAssemblyReference.cache
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.csproj.CoreCompileInputs.cache
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.AssemblyInfoInputs.cache
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.AssemblyInfo.cs
@@ -20,3 +19,5 @@ C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcor
 C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\Microsoft.Extensions.Configuration.dll
 C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\Microsoft.Extensions.Configuration.xml
 C:\Users\tadmin\Google Drive\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.csprojResolveAssemblyReference.cache
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\Microsoft.Extensions.Configuration.dll
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\Microsoft.Extensions.Configuration.xml

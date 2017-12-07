@@ -11,6 +11,7 @@ using sbpc.Timesheet.Data;
 using System.Linq;
 using AutoMapper;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace sbpc.Timesheet.Controllers
 {
@@ -102,6 +103,7 @@ namespace sbpc.Timesheet.Controllers
             if (ModelState.IsValid)
             {
                 var user = _mapper.Map<ApplicationUser>(model);
+                user.UserName = model.Email;
                 var tempPassword = "Welcome321!";
                 var createUserResult = await _userManager.CreateAsync(user, tempPassword);
                 if (createUserResult.Succeeded)

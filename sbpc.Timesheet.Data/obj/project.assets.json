@@ -4075,11 +4075,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\tadmin\\Google Drive\\sbpc.Timesheet\\sbpc.Timesheet.Data\\sbpc.Timesheet.Data.csproj",
+      "projectUniqueName": "C:\\Projects\\sbpc.Timesheet\\sbpc.Timesheet.Data\\sbpc.Timesheet.Data.csproj",
       "projectName": "sbpc.Timesheet.Data",
-      "projectPath": "C:\\Users\\tadmin\\Google Drive\\sbpc.Timesheet\\sbpc.Timesheet.Data\\sbpc.Timesheet.Data.csproj",
+      "projectPath": "C:\\Projects\\sbpc.Timesheet\\sbpc.Timesheet.Data\\sbpc.Timesheet.Data.csproj",
       "packagesPath": "C:\\Users\\tadmin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tadmin\\Google Drive\\sbpc.Timesheet\\sbpc.Timesheet.Data\\obj\\",
+      "outputPath": "C:\\Projects\\sbpc.Timesheet\\sbpc.Timesheet.Data\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

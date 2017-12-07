@@ -13220,11 +13220,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\tadmin\\Google Drive\\sbpc.Timesheet\\sbpc.Timesheet\\sbpc.Timesheet.csproj",
+      "projectUniqueName": "C:\\Projects\\sbpc.Timesheet\\sbpc.Timesheet\\sbpc.Timesheet.csproj",
       "projectName": "sbpc.Timesheet",
-      "projectPath": "C:\\Users\\tadmin\\Google Drive\\sbpc.Timesheet\\sbpc.Timesheet\\sbpc.Timesheet.csproj",
+      "projectPath": "C:\\Projects\\sbpc.Timesheet\\sbpc.Timesheet\\sbpc.Timesheet.csproj",
       "packagesPath": "C:\\Users\\tadmin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tadmin\\Google Drive\\sbpc.Timesheet\\sbpc.Timesheet\\obj\\",
+      "outputPath": "C:\\Projects\\sbpc.Timesheet\\sbpc.Timesheet\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -13243,8 +13243,8 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "C:\\Users\\tadmin\\Google Drive\\sbpc.Timesheet\\sbpc.Timesheet.Data\\sbpc.Timesheet.Data.csproj": {
-              "projectPath": "C:\\Users\\tadmin\\Google Drive\\sbpc.Timesheet\\sbpc.Timesheet.Data\\sbpc.Timesheet.Data.csproj"
+            "C:\\Projects\\sbpc.Timesheet\\sbpc.Timesheet.Data\\sbpc.Timesheet.Data.csproj": {
+              "projectPath": "C:\\Projects\\sbpc.Timesheet\\sbpc.Timesheet.Data\\sbpc.Timesheet.Data.csproj"
             }
           }
         }
