@@ -2,13 +2,13 @@
 
 @{
 
-    ViewData["Title"] = "Edit Job";
+    ViewData["Title"] = "Edit Job Info";
     ViewData.AddActivePage(AdminNavPages.EditJob);
 }
 <div class="row">
     <div class="col-md-8">
-        <div class="panel panel-default" style="border:none;">
-            <div class="panel-heading"><h5>@ViewData["Title"]</h5></div>
+        <div class="panel panel-primary" style="border:none;">
+            <div class="panel-heading"><h5><i class="fa fa-edit fa-lg"></i> @ViewData["Title"]</h5></div>
             <div class="panel-body">
                 <form asp-action="EditJob">
                     @Html.Partial("_StatusMessage", Model.StatusMessage)
@@ -28,7 +28,7 @@
                         <span asp-validation-for="CostPerMile" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-success" style="width:100px;" />
+                        <button type="submit" class="btn btn-primary" style="width:100px;"><i class="fa fa-save fa-lg"></i> Save</button>
                     </div>
                 </form>
             </div>
