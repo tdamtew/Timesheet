@@ -38,12 +38,13 @@
         </div>
     </div>
 </div>
-<div style="border-left:solid;border-width:thin; padding-left:20px;">
+<div style="padding-left:20px;">
     <p>
         <a asp-action="AddUser" class="btn btn-success">Add Employee</a>
     </p>
+    <hr/>
     @Html.AntiForgeryToken()
-    <table class="table table-hover">
+    <table class="table table-hover" id="usersTable">
         <thead>
             <tr>
                 <th>
@@ -93,6 +94,8 @@
     {
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $("#usersTable").DataTable();
             $(".deleteUser").on("click", function () {
                 $("#userId").html($(this).data("user"));
                 $("#confirmModal").modal("show");

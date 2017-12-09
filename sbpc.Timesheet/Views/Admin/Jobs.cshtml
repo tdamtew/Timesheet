@@ -38,12 +38,13 @@
         </div>
     </div>
 </div>
-<div style="border-left:solid;border-width:thin; padding-left:20px;">
+<div style="padding-left:20px;">
     <p>
         <a asp-action="AddJob" class="btn btn-success">Add Job</a>
     </p>
+    <hr/>
     @Html.AntiForgeryToken()
-    <table class="table">
+    <table class="table" id="jobsTable">
         <thead>
             <tr>
                 <th>
@@ -84,6 +85,8 @@
     {
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#jobsTable").DataTable();
+
             $(".deleteJob").on("click", function () {
                 $("#jobId").html($(this).data("job"))
                     .attr("data-job", $(this).val());
