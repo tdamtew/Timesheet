@@ -11,10 +11,14 @@ namespace sbpc.Timesheet.Helpers
         public AutoMapperProfile()
         {
             CreateMap<ApplicationUser, UserViewModel>(MemberList.None).ReverseMap();
-            CreateMap<Job, JobViewModel>(MemberList.None).ReverseMap();
-            CreateMap<Expense, ExpenseViewModel>(MemberList.None).ReverseMap();
-            CreateMap<Hour, HourViewModel>(MemberList.None).ReverseMap();
-            CreateMap<Mileage, MileageViewModel>(MemberList.None).ReverseMap();
+            CreateMap<JobViewModel, Job>(MemberList.None)
+                .ForMember(d => d.Id, opt => opt.UseDestinationValue()).ReverseMap();
+            CreateMap<ExpenseViewModel, Expense>(MemberList.None)
+                .ForMember(d => d.Id, opt => opt.UseDestinationValue()).ReverseMap();
+            CreateMap<HourViewModel, Hour>(MemberList.None)
+                .ForMember(d => d.Id, opt => opt.UseDestinationValue()).ReverseMap();
+            CreateMap<MileageViewModel, Mileage>(MemberList.None)
+                .ForMember(d => d.Id, opt => opt.UseDestinationValue()).ReverseMap();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace sbpc.Timesheet.Models
     }
     public class TimeLogViewModel
     {
+        public int Id { get; set; }
         [Required]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }

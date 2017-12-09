@@ -66,7 +66,7 @@ namespace sbpc.Timesheet.Data.Repository
             return new TimeLog { Expenses = expenses, Hours = hours, Mileages = mileages };
         }
 
-        public ApplicationUser GetUser(string userId) => _timesheetDbContext.Users.First(x => x.Id == userId);
+        public ApplicationUser GetUser(string userId) => _timesheetDbContext.Users.First(x => x.UserName == userId);
 
         public int RemoveExpense(int Id)
         {
@@ -102,7 +102,7 @@ namespace sbpc.Timesheet.Data.Repository
 
         public int RemoveUser(string userId)
         {
-            var user = _timesheetDbContext.Users.First(x => x.Id == userId);
+            var user = _timesheetDbContext.Users.First(x => x.UserName == userId);
             if (user != null)
                 _timesheetDbContext.Users.Remove(user);
             return _timesheetDbContext.SaveChanges();
@@ -134,7 +134,13 @@ namespace sbpc.Timesheet.Data.Repository
 
         public int UpdateUser(ApplicationUser user)
         {
-            _timesheetDbContext.Users.Update(user);
+            var updatedUser = _timesheetDbContext.Users.First(x => x.UserName == user.UserName);
+            if (updatedUser == null) throw new ApplicationException($"Unable to find the user : {user.UserName}");
+            updatedUser.FirstName = user.FirstName;
+            updatedUser.LastName = user.LastName;
+            updatedUser.MiddleName = user.MiddleName;
+            updatedUser.PhoneNumber = user.PhoneNumber;
+            _timesheetDbContext.Users.Update(updatedUser);
             return _timesheetDbContext.SaveChanges();
         }
     }

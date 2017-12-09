@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Timesheet Administration</h2>
+<hr />
+<div>
+    <div class="row" style="padding-top:20px; padding-bottom:20px;">
+        <div class="col-md-3">
+            @await Html.PartialAsync("_AdminNav")
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
+

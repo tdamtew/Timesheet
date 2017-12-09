@@ -9,10 +9,12 @@ namespace sbpc.Timesheet.Models.AccountViewModels
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        public string UserName { get; set; }
+
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
-        
+
         [Display(Name = "Middle Name")]
         public string MiddleName { get; set; }
 
@@ -21,10 +23,10 @@ namespace sbpc.Timesheet.Models.AccountViewModels
         public string LastName { get; set; }
 
         [Display(Name = "Phone Number")]
-        [Phone]
+        [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
-        [Required]
-        public string UserRole { get; set; }
+        public string StatusMessage { get; set; }
+
     }
 }

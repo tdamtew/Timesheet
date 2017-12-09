@@ -1,0 +1,37 @@
+﻿@model sbpc.Timesheet.Models.AdminViewModels.JobViewModel
+
+@{
+
+    ViewData["Title"] = "Edit Job";
+    ViewData.AddActivePage(AdminNavPages.EditJob);
+}
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-default" style="border:none;">
+            <div class="panel-heading"><h5>@ViewData["Title"]</h5></div>
+            <div class="panel-body">
+                <form asp-action="EditJob">
+                    @Html.Partial("_StatusMessage", Model.StatusMessage)
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="OverTimeRate" class="control-label"></label>
+                        <input asp-for="OverTimeRate" class="form-control" />
+                        <span asp-validation-for="OverTimeRate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CostPerMile" class="control-label"></label>
+                        <input asp-for="CostPerMile" class="form-control" />
+                        <span asp-validation-for="CostPerMile" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-success" style="width:100px;" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

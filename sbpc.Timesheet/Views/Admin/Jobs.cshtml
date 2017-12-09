@@ -1,18 +1,51 @@
 ﻿@model IEnumerable<sbpc.Timesheet.Models.AdminViewModels.JobViewModel>
 
 @{
-    ViewData["Title"] = "Jobs";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Manage Jobs";
+    ViewData.AddActivePage(AdminNavPages.Jobs);
 }
-
-<h2>Jobs</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
+<div class="modal fade" id="confirmModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="modal-title">Confirm</h2>
+            </div>
+            <div class="modal-body">
+                <div>
+                    Are you sure you want to delete job <strong id="jobId"></strong> ?
+                    The operation is irreversible.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirmButton">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="resultModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="resultMessageDiv" class="info text-info"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="continueButton" style="width:50px;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="border-left:solid;border-width:thin; padding-left:20px;">
+    <p>
+        <a asp-action="AddJob" class="btn btn-success">Add Job</a>
+    </p>
+    @Html.AntiForgeryToken()
+    <table class="table">
+        <thead>
+            <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
@@ -22,27 +55,70 @@
                 <th>
                     @Html.DisplayNameFor(model => model.CostPerMile)
                 </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OverTimeRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CostPerMile)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OverTimeRate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CostPerMile)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditJob", new { Id = item.Id }) |
+                        <button type="button" data-job="@item.Name" value="@item.Id" class="deleteJob btn btn-default">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts
+    {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".deleteJob").on("click", function () {
+                $("#jobId").html($(this).data("job"))
+                    .attr("data-job", $(this).val());
+                $("#confirmModal").modal("show");
+            });
+
+            $("#confirmButton").on("click", function () {
+                $.ajax({
+                    type: "post",
+                    url: '@Url.Action("DeleteJob", "Admin")',
+                        data: {
+                            jobId : $("#jobId").data("job"),
+                            __RequestVerificationToken : $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function (data, textStatus, xhr) {
+                            $("#confirmModal").modal("hide");
+                            $("#resultMessageDiv").html("Job has been removed successfully!")
+                                .parent().addClass("alert-success");
+                            $("#resultModal").modal("show");
+                        },
+                        error: function (jqXhr, textStatus, errorThrown) {
+                            $("#confirmModal").modal("hide");
+                            $("#resultMessageDiv").html(jqXhr.status == 400 ? "System was unable to find the job to remove.": "Error occurred while removing the job. Please try again later.")
+                                .parent().addClass("alert-danger");
+                            $("#resultModal").modal("show");
+                        }
+                    });
+            });
+
+            $("#continueButton").on("click", function () {
+                window.location.href = '@Url.Action("Jobs", "Admin")';
+            });
+
+        });
+    </script>
 }
-    </tbody>
-</table>
+
+

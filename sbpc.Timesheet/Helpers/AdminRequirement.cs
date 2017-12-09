@@ -11,11 +11,6 @@ namespace sbpc.Timesheet.Helpers
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminRequirement requirement)
         {
-            if (string.Compare(((ApplicationUser)context.User.Identity).UserRole, "Admin", true) > 0)
-            {
-                context.Succeed(requirement);
-            }
-            context.Fail();
             return Task.CompletedTask;
         }
     }

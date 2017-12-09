@@ -1,0 +1,14 @@
+﻿@using sbpc.Timesheet.Views.Admins
+
+<ul class="nav nav-pills nav-stacked">
+    <li class="@AdminNavPages.TimesheetNavClass(ViewContext)">
+        <a asp-action="Index" asp-controller="Admin">View Timesheet</a>
+    </li>
+    <li class="@AdminNavPages.EmployeesNavClass(ViewContext)">
+        <a asp-action="Users" asp-controller="Admin">Manage Employees</a>
+    </li>
+    <li class="@AdminNavPages.JobsNavClass(ViewContext)">
+        <a asp-action="Jobs" asp-controller="Admin">Manage Jobs</a>
+    </li>
+</ul>
+
