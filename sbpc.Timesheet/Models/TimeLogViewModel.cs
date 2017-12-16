@@ -6,8 +6,7 @@ namespace sbpc.Timesheet.Models
 {
     public class TimesheetViewModel
     {
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime date { get; set; }
         public IEnumerable<ExpenseViewModel> Expenses { get; set; }
         public IEnumerable<HourViewModel> Hours { get; set; }
         public IEnumerable<MileageViewModel> Mileages { get; set; }
@@ -15,15 +14,15 @@ namespace sbpc.Timesheet.Models
     public class TimeLogViewModel
     {
         public int Id { get; set; }
+
         [Required]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         [Required]
-        public int JobId { get; set; }
+        public string JobName { get; set; }
 
-        [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         public string Note { get; set; }
     }
@@ -33,11 +32,12 @@ namespace sbpc.Timesheet.Models
         [Required]
         [DataType(DataType.Currency)]
         public Decimal Amount { get; set; }
-        [Required]
-        public int CategoryId { get; set; }
 
         [Required]
-        public int MethodId { get; set; }
+        public string Category { get; set; }
+
+        [Required]
+        public string Method { get; set; }
 
     }
 
@@ -45,8 +45,8 @@ namespace sbpc.Timesheet.Models
     {
         [Required]
         public int Hours { get; set; }
-        [Required]
-        public int ItemId { get; set; }
+
+        public string Item { get; set; }
     }
 
     public class MileageViewModel : TimeLogViewModel

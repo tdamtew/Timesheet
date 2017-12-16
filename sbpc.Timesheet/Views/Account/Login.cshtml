@@ -4,15 +4,19 @@
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
-    ViewData["Title"] = "sbp consulting - log in";
+    ViewData["Title"] = "Login";
 }
-
-<div class="row" style="padding:30px;">
-    <div class="col-md-6">
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            @ViewData["Title"] <br />
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5">
         <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
             <section>
-                <h2>Login</h2>
-                <hr />
                 <div class="form-group">
                     <label asp-for="Email"></label>
                     <input asp-for="Email" class="form-control" />

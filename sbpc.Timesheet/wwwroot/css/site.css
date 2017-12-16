@@ -1,36 +1,75 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-    width: auto;
+﻿.navbar, footer {
+    background-color: #428bca;
 }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+.navbar-collapse {
+    max-height: none;
 }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
+.navbar-default .navbar-brand {
+    color: white;
 }
 
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-    width: 100%;
+a.active {
+    background: #428bca;
 }
 
-/* QR code generator */
-#qrCode {
-    margin: 15px;
+footer p {
+    font-size: 1.25em;
+    padding: 10px;
 }
 
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
+.nav > li > span {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    background: none;
 }
+
+.widget .table tr td, .widget .table tr th {
+    text-align: center !important;
+}
+
+body .list-view thead > tr > th {
+    text-align: left;
+}
+
+.panel .btn-primary {
+    color: white !important;
+}
+
+.thread-item {
+    margin: 25px 0;
+}
+
+ul {
+    padding-left: 10px;
+}
+
+html body {
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+.navbar-brand:hover {
+    color: white !important;
+}
+
+.panel-yellow a, .panel-red a {
+    color: #428bca !important;
+}
+
+.progress {
+    margin: 10px 0;
+}
+
+.panel-heading {
+    padding: 5px 10px;
+}
+
+#full-page-form {
+    margin-bottom: 50px;
+}
+

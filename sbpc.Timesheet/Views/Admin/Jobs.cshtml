@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Manage Jobs";
-    ViewData.AddActivePage(AdminNavPages.Jobs);
+    Layout = "/Views/Shared/_Layout.cshtml";
 }
 <div class="modal fade" id="confirmModal">
     <div class="modal-dialog">
@@ -38,54 +38,61 @@
         </div>
     </div>
 </div>
-<div style="padding-left:20px;">
-    <p class="text-right">
-        <a asp-action="AddJob" class="btn btn-primary">Add Job</a>
-    </p>
-    @Html.AntiForgeryToken()
-    @if (Model == null || !Model.Any())
-    {
-        <p class="alert alert-warning text-center">There are no jobs registered. Please click on <strong>Add Job</strong> to add new Jobs.</p>
-    }
-    else
-    {
-        <table class="table" id="jobsTable">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.OverTimeRate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CostPerMile)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            @ViewData["Title"] <br />
+            <small>Jobs registered in the timesheet system.</small>
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        @Html.AntiForgeryToken()
+        @if (Model == null || !Model.Any())
+        {
+            <p class="alert alert-warning text-center">There are no jobs registered. Please click on <strong>Add Job</strong> to add new Jobs.</p>
+        }
+        else
+        {
+            <table class="table" id="jobsTable">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.OverTimeRate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CostPerMile)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Edit", "EditJob", new { Id = item.Id }) |
-                            <button type="button" data-job="@item.Name" value="@item.Id" class="deleteJob btn btn-default">Delete</button>
-                        </td>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OverTimeRate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CostPerMile)
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    }
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OverTimeRate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CostPerMile)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "EditJob", new { Id = item.Id }) |
+                                <button type="button" data-job="@item.Name" value="@item.Id" class="deleteJob btn btn-default">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
 </div>
 @section scripts
     {

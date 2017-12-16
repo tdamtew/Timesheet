@@ -7,6 +7,6 @@
     "jquery-validation-unobtrusive": "v3.2.6",
     "fontawesome": "4.7.0",
     "bootstrap": "3.3.7",
-    "datatables": "1.10.16"
+    "jquery.notify": "v1.0"
   }
 }

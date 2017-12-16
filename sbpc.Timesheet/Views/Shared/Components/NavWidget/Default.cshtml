@@ -1,0 +1,24 @@
+﻿@model IEnumerable<sbpc.Timesheet.Components.NavWidget.NavPage>
+@using Microsoft.AspNetCore.Identity
+@using sbpc.Timesheet.Data.Entity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@foreach (var page in Model)
+{
+    <ul class="nav" id="side-menu">
+        <li>
+            <span><i class="fa fa-edit fa-fw"></i>@(page.root)</span>
+            <ul class="nav nav-second-level in">
+                @foreach (var link in page.links)
+                {
+                    <li>
+                        <a href="@link.Value">@link.Key</a>
+                    </li>
+
+                }
+            </ul>
+        </li>
+    </ul>
+}
+

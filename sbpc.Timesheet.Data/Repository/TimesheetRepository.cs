@@ -31,9 +31,22 @@ namespace sbpc.Timesheet.Data.Repository
             return _timesheetDbContext.SaveChanges();
         }
 
-        public int AddMileage(Mileage mileage)
+        public int AddorUpdateMileage(Mileage mileage)
         {
-            _timesheetDbContext.Mileages.Add(mileage);
+            if (mileage.Id == 0)
+                _timesheetDbContext.Mileages.Add(mileage);
+            else
+            {
+                if (!_timesheetDbContext.Mileages.Any(x => x.Id == mileage.Id))
+                {
+                    mileage.Id = 0;
+                    _timesheetDbContext.Mileages.Add(mileage);
+                }
+                else
+                {
+                    _timesheetDbContext.Mileages.Update(mileage);
+                }
+            }
             return _timesheetDbContext.SaveChanges();
         }
 
@@ -43,27 +56,61 @@ namespace sbpc.Timesheet.Data.Repository
             return _timesheetDbContext.SaveChanges();
         }
 
+        public int AddorUpdateExpense(Expense expense)
+        {
+            if (expense.Id == 0)
+                _timesheetDbContext.Expenses.Add(expense);
+            else
+            {
+                if (!_timesheetDbContext.Expenses.Any(x => x.Id == expense.Id))
+                {
+                    expense.Id = 0;
+                    _timesheetDbContext.Expenses.Add(expense);
+                }
+                else
+                {
+                    _timesheetDbContext.Expenses.Update(expense);
+                }
+            }
+            return _timesheetDbContext.SaveChanges();
+        }
+
+        public int AddorUpdateHour(Hour hour)
+        {
+            if (hour.Id == 0)
+                _timesheetDbContext.Hours.Add(hour);
+            else
+            {
+                if (!_timesheetDbContext.Hours.Any(x => x.Id == hour.Id))
+                {
+                    hour.Id = 0;
+                    _timesheetDbContext.Hours.Add(hour);
+                }
+                else
+                {
+                    _timesheetDbContext.Hours.Update(hour);
+                }
+            }
+            return _timesheetDbContext.SaveChanges();
+        }
+
         public IEnumerable<Job> GetAllJobs() => _timesheetDbContext.Jobs;
 
         public IEnumerable<ApplicationUser> GetAllUsers() => _timesheetDbContext.Users;
 
         public Job GetJob(int Id) => _timesheetDbContext.Jobs.First(x => x.Id == Id);
 
-        public TimeLog GetTimesheet(DateTime startDate, DateTime endDate, string userId = null, int jobId = 0)
+        public TimeLog GetUserTimesheet(DateTime date, string userId)
         {
-            var expenses = _timesheetDbContext.Expenses
-                                .Where(x => x.Date >= startDate && x.Date <= endDate
-                                        && string.IsNullOrEmpty(userId) ? true : x.UserId == userId
-                                        && jobId == 0 ? true : x.JobId == jobId);
-            var hours = _timesheetDbContext.Hours
-                                .Where(x => x.Date >= startDate && x.Date <= endDate
-                                        && string.IsNullOrEmpty(userId) ? true : x.UserId == userId
-                                        && jobId == 0 ? true : x.JobId == jobId);
-            var mileages = _timesheetDbContext.Mileages
-                                .Where(x => x.Date >= startDate && x.Date <= endDate
-                                        && string.IsNullOrEmpty(userId) ? true : x.UserId == userId
-                                        && jobId == 0 ? true : x.JobId == jobId);
-            return new TimeLog { Expenses = expenses, Hours = hours, Mileages = mileages };
+            var expenses = _timesheetDbContext.Expenses.Where(x => x.Date.ToShortDateString() == date.ToShortDateString() && x.UserId == userId);
+            var hours = _timesheetDbContext.Hours.Where(x => x.Date.ToShortDateString() == date.ToShortDateString() && x.UserId == userId);
+            var mileages = _timesheetDbContext.Mileages.Where(x => x.Date.ToShortDateString() == date.ToShortDateString() && x.UserId == userId);
+            return new TimeLog
+            {
+                Expenses = expenses.Any() ? expenses.ToList() : null,
+                Hours = hours.Any() ? hours.ToList() : null,
+                Mileages = mileages.Any() ? mileages.ToList() : null
+            };
         }
 
         public ApplicationUser GetUser(string userId) => _timesheetDbContext.Users.First(x => x.UserName == userId);
@@ -108,29 +155,15 @@ namespace sbpc.Timesheet.Data.Repository
             return _timesheetDbContext.SaveChanges();
         }
 
-        public int UpdateExpense(Expense expense)
-        {
-            _timesheetDbContext.Expenses.Update(expense);
-            return _timesheetDbContext.SaveChanges();
-        }
-
-        public int UpdateHour(Hour hour)
-        {
-            _timesheetDbContext.Hours.Update(hour);
-            return _timesheetDbContext.SaveChanges();
-        }
-
         public int UpdateJob(Job job)
         {
             _timesheetDbContext.Jobs.Update(job);
             return _timesheetDbContext.SaveChanges();
         }
 
-        public int UpdateMileage(Mileage mileage)
-        {
-            _timesheetDbContext.Mileages.Update(mileage);
-            return _timesheetDbContext.SaveChanges();
-        }
+        public Expense GetExpense(int Id) => _timesheetDbContext.Expenses.First(x => x.Id == Id);
+
+        public Mileage GetMileage(int Id) => _timesheetDbContext.Mileages.First(x => x.Id == Id);
 
         public int UpdateUser(ApplicationUser user)
         {
@@ -143,5 +176,8 @@ namespace sbpc.Timesheet.Data.Repository
             _timesheetDbContext.Users.Update(updatedUser);
             return _timesheetDbContext.SaveChanges();
         }
+
+        public Hour GetHour(int Id) => _timesheetDbContext.Hours.First(x => x.Id == Id);
+
     }
 }

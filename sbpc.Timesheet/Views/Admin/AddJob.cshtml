@@ -1,14 +1,22 @@
 ﻿@model sbpc.Timesheet.Models.AdminViewModels.JobViewModel
 
 @{
-    ViewData["Title"] = "Add New Job";
-    ViewData.AddActivePage(AdminNavPages.AddEmployee);
+    ViewData["Title"] = "New Job";
+    ViewData["panel-header"] = "Job Details";
+    Layout = "/Views/Shared/_Layout.cshtml";
 }
-
 <div class="row">
-    <div class="col-md-8">
-        <div class="panel panel-primary" style="border:none;">
-            <div class="panel-heading"><h5><i class="fa fa-info-circle fa-lg"></i> @ViewData["Title"]</h5></div>
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            @ViewData["Title"] <br />
+            <small>Provide new job information below</small>
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><span class="panel-title">@ViewData["panel-header"]</span></div>
             <div class="panel-body">
                 <form asp-action="AddJob">
                     @Html.Partial("_StatusMessage", Model.StatusMessage)

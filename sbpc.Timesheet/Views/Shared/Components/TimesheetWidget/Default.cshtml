@@ -1,0 +1,310 @@
+﻿@model sbpc.Timesheet.Models.TimesheetViewModel
+@using sbpc.Timesheet.Helpers
+<div class="row">
+    <div class="col-md-3">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <i class="fa fa-calendar fa-fw"></i><strong> Overview</strong>
+            </div>
+            <div class="panel-body">
+                <!--date picker-->
+                <div class="form-group">
+                    <label class="control-label"><strong>Choose a Date:</strong></label>
+                    <input class="form-control" type="date" value="@Model.date.ToString("yyyy-MM-dd")" />
+                </div>
+                <!--daily total-->
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <strong style="font-size:13pt;">@Model.date.ToString("MM/dd/yyyy")</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="padding-top: 0px; padding-bottom: 0px;">
+                        <div class="row">
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Hours
+                                    <span class="badge badge-primary badge-pill">@(Model.Hours == null ? "0" : Model.Hours.Sum(x => x.Hours).ToString())</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Expenses
+                                    <span class="badge badge-primary badge-pill">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Sum(x => x.Amount).ToString("C"))</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- weekly total-->
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <strong style="font-size:13pt;">Week of @Model.date.ToString("MM/dd/yyyy")</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="padding-top: 0px; padding-bottom: 0px;">
+                        <div class="row">
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Total hours
+                                    <span class="badge badge-primary badge-pill">@(Model.Hours == null ? "0" : Model.Hours.Sum(x => x.Hours).ToString())</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Work hours
+                                    <span class="badge badge-primary badge-pill">@(Model.Hours == null ? "0" : Model.Hours.Where(a => a.Item != Constants.Item.Overtime).Sum(x => x.Hours).ToString())</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    OT hours
+                                    <span class="badge badge-primary badge-pill">@(Model.Hours == null ? "0" : Model.Hours.Where(a => a.Item == Constants.Item.Overtime).Sum(x => x.Hours).ToString())</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Expenses
+                                    <span class="badge badge-primary badge-pill">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Sum(x => x.Amount).ToString("C"))</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Reimbursement
+                                    <span class="badge badge-primary badge-pill">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Where(a => a.Method == Constants.Method.Personal).Sum(x => x.Amount).ToString("C"))</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Mileage
+                                    <span class="badge badge-primary">@(Model.Mileages == null ? "0" : Model.Mileages.Sum(x => x.mile).ToString())</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="panel panel-success" style="min-height:641px;">
+            <div class="panel-heading">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item active">
+                        <a class="nav-link" id="hour-tab" data-toggle="tab" href="#hour" role="tab" aria-controls="home" aria-selected="true">Hours</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="expense-tab" data-toggle="tab" href="#expense" role="tab" aria-controls="profile" aria-selected="false">Expense</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="mileage-tab" data-toggle="tab" href="#mileage" role="tab" aria-controls="contact" aria-selected="false">Mileage</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <div class="tab-content">
+                    <!--Hours tab content-->
+                    <div class="tab-pane active" id="hour" role="tabpanel" aria-labelledby="hour-tab">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-hourglass fa-fw"></i><strong> Current hours</strong>
+                                    </div>
+                                    <div class="panel-body">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        Job
+                                                    </th>
+                                                    <th>
+                                                        Duration
+                                                    </th>
+                                                    <th>
+                                                        Item
+                                                    </th>
+                                                    <th>
+                                                        Note
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            @if (Model.Hours != null)
+                                            {
+                                                <tbody>
+                                                    @foreach (var item in Model.Hours)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.JobName)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Hours)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Item)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Note)
+                                                            </td>
+                                                            <td>
+                                                                <a href="#" data-hour="@item.Id" class="edit-hour">Edit</a> |
+                                                                <a href="#" data-hour="@item.Id" data-date="@Model.date" class="delete-hour">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            }
+                                            else
+                                            {
+                                                <tbody><tr><td colspan="5" class="alert alert-warning">No hours logged yet.</td></tr></tbody>
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" id="HourWidget">
+                                @await Component.InvokeAsync("HourWidget", new { date = Model.date, hourId = 0 })
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--expense tab-->
+                    <div class="tab-pane fade" id="expense" role="tabpanel" aria-labelledby="expense-tab">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-money fa-fw"></i><strong> Current expenses</strong>
+                                    </div>
+                                    <div class="panel-body">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        Job
+                                                    </th>
+                                                    <th>
+                                                        Cost
+                                                    </th>
+                                                    <th>
+                                                        Category
+                                                    </th>
+                                                    <th>
+                                                        Method
+                                                    </th>
+                                                    <th>
+                                                        Note
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            @if (Model.Expenses != null)
+                                            {
+                                                <tbody>
+                                                    @foreach (var item in Model.Expenses)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.JobName)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Amount)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Category)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Method)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Note)
+                                                            </td>
+                                                            <td>
+                                                                <a href="#" data-expense="@item.Id" class="edit-expense">Edit</a> |
+                                                                <a href="#" data-expense="@item.Id" data-date="@Model.date" class="delete-expense">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            }
+                                            else
+                                            {
+                                                <tbody><tr><td colspan="5" class="alert alert-warning">No Expenses logged yet.</td></tr></tbody>
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" id="ExpenseWidget">
+                                @await Component.InvokeAsync("ExpenseWidget", new { date = Model.date, expenseId = 0 })
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--mileage tab-->
+                    <div class="tab-pane fade" id="mileage" role="tabpanel" aria-labelledby="mileage-tab">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-cc-discover fa-fw"></i><strong> Current mileage</strong>
+                                    </div>
+                                    <div class="panel-body">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        Job
+                                                    </th>
+                                                    <th>
+                                                        Mileage
+                                                    </th>
+                                                    <th>
+                                                        Note
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            @if (Model.Mileages != null)
+                                            {
+                                                <tbody>
+                                                    @foreach (var item in Model.Mileages)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.JobName)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.mile)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Note)
+                                                            </td>
+                                                            <td>
+                                                                <a href="#" data-mileage="@item.Id" class="edit-mileage">Edit</a> |
+                                                                <a href="#" data-mileage="@item.Id" data-date="@Model.date" class="delete-mileage">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            }
+                                            else
+                                            {
+                                                <tbody><tr><td colspan="5" class="alert alert-warning">No mileage logged yet.</td></tr></tbody>
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" id="MileageWidget">
+                                @await Component.InvokeAsync("MileageWidget", new { date = Model.date, mileageId = 0 })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

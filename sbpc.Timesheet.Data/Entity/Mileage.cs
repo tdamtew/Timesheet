@@ -11,6 +11,6 @@ namespace sbpc.Timesheet.Data.Entity
         public string Note { get; set; }
         public DateTime Date { get; set; }
         public string UserId { get; set; }
-        public int JobId { get; set; }
+        public string JobName { get; set; }
     }
 }

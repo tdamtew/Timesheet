@@ -24,4 +24,10 @@
     <ProjectReference Include="..\sbpc.Timesheet.Data\sbpc.Timesheet.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Shared\Components\NavWidget\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

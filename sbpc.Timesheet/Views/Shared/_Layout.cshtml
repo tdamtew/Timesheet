@@ -6,33 +6,28 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/sb-admin-2.css" rel="stylesheet" />
     <link href="~/lib/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/lib/datatables/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/site.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-collapse collapse">
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
+    <div id="wrapper">
+        @await Html.PartialAsync("_LoginPartial")
+        <div id="page-wrapper">
+            @RenderBody()
         </div>
-    </nav>
-    <div class="container">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - SBP Consulting</p>
-        </footer>
     </div>
+    <hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - SBP Consulting</p>
+    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/datatables/media/js/jquery.dataTables.min.js"></script>
     <script src="~/lib/datatables/media/js/dataTables.bootstrap.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
     @RenderSection("Scripts", required: false)
 </body>
 </html>

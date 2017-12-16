@@ -20,9 +20,6 @@ namespace sbpc.Timesheet.Data
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Mileage> Mileages { get; set; }
-        public DbSet<Method> Methods { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Item> Items { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -54,27 +51,6 @@ namespace sbpc.Timesheet.Data
                 x.HasOne<IdentityRole>().WithMany().HasForeignKey(a => a.RoleId).OnDelete(DeleteBehavior.Cascade);
                 x.HasOne<ApplicationUser>().WithMany().HasForeignKey(a => a.UserId).OnDelete(DeleteBehavior.Cascade);
                 x.ToTable("UserRoles");
-            });
-
-            builder.Entity<Expense>(x =>
-            {
-                x.HasOne<Method>().WithMany().HasForeignKey(a => a.MethodId).OnDelete(DeleteBehavior.Cascade);
-                x.HasOne<Category>().WithMany().HasForeignKey(a => a.CategoryId).OnDelete(DeleteBehavior.Cascade);
-                x.HasOne<ApplicationUser>().WithMany().HasForeignKey(a => a.UserId).OnDelete(DeleteBehavior.Cascade);
-                x.HasOne<Job>().WithMany().HasForeignKey(a => a.JobId).OnDelete(DeleteBehavior.Cascade);
-            });
-
-            builder.Entity<Hour>(x =>
-            {
-                x.HasOne<ApplicationUser>().WithMany().HasForeignKey(a => a.UserId).OnDelete(DeleteBehavior.Cascade);
-                x.HasOne<Job>().WithMany().HasForeignKey(a => a.JobId).OnDelete(DeleteBehavior.Cascade);
-                x.HasOne<Item>().WithMany().HasForeignKey(a => a.ItemId).OnDelete(DeleteBehavior.Cascade);
-            });
-
-            builder.Entity<Mileage>(x =>
-            {
-                x.HasOne<ApplicationUser>().WithMany().HasForeignKey(a => a.UserId).OnDelete(DeleteBehavior.Cascade);
-                x.HasOne<Job>().WithMany().HasForeignKey(a => a.JobId).OnDelete(DeleteBehavior.Cascade);
             });
 
         }
