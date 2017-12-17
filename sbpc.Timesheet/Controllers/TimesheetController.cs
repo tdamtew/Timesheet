@@ -32,6 +32,11 @@ namespace sbpc.Timesheet.Controllers
             return View();
         }
 
+        public IActionResult GetDate(DateTime date)
+        {
+            return ViewComponent("TimesheetWidget", new { userName = _userManager.GetUserName(User), dateTime = date });
+        }
+
         #region manage your hours
         public IActionResult EditHour(int Id, DateTime date)
         {
@@ -116,21 +121,6 @@ namespace sbpc.Timesheet.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        public TimesheetViewModel GetTimesheet(DateTime date, int JobId)
-        {
-            var startOfWeek = DateTime.Today.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)DateTime.Today.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(7);
-            var TimeLog = _timesheetRepository.GetUserTimesheet(startOfWeek, User.Identity.Name);
-            if (TimeLog == null) return null;
-            return new TimesheetViewModel
-            {
-                date = startOfWeek,
-                Expenses = _mapper.Map<IEnumerable<ExpenseViewModel>>(TimeLog.Expenses),
-                Hours = _mapper.Map<IEnumerable<HourViewModel>>(TimeLog.Hours),
-                Mileages = _mapper.Map<IEnumerable<MileageViewModel>>(TimeLog.Mileages)
-            };
         }
     }
 }

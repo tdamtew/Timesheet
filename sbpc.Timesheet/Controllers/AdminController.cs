@@ -13,6 +13,8 @@ using AutoMapper;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 
 namespace sbpc.Timesheet.Controllers
 {
@@ -47,7 +49,31 @@ namespace sbpc.Timesheet.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            var jobsData = _timesheetRepository.GetAllJobs();
+            var employeesData = _timesheetRepository.GetAllUsers();
+
+            if (jobsData != null)
+            {
+                var jobList = jobsData.Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToList();
+                jobList.Add(new SelectListItem { Value = "", Text = "All", Selected = true });
+                ViewBag.jobList = jobList;
+            }
+            if (employeesData != null)
+            {
+                var employeeList = employeesData.Select(x => new SelectListItem { Value = x.UserName, Text = $"{x.FirstName} {x.LastName}" }).ToList();
+                employeeList.Add(new SelectListItem { Value = "", Text = "All", Selected = true });
+                ViewBag.employeeList = employeeList;
+            }
+            var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            ViewBag.startDate = startDate;
+            ViewBag.endDate = startDate.AddMonths(1).AddDays(-1);
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Search(string userId, string jobName, DateTime startDate, DateTime endDate)
+        {
+            return ViewComponent("TimesheetAdminWidget", new { startDate = startDate, endDate = endDate, userId = userId, jobName = jobName });
         }
 
         [HttpGet]

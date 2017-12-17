@@ -3,6 +3,7 @@ using sbpc.Timesheet.Data.Model;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace sbpc.Timesheet.Data.Repository
 {
@@ -100,11 +101,27 @@ namespace sbpc.Timesheet.Data.Repository
 
         public Job GetJob(int Id) => _timesheetDbContext.Jobs.First(x => x.Id == Id);
 
-        public TimeLog GetUserTimesheet(DateTime date, string userId)
+        public TimeLog GetTimesheet(DateTime startDate, DateTime endDate, string userId = "", string jobName = "")
         {
-            var expenses = _timesheetDbContext.Expenses.Where(x => x.Date.ToShortDateString() == date.ToShortDateString() && x.UserId == userId);
-            var hours = _timesheetDbContext.Hours.Where(x => x.Date.ToShortDateString() == date.ToShortDateString() && x.UserId == userId);
-            var mileages = _timesheetDbContext.Mileages.Where(x => x.Date.ToShortDateString() == date.ToShortDateString() && x.UserId == userId);
+            var expenses = _timesheetDbContext.Expenses
+                 .Where(x => x.Date.Date >= startDate.Date && x.Date.Date <= endDate.Date);
+            var hours = _timesheetDbContext.Hours
+                 .Where(x => x.Date.Date >= startDate.Date && x.Date.Date <= endDate.Date);
+            var mileages = _timesheetDbContext.Mileages
+                 .Where(x => x.Date.Date >= startDate.Date && x.Date.Date <= endDate.Date);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                expenses = expenses.Where(x => x.UserId == userId);
+                hours = hours.Where(x => x.UserId == userId);
+                mileages = mileages.Where(x => x.UserId == userId);
+            }
+            if (!string.IsNullOrEmpty(jobName))
+            {
+                expenses = expenses.Where(x => x.JobName == jobName);
+                hours = hours.Where(x => x.JobName == jobName);
+                mileages = mileages.Where(x => x.JobName == jobName);
+            }
+
             return new TimeLog
             {
                 Expenses = expenses.Any() ? expenses.ToList() : null,

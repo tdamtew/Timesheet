@@ -2,7 +2,7 @@
 @using sbpc.Timesheet.Helpers
 <div class="row">
     <div class="col-md-3">
-        <div class="panel panel-red">
+        <div class="panel panel-green">
             <div class="panel-heading">
                 <i class="fa fa-calendar fa-fw"></i><strong> Overview</strong>
             </div>
@@ -29,11 +29,11 @@
                             <ul class="list-group">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Hours
-                                    <span class="badge badge-primary badge-pill">@(Model.Hours == null ? "0" : Model.Hours.Sum(x => x.Hours).ToString())</span>
+                                    <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0" : Model.Hours.Where(x => x.Date.Date == Model.date.Date).Sum(x => x.Hours).ToString())</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Expenses
-                                    <span class="badge badge-primary badge-pill">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Sum(x => x.Amount).ToString("C"))</span>
+                                    <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Where(x => x.Date.Date == Model.date.Date).Sum(x => x.Amount).ToString("C"))</span>
                                 </li>
                             </ul>
                         </div>
@@ -56,27 +56,27 @@
                             <ul class="list-group">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Total hours
-                                    <span class="badge badge-primary badge-pill">@(Model.Hours == null ? "0" : Model.Hours.Sum(x => x.Hours).ToString())</span>
+                                    <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0" : Model.Hours.Sum(x => x.Hours).ToString())</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Work hours
-                                    <span class="badge badge-primary badge-pill">@(Model.Hours == null ? "0" : Model.Hours.Where(a => a.Item != Constants.Item.Overtime).Sum(x => x.Hours).ToString())</span>
+                                    <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0" : Model.Hours.Where(a => a.Item != Constants.Item.Overtime).Sum(x => x.Hours).ToString())</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     OT hours
-                                    <span class="badge badge-primary badge-pill">@(Model.Hours == null ? "0" : Model.Hours.Where(a => a.Item == Constants.Item.Overtime).Sum(x => x.Hours).ToString())</span>
+                                    <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0" : Model.Hours.Where(a => a.Item == Constants.Item.Overtime).Sum(x => x.Hours).ToString())</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Expenses
-                                    <span class="badge badge-primary badge-pill">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Sum(x => x.Amount).ToString("C"))</span>
+                                    <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Sum(x => x.Amount).ToString("C"))</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Reimbursement
-                                    <span class="badge badge-primary badge-pill">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Where(a => a.Method == Constants.Method.Personal).Sum(x => x.Amount).ToString("C"))</span>
+                                    <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Where(a => a.Method == Constants.Method.Personal).Sum(x => x.Amount).ToString("C"))</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Mileage
-                                    <span class="badge badge-primary">@(Model.Mileages == null ? "0" : Model.Mileages.Sum(x => x.mile).ToString())</span>
+                                    <span class="badge badge-pill alert-success">@(Model.Mileages == null ? "0" : Model.Mileages.Sum(x => x.mile).ToString())</span>
                                 </li>
                             </ul>
                         </div>
@@ -129,10 +129,10 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            @if (Model.Hours != null)
+                                            @if (Model.Hours != null && Model.Hours.Where(x => x.Date.Date == Model.date.Date) != null)
                                             {
                                                 <tbody>
-                                                    @foreach (var item in Model.Hours)
+                                                    @foreach (var item in Model.Hours.Where(x => x.Date.Date == Model.date.Date))
                                                     {
                                                         <tr>
                                                             <td>
@@ -199,10 +199,10 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            @if (Model.Expenses != null)
+                                            @if (Model.Expenses != null && Model.Expenses.Where(x => x.Date.Date == Model.date.Date) != null)
                                             {
                                                 <tbody>
-                                                    @foreach (var item in Model.Expenses)
+                                                    @foreach (var item in Model.Expenses.Where(x => x.Date.Date == Model.date.Date))
                                                     {
                                                         <tr>
                                                             <td>
@@ -266,10 +266,10 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            @if (Model.Mileages != null)
+                                            @if (Model.Mileages != null && Model.Mileages.Where(x => x.Date.Date == Model.date.Date) != null)
                                             {
                                                 <tbody>
-                                                    @foreach (var item in Model.Mileages)
+                                                    @foreach (var item in Model.Mileages.Where(x => x.Date.Date == Model.date.Date))
                                                     {
                                                         <tr>
                                                             <td>
@@ -307,4 +307,3 @@
         </div>
     </div>
 </div>
-

@@ -30,10 +30,10 @@
     <div class="col-lg-12">
         <h1 class="page-header">
             @ViewData["Title"] <br/>
-            <small>Employees registered to use the timesheet system.</small>
         </h1>
     </div>
 </div>
+<div class="row notify"></div>
 <div class="row">
     <div class="col-md-8">
         @Html.AntiForgeryToken()
@@ -63,7 +63,7 @@
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
-                {
+                    {
                         <tr>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Email)
@@ -111,11 +111,11 @@
                         },
                         success: function (data, textStatus, xhr) {
                             $("#confirmModal").modal("hide");
-                            $.notify("Employee has been removed successfully!", "success");
+                            $(".notify").notify("Employee has been removed successfully!", "success");
                         },
                         error: function (jqXhr, textStatus, errorThrown) {
                             $("#confirmModal").modal("hide");
-                            $.notify(jqXhr.status == 400 ? "System was unable to find the employee to remove." : "Error occurred while removing the employee. Please try again later.", "error");
+                            $(".notify").notify(jqXhr.status == 400 ? "System was unable to find the employee to remove." : "Error occurred while removing the employee. Please try again later.", "error");
                         }
                     });
             });

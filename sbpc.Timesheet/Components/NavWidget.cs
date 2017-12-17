@@ -32,7 +32,7 @@ namespace sbpc.Timesheet.Components
             {
                 new NavPage { root = "Timesheet",
                     links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
-                    { new KeyValuePair<string, string>("View Timesheet",Url.Action("Index","Admin")) }) },
+                    { new KeyValuePair<string, string>("Timesheet Admin",Url.Action("Index","Admin")) }) },
                 new NavPage { root = "Employees",
                     links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
                     { new KeyValuePair<string, string>("All Employees",Url.Action("Users","Admin")),
@@ -58,7 +58,7 @@ namespace sbpc.Timesheet.Components
             {
                 new NavPage { root = "Timesheet",
                     links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
-                    { new KeyValuePair<string, string>("View/Enter Timesheet", Url.Action("Index","Timesheet")) }) },
+                    { new KeyValuePair<string, string>("Timesheet", Url.Action("Index","Timesheet")) }) },
                 new NavPage { root = "Account",
                     links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
                     { new KeyValuePair<string, string>("Profile",Url.Action("Index","Manage")),
