@@ -129,7 +129,7 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            @if (Model.Hours != null && Model.Hours.Where(x => x.Date.Date == Model.date.Date) != null)
+                                            @if (Model.Hours != null && Model.Hours.Any(x => x.Date.Date == Model.date.Date))
                                             {
                                                 <tbody>
                                                     @foreach (var item in Model.Hours.Where(x => x.Date.Date == Model.date.Date))
@@ -199,7 +199,7 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            @if (Model.Expenses != null && Model.Expenses.Where(x => x.Date.Date == Model.date.Date) != null)
+                                            @if (Model.Expenses != null && Model.Expenses.Any(x => x.Date.Date == Model.date.Date))
                                             {
                                                 <tbody>
                                                     @foreach (var item in Model.Expenses.Where(x => x.Date.Date == Model.date.Date))
@@ -266,7 +266,7 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            @if (Model.Mileages != null && Model.Mileages.Where(x => x.Date.Date == Model.date.Date) != null)
+                                            @if (Model.Mileages != null && Model.Mileages.Any(x => x.Date.Date == Model.date.Date))
                                             {
                                                 <tbody>
                                                     @foreach (var item in Model.Mileages.Where(x => x.Date.Date == Model.date.Date))

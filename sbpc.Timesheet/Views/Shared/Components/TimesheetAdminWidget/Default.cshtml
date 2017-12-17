@@ -1,5 +1,8 @@
 ﻿@model sbpc.Timesheet.Models.TimesheetViewModel
+@using Microsoft.AspNetCore.Identity
+@using sbpc.Timesheet.Data.Entity
 @using sbpc.Timesheet.Helpers
+@inject UserManager<ApplicationUser> UserManager
 
 <div class="row">
     <div class="col-md-9">

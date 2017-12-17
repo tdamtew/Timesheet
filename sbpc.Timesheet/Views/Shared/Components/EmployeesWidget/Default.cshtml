@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<sbpc.Timesheet.Models.AccountViewModels.UserViewModel>
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration _configuration
 <div class="row">
     <div class="col-md-9">
         <div class="panel panel-primary">
@@ -49,8 +51,12 @@
                                         @Html.DisplayFor(modelItem => item.PhoneNumber)
                                     </td>
                                     <td>
-                                        <a href="#" data-user="@item.UserName" class="edit-user">Edit</a> |
-                                        <a href="#" data-user="@item.UserName" class="delete-user">Delete</a>
+                                        <a href="#" data-user="@item.UserName" class="edit-user">Edit</a>
+                                        @if (string.Compare(item.UserName, _configuration.GetValue<string>("Data:MasterUser")) != 0)
+                                        { <span>|</span>
+                                        <a href="#" data - user="@item.UserName" class="delete-user">Delete</a>
+                                        }
+
                                     </td>
                                 </tr>
                             }
