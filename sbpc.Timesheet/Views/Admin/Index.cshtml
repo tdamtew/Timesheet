@@ -1,21 +1,23 @@
 ﻿
 @{
-    ViewData["Title"] = "Timesheet Administration";
+    ViewData["Title"] = "Employees timesheet";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div id="wait" class="modal" style="display:none; position:absolute; top:50%; left:50%;"><img src='~/images/pIkfp.gif' /></div>
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            @ViewData["Title"]
+            @ViewData["Title"] <br/>
+            <small>View employees' hours, expenses and mileage for a given time frame.</small>
         </h1>
     </div>
 </div>
+<div class="row alert alert-info"><i class="fa fa-info-circle"></i> please use the filter section to narrow down your search by job, and/or employee.</div>
 <div class="row">
     <div class="col-md-2">
-        <div class="panel panel-info">
+        <div class="panel panel-red">
             <div class="panel-heading">
-                <i class="fa fa-filter fa-fw"> </i> <strong>Refine Results</strong>
+                <i class="fa fa-search fa-fw"> </i> <strong>Filters</strong>
             </div>
             <div class="panel-body">
                 <form asp-action="Search" asp-controller="Admin" class="search">
@@ -55,12 +57,20 @@
 @section scripts{ 
     <script type="text/javascript">
         $(function () {
+            init();
+            function init()
+            {
+                $("#hourtable").DataTable();
+                $("#expensetable").DataTable();
+                $("#mileagetable").DataTable();
+            }
             $(document).on("submit", "form.search", function () {
                 event.preventDefault();
                 $("#wait").modal("show");
                 $.post("@Url.Action("Search","Admin")", $(this).serialize(), function (data) {
                     $("#TimesheetAdminWidget").html(data);
                     $("#wait").modal("hide");
+                    init();
                  });
             });
         });

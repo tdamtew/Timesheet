@@ -1,11 +1,8 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using sbpc.Timesheet.Models;
 using sbpc.Timesheet.Data;
 using System;
 using AutoMapper;
-using System.Globalization;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using sbpc.Timesheet.Data.Entity;
 using Microsoft.AspNetCore.Identity;
@@ -118,9 +115,5 @@ namespace sbpc.Timesheet.Controllers
             return ViewComponent("TimesheetWidget", new { userName = _userManager.GetUserName(User), dateTime = date });
         }
         #endregion
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

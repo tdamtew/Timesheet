@@ -1,0 +1,55 @@
+﻿@model IEnumerable<sbpc.Timesheet.Models.AdminViewModels.JobViewModel>
+<div class="row">
+    <div class="col-md-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <i class="fa fa-tasks fa-fw"></i><strong> All Jobs</strong>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover" id="jobsTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                Job
+                            </th>
+                            <th>
+                                OverTime Rate
+                            </th>
+                            <th>
+                                Cost Per Mile
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    @if (Model != null)
+                    {
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OverTimeRate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CostPerMile)
+                                    </td>
+                                    <td>
+                                        <a href="#" data-job="@item.Id" class="edit-job">Edit</a> |
+                                        <a href="#" data-job="@item.Id" class="delete-job">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" id="JobWidget">
+        @await Component.InvokeAsync("JobWidget")
+    </div>
+</div>
+

@@ -28,101 +28,19 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">
-            @ViewData["Title"] <br/>
+        <h1 class="page-header notify">
+            @ViewData["Title"] <br />
+           <small> Add/update employees</small>
         </h1>
     </div>
 </div>
-<div class="row notify"></div>
-<div class="row">
-    <div class="col-md-8">
-        @Html.AntiForgeryToken()
-        @if (Model == null || !Model.Any())
-            {
-            <p class="alert alert-warning text-center">There are no employees registered. Please click on <strong>Add Employee</strong> to add new employees.</p>
-        }
-        else
-        {
-            <table class="table table-hover" id="usersTable">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Email)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.FirstName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.LastName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PhoneNumber)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FirstName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LastName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PhoneNumber)
-                            </td>
-                            <td>
-                                @Html.ActionLink("Edit", "EditUser", new { userId = item.Email }, new { @class = "btn btn default" }) |
-                                <button type="button" data-user="@item.Email" class="deleteUser btn btn-default">Delete</button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-        }
-    </div>
+<div id="wait" class="modal" style="display:none; position:absolute; top:50%; left:50%;"><img src='~/images/pIkfp.gif' /></div>
+<div class="row alert alert-info"><i class="fa fa-info-circle"></i> please click on <strong>edit</strong> next to the corresponding record to start updating.</div>
+<div id="EmployeesWidget">
+    @await Component.InvokeAsync("EmployeesWidget");
 </div>
 
 @section scripts
     {
-    <script type="text/javascript">
-        $(document).ready(function () {
-
-            $("#usersTable").DataTable();
-            $(".deleteUser").on("click", function () {
-                $("#userId").html($(this).data("user"));
-                $("#confirmModal").modal("show");
-            });
-
-            $("#confirmButton").on("click", function () {
-                     $.ajax({
-                        type: "post",
-                        url: '@Url.Action("DeleteUser", "Admin")',
-                        data: {
-                            userId : $("#userId").html(),
-                            __RequestVerificationToken : $('input[name="__RequestVerificationToken"]').val()
-                        },
-                        success: function (data, textStatus, xhr) {
-                            $("#confirmModal").modal("hide");
-                            $(".notify").notify("Employee has been removed successfully!", "success");
-                        },
-                        error: function (jqXhr, textStatus, errorThrown) {
-                            $("#confirmModal").modal("hide");
-                            $(".notify").notify(jqXhr.status == 400 ? "System was unable to find the employee to remove." : "Error occurred while removing the employee. Please try again later.", "error");
-                        }
-                    });
-            });
-
-            $("#continueButton").on("click", function () {
-                window.location.href = '@Url.Action("Users", "Admin")';
-            });
-        });
-    </script>
+    <script src="~/js/admin-users.js"></script>
 }

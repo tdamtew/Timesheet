@@ -10,6 +10,7 @@ namespace sbpc.Timesheet.Helpers
 {
     public static class Constants
     {
+        public static double CostPerMile = 0.56;
         public static class Method
         {
             public static string Personal = "Personal";

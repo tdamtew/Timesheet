@@ -1,0 +1,39 @@
+﻿@model sbpc.Timesheet.Models.AccountViewModels.UserViewModel
+
+<div class="panel panel-primary">
+    <div class="panel-heading"><i class="fa fa-edit"></i> <strong>Add/Edit Employee</strong></div>
+    <div class="panel-body">
+        <form asp-action="SaveUser" asp-controller="Admin" class="employee">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.UserName)
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" readonly="@(!string.IsNullOrEmpty(Model.Email))" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MiddleName" class="control-label"></label>
+                <input asp-for="MiddleName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label">Phone Number:</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" style="width: 100px;"><i class="fa fa-save fa-lg"></i> Save</button>
+            </div>
+        </form>
+    </div>
+</div>

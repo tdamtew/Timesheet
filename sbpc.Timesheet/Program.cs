@@ -18,7 +18,6 @@ namespace sbpc.Timesheet
 
                 try
                 {
-                    // Requires using RazorPagesMovie.Models;
                     DbInitializer.Seed(scope);
                 }
                 catch (Exception ex)

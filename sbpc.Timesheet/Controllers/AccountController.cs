@@ -92,7 +92,7 @@ namespace sbpc.Timesheet.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(TimesheetController.Index), "Home");
+            return RedirectToAction(nameof(Login));
         }
 
         [HttpGet]
@@ -101,7 +101,7 @@ namespace sbpc.Timesheet.Controllers
         {
             if (userId == null || code == null)
             {
-                return RedirectToAction(nameof(TimesheetController.Index), "Home");
+                return RedirectToAction(nameof(TimesheetController.Index), "Timesheet");
             }
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
@@ -221,7 +221,7 @@ namespace sbpc.Timesheet.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(TimesheetController.Index), "Home");
+                return RedirectToAction(nameof(TimesheetController.Index), "Timesheet");
             }
         }
 

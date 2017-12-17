@@ -13,12 +13,9 @@ namespace sbpc.Timesheet.Data
         TimeLog GetTimesheet(DateTime startDate, DateTime endDate, string userId = "", string jobName = "");
         ApplicationUser GetUser(string userId);
         Job GetJob(int Id);
-        int AddUser(ApplicationUser user);
         int UpdateUser(ApplicationUser user);
-        int RemoveUser(string userId);
         Hour GetHour(int Id);
-        int AddJob(Job job);
-        int UpdateJob(Job job);
+        int AddorUpdateJob(Job job);
         int RemoveJob(int Id);
         int AddorUpdateExpense(Expense expense);
         int AddorUpdateMileage(Mileage mileage);

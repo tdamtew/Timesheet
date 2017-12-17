@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,13 +8,17 @@ namespace sbpc.Timesheet.Components
 {
     public class NavWidget : ViewComponent
     {
-
+        private readonly IConfiguration _configuration;
+        public NavWidget(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<IViewComponentResult> InvokeAsync(string userName)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             var navpage = new List<NavPage>();
-            if (String.CompareOrdinal(userName, "tadesse.eshetu@gmail.com") == 0)
+            if (String.CompareOrdinal(userName, _configuration.GetValue<string>("Data:MasterUser")) == 0)
             {
                 return View(AdminPages());
             }
@@ -30,25 +35,30 @@ namespace sbpc.Timesheet.Components
         {
             return new List<NavPage>
             {
-                new NavPage { root = "Timesheet",
+                new NavPage {
+                        root = "Home",
+                        links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
+                        {
+                            new KeyValuePair<string, string>("My Timesheet",Url.Action("Index","Timesheet"))
+                        })
+                    },
+                new NavPage {
+                        root = "Admin",
+                        links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
+                        {
+                            new KeyValuePair<string, string>("Timesheets",Url.Action("Index","Admin")),
+                            new KeyValuePair<string, string>("Employees",Url.Action("Users","Admin")),
+                            new KeyValuePair<string, string>("Jobs",Url.Action("Jobs","Admin"))
+                        })
+                    },
+                new NavPage {
+                    root = "Account",
                     links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
-                    { new KeyValuePair<string, string>("Timesheet Admin",Url.Action("Index","Admin")) }) },
-                new NavPage { root = "Employees",
-                    links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
-                    { new KeyValuePair<string, string>("All Employees",Url.Action("Users","Admin")),
-                            new KeyValuePair<string, string>("Add Employee", Url.Action("AddUser","Admin")) }) },
-                new NavPage { root = "Jobs",
-                    links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
-                    { new KeyValuePair<string, string>("All Jobs",Url.Action("Jobs","Admin")),
-                            new KeyValuePair<string, string>("Add Job", Url.Action("AddJob","Admin")) })
-                },
-                new NavPage { root = "Account",
-                    links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
-                    { new KeyValuePair<string, string>("Profile",Url.Action("Index","Manage")),
-                    new KeyValuePair<string, string>("Password", Url.Action("ChangePassword","Manage")) })
-
+                    {
+                        new KeyValuePair<string, string>("Profile",Url.Action("Index","Manage")),
+                        new KeyValuePair<string, string>("Password", Url.Action("ChangePassword","Manage"))
+                    })
                 }
-
             };
         }
 
@@ -56,13 +66,21 @@ namespace sbpc.Timesheet.Components
         {
             return new List<NavPage>
             {
-                new NavPage { root = "Timesheet",
+                new NavPage {
+                        root = "Home",
+                        links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
+                        {
+                            new KeyValuePair<string, string>("My Timesheet",Url.Action("Index","Timesheet"))
+                        })
+                    },
+                new NavPage {
+                    root = "Account",
                     links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
-                    { new KeyValuePair<string, string>("Timesheet", Url.Action("Index","Timesheet")) }) },
-                new NavPage { root = "Account",
-                    links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
-                    { new KeyValuePair<string, string>("Profile",Url.Action("Index","Manage")),
-                            new KeyValuePair<string, string>("Password", Url.Action("ChangePassword","Manage")) }) }
+                    {
+                        new KeyValuePair<string, string>("Profile",Url.Action("Index","Manage")),
+                        new KeyValuePair<string, string>("Password", Url.Action("ChangePassword","Manage"))
+                    })
+                }
             };
         }
     }

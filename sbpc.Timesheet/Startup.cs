@@ -39,7 +39,7 @@ namespace sbpc.Timesheet
             services.AddMvc();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("AdminRole", policy => policy.Requirements.Add(new AdminRequirement()));
+                options.AddPolicy("AdminRole", policy => policy.Requirements.Add(new AdminRequirement(Configuration.GetValue<string>("Data:MasterUser"))));
             });
         }
 
@@ -65,7 +65,7 @@ namespace sbpc.Timesheet
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Timesheet}/{action=Index}/{id?}");
             });
         }
     }

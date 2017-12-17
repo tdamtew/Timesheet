@@ -10,14 +10,13 @@ using sbpc.Timesheet.Models.AdminViewModels;
 using sbpc.Timesheet.Data;
 using System.Linq;
 using AutoMapper;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 
 namespace sbpc.Timesheet.Controllers
 {
+    [Authorize(policy: "AdminRole")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -76,81 +75,60 @@ namespace sbpc.Timesheet.Controllers
             return ViewComponent("TimesheetAdminWidget", new { startDate = startDate, endDate = endDate, userId = userId, jobName = jobName });
         }
 
+        #region manage employees
+
         [HttpGet]
         [Route("Admin/Users")]
         public IActionResult Users()
         {
-            var appUsers = _timesheetRepository.GetAllUsers();
-            if (!appUsers.Any()) return View();
-            var users = _mapper.Map<IEnumerable<UserViewModel>>(appUsers);
-            return View(users);
+            return View();
         }
-
-        [HttpGet]
-        [Route("Admin/AddUser")]
-        public IActionResult AddUser()
-        {
-            return View(new UserViewModel { });
-        }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUser(UserViewModel model)
+        public async Task<IActionResult> SaveUser(UserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = _mapper.Map<ApplicationUser>(model);
-                user.UserName = model.Email;
-                var tempPassword = "Welcome321!";
-                var createUserResult = await _userManager.CreateAsync(user, tempPassword);
-                if (createUserResult.Succeeded)
+                try
                 {
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
-                    _logger.LogInformation($"user {model.Email} has been created.");
-                    model.StatusMessage = "Employee Information has been created successfully!";
-                    return View(model);
+                    //check if the user exists
+                    var user = _mapper.Map<ApplicationUser>(model);
+                    var data = await _userManager.FindByNameAsync(model.Email);
+                    if (data == null)
+                    {
+                        user.UserName = model.Email;
+                        var tempPassword = "Welcome321!";
+                        var createUserResult = await _userManager.CreateAsync(user, tempPassword);
+                        if (createUserResult.Succeeded)
+                        {
+                            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                            await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                            _logger.LogInformation($"user {model.Email} has been created.");
+                        }
+                    }
+                    else
+                    {
+                        _timesheetRepository.UpdateUser(user);
+                        _logger.LogInformation($"user {model.Email} has been updated successfully!");
+                    }
+                    return ViewComponent("EmployeesWidget");
                 }
-
-                model.StatusMessage = $"Error while creating new employee {model.Email}.";
-                _logger.LogError($"Error while creating new employee {model.Email}");
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error while creating new employee {model.Email} with message {ex.Message}");
+                    return StatusCode(500);
+                }
             }
-            return View(model);
+            return ViewComponent("EmployeesWidget");
         }
 
         [HttpGet]
         [Route("Admin/EditUser")]
         public IActionResult EditUser(string userId)
         {
-            var user = _timesheetRepository.GetUser(userId);
-            if (user == null) return View();
-            var model = _mapper.Map<UserViewModel>(user);
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditUser(UserViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var user = _mapper.Map<ApplicationUser>(model);
-                    _timesheetRepository.UpdateUser(user);
-                    model.StatusMessage = "Employee Information has been updated successfully!";
-                    return View(model);
-                }
-                catch (System.Exception ex)
-                {
-                    _logger.LogError($"Exception occurred while updating employee {model.Email} with message {ex.Message}");
-                    model.StatusMessage = "Error occurred while updating Employee's Profile. Please try again.";
-                    return View(model);
-                }
-            }
-            return View();
+            return ViewComponent("EmployeeWidget", new { userId = userId });
         }
 
         [HttpPost]
@@ -162,86 +140,51 @@ namespace sbpc.Timesheet.Controllers
                 var user = await _userManager.FindByNameAsync(userId);
                 var result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded)
-                {
-                    return StatusCode(200);
-                }
+                    return ViewComponent("EmployeesWidget");
                 return NotFound();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"Exception occurred while removing employee {userId} with message {ex.Message}");
                 return StatusCode(500);
             }
         }
 
+        #endregion
+
+        #region manage jobs
         [HttpGet]
         public IActionResult Jobs()
         {
-            var jobs = _timesheetRepository.GetAllJobs();
-            if (!jobs.Any()) return View();
-            var jobViewModel = _mapper.Map<IEnumerable<JobViewModel>>(jobs);
-            return View(jobViewModel);
-        }
-
-        [HttpGet]
-        [Route("Admin/AddJob")]
-        public IActionResult AddJob()
-        {
-            return View(new JobViewModel { });
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddJob(JobViewModel model)
+        public ActionResult SaveJob(JobViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _timesheetRepository.AddJob(_mapper.Map<Job>(model));
-                    model.StatusMessage = "Job has been created successfully!";
-                    return View(model);
+                    _timesheetRepository.AddorUpdateJob(_mapper.Map<Job>(model));
+                    _logger.LogInformation($"{model.Name} has been added/updated successfully!");
+                    return ViewComponent("JobsWidget");
                 }
                 catch (System.Exception ex)
                 {
                     _logger.LogError(string.Format("Exception occurred while creating Job {0} with message {1}", model.Name, ex.Message));
-                    ModelState.AddModelError(string.Empty, string.Format("Error occurred while creating job {0}", model.Name));
-                    return View(model);
+                    return StatusCode(500);
                 }
             }
-            return View(model);
+            return ViewComponent("JobsWidget");
         }
 
         [HttpGet]
         [Route("Admin/EditJob")]
-        public IActionResult EditJob(int id)
+        public IActionResult EditJob(int jobId)
         {
-            var job = _timesheetRepository.GetJob(id);
-            if (job == null) return View();
-            var model = _mapper.Map<JobViewModel>(job);
-            return View(model);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditJob(JobViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var job = _mapper.Map<Job>(model);
-                    _timesheetRepository.UpdateJob(job);
-                    model.StatusMessage = "Job Information has been updated successfully!";
-                    return View(model);
-                }
-                catch (System.Exception ex)
-                {
-                    _logger.LogError($"Exception occurred while updating job {model.Name} with message {ex.Message}");
-                    model.StatusMessage = "Error occurred while updating job. Please try again.";
-                    return View(model);
-                }
-            }
-            return View();
+            return ViewComponent("JobWidget", new { jobId = jobId });
         }
 
         [HttpPost]
@@ -253,15 +196,16 @@ namespace sbpc.Timesheet.Controllers
                 var removedJob = _timesheetRepository.RemoveJob(jobId);
                 if (removedJob > 0)
                 {
-                    return StatusCode(200);
+                    return ViewComponent("JobsWidget");
                 }
                 return NotFound();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"Exception occurred while removing job {jobId} with message {ex.Message}");
                 return StatusCode(500);
             }
         }
+        #endregion
     }
 }
