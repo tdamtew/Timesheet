@@ -16,11 +16,11 @@ using System;
 
 namespace sbpc.Timesheet.Controllers
 {
-    [Authorize(policy: "AdminRole")]
+   // [Authorize(policy: "AdminRole")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly SignInManager  <ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ITimesheetRepository _timesheetRepository;
         private readonly IMapper _mapper;

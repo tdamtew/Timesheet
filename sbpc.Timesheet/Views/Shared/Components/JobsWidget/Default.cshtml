@@ -18,6 +18,9 @@
                             <th>
                                 Cost Per Mile
                             </th>
+                            <th>
+                                Active?
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -37,8 +40,16 @@
                                         @Html.DisplayFor(modelItem => item.CostPerMile)
                                     </td>
                                     <td>
-                                        <a href="#" data-job="@item.Id" class="edit-job">Edit</a> |
-                                        <a href="#" data-job="@item.Id" class="delete-job">Delete</a>
+                                        @(item.Active ? "Yes" : "No")
+                                    </td>
+                                    <td>
+                                        <a href="#" data-job="@item.Id" class="edit-job">Edit</a>
+                                        @if (!item.Active)
+                                        {
+                                            <span>|</span>
+                                            <a href="#" data-job="@item.Id" class="delete-job">Delete</a>
+                                        }
+
                                     </td>
                                 </tr>
                             }

@@ -1,5 +1,6 @@
 ﻿@model sbpc.Timesheet.Models.AccountViewModels.UserViewModel
-
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration _configuration
 <div class="panel panel-primary">
     <div class="panel-heading"><i class="fa fa-edit"></i> <strong>Add/Edit Employee</strong></div>
     <div class="panel-body">
@@ -30,6 +31,12 @@
                 <label asp-for="PhoneNumber" class="control-label">Phone Number:</label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="form-check-label">
+                    <input type="checkbox" asp-for="IsEnabled" class="form-check-input" disabled="@(Model.IsEnabled && string.Compare(Model.UserName, _configuration.GetValue<string>("Data:MasterUser")) == 0)">
+                    Active
+                </label>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" style="width: 100px;"><i class="fa fa-save fa-lg"></i> Save</button>

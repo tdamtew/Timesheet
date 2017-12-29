@@ -26,6 +26,7 @@ namespace sbpc.Timesheet.Data.Repository
             updatedUser.LastName = user.LastName;
             updatedUser.MiddleName = user.MiddleName;
             updatedUser.PhoneNumber = user.PhoneNumber;
+            updatedUser.IsEnabled = user.IsEnabled;
             _timesheetDbContext.Users.Update(updatedUser);
             return _timesheetDbContext.SaveChanges();
         }
@@ -72,9 +73,9 @@ namespace sbpc.Timesheet.Data.Repository
                  .Where(x => x.Date.Date >= startDate.Date && x.Date.Date <= endDate.Date);
             if (!string.IsNullOrEmpty(userId))
             {
-                expenses = expenses.Where(x => x.UserId == userId);
-                hours = hours.Where(x => x.UserId == userId);
-                mileages = mileages.Where(x => x.UserId == userId);
+                expenses = expenses.Where(x => x.EmployeeName == userId);
+                hours = hours.Where(x => x.EmployeeName == userId);
+                mileages = mileages.Where(x => x.EmployeeName == userId);
             }
             if (!string.IsNullOrEmpty(jobName))
             {

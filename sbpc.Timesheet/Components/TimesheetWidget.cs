@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using sbpc.Timesheet.Data;
-using sbpc.Timesheet.Data.Model;
 using sbpc.Timesheet.Models;
 using System;
 using System.Collections.Generic;
@@ -24,11 +23,11 @@ namespace sbpc.Timesheet.Components
         public async Task<IViewComponentResult> InvokeAsync(string userName, DateTime dateTime)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            //get weekly data
-            var startOfWeek = dateTime.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)dateTime.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(7);
+            //get monthly data
+            var startOfMonth = new DateTime(dateTime.Year, dateTime.Month, 1);
+            var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
-            var data = _timesheetRepository.GetTimesheet(startOfWeek, endOfWeek, userName);
+            var data = _timesheetRepository.GetTimesheet(startOfMonth, endOfMonth, userName);
             if (data == null) return View(new TimesheetViewModel { date = dateTime });
 
             return View(new TimesheetViewModel

@@ -26,7 +26,7 @@ namespace sbpc.Timesheet.Models.AccountViewModels
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
-        public string StatusMessage { get; set; }
+        public bool IsEnabled { get; set; } 
 
     }
 }

@@ -21,7 +21,7 @@ namespace sbpc.Timesheet.Components
         public async Task<IViewComponentResult> InvokeAsync(DateTime date, int mileageId = 0)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            var jobs = _timesheetRepository.GetAllJobs();
+            var jobs = _timesheetRepository.GetAllJobs().Where(x => x.Active);
             ViewBag.jobList = jobs == null ? null : jobs.ToList();
             if (mileageId == 0) return View(new MileageViewModel { Date = DateTime.Now });
             var data = _timesheetRepository.GetMileage(mileageId);

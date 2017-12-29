@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace sbpc.Timesheet.Data.Entity
+﻿namespace sbpc.Timesheet.Data.Entity
 {
     public class Job
     {
@@ -10,5 +6,6 @@ namespace sbpc.Timesheet.Data.Entity
         public string Name { get; set; }
         public decimal OverTimeRate { get; set; }
         public double CostPerMile { get; set; }
+        public bool Active { get; set; }
     }
 }

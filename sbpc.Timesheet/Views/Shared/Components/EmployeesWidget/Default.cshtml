@@ -15,17 +15,12 @@
                                 Email
                             </th>
                             <th>
-                                First Name
-                            </th>
-                            <th>
-                                Middle Name
-                            </th>
-                            <th>
-                                Last Name
+                                Full Name
                             </th>
                             <th>
                                 Phone Number
                             </th>
+                            <th>Status</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -39,22 +34,19 @@
                                         @Html.DisplayFor(modelItem => item.Email)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.FirstName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.MiddleName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.LastName)
+                                        @($"{item.FirstName} {item.MiddleName} {item.LastName}")
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.PhoneNumber)
                                     </td>
                                     <td>
+                                        @(item.IsEnabled ? "Yes" : "No")
+                                    </td>
+                                    <td>
                                         <a href="#" data-user="@item.UserName" class="edit-user">Edit</a>
-                                        @if (string.Compare(item.UserName, _configuration.GetValue<string>("Data:MasterUser")) != 0)
+                                        @if (string.Compare(item.UserName, _configuration.GetValue<string>("Data:MasterUser")) != 0 && !item.IsEnabled)
                                         { <span>|</span>
-                                        <a href="#" data - user="@item.UserName" class="delete-user">Delete</a>
+                                        <a href="#" data-user="@item.UserName" class="delete-user">Delete</a>
                                         }
 
                                     </td>

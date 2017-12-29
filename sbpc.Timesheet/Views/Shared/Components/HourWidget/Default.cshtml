@@ -1,12 +1,14 @@
 ﻿@model sbpc.Timesheet.Models.HourViewModel
-@using sbpc.Timesheet.Helpers
 
 <div class="panel panel-primary">
     <div class="panel-heading"><i class="fa fa-edit"></i> <strong>Add/Edit Hour</strong></div>
     <div class="panel-body">
         <form asp-action="SaveHour" asp-controller="Timesheet" class="hour">
             @Html.HiddenFor(Model => Model.Id)
-            @Html.HiddenFor(Model => Model.Date)
+            <div class="form-group">
+                <label class="control-label"><strong>Choose a Date:</strong></label>
+                <input class="form-control" asp-for="Date" type="date" value="@Model.Date.ToString("yyyy-MM-dd")" />
+            </div>
             <div class="form-group">
                 <span class="control-label">Select Job:</span>
                 @Html.DropDownListFor(model => model.JobName, new SelectList(ViewBag.jobList, "Name", "Name"), null, new { @class = "form-control" })
@@ -17,9 +19,10 @@
                 <span asp-validation-for="Hours" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <span class="control-label">Item:</span>
-                @Html.DropDownListFor(model => model.Item, Constants.Items, null, new { @class = "form-control" })
-                <span asp-validation-for="Item" class="text-danger"></span>
+                <label class="form-check-label">
+                    <input type="checkbox" asp-for="IsTravel" class="form-check-input">
+                    Travel?
+                </label>
             </div>
             <div class="form-group">
                 <span class="control-label">Note:</span>

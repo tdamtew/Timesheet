@@ -22,7 +22,7 @@ namespace sbpc.Timesheet.Models
         [Required]
         public string JobName { get; set; }
 
-        public string UserId { get; set; }
+        public string EmployeeName { get; set; }
 
         public string Note { get; set; }
     }
@@ -46,7 +46,7 @@ namespace sbpc.Timesheet.Models
         [Required]
         public int Hours { get; set; }
 
-        public string Item { get; set; }
+        public bool IsTravel { get; set; }
     }
 
     public class MileageViewModel : TimeLogViewModel

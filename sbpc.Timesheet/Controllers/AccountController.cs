@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using sbpc.Timesheet.Models.AccountViewModels;
 using sbpc.Timesheet.Services;
 using sbpc.Timesheet.Data.Entity;
+using sbpc.Timesheet.Helpers;
 
 namespace sbpc.Timesheet.Controllers
 {
@@ -16,13 +17,13 @@ namespace sbpc.Timesheet.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationSignInManager _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            ApplicationSignInManager signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
@@ -54,8 +55,6 @@ namespace sbpc.Timesheet.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
@@ -133,8 +132,6 @@ namespace sbpc.Timesheet.Controllers
                     return RedirectToAction(nameof(ForgotPasswordConfirmation));
                 }
 
-                // For more information on how to enable account confirmation and password reset please
-                // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password",

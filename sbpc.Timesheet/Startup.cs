@@ -30,6 +30,7 @@ namespace sbpc.Timesheet
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddSignInManager<ApplicationSignInManager>()
                 .AddDefaultTokenProviders();
 
             // Add application services.
@@ -40,6 +41,7 @@ namespace sbpc.Timesheet
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminRole", policy => policy.Requirements.Add(new AdminRequirement(Configuration.GetValue<string>("Data:MasterUser"))));
+                options.AddPolicy("TimesheetAdminRole", policy => policy.Requirements.Add(new TimesheetAdminRequirement(Configuration.GetValue<string>("Data:TimesheetAdminUser"))));
             });
         }
 

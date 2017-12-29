@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using sbpc.Timesheet.Data;
-using sbpc.Timesheet.Models;
 using sbpc.Timesheet.Models.AdminViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;

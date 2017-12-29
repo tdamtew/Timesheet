@@ -15,13 +15,19 @@
             </div>
             <div class="form-group">
                 <label asp-for="OverTimeRate" class="control-label"></label>
-                <input asp-for="OverTimeRate" class="form-control" min="1"/>
+                <input asp-for="OverTimeRate" class="form-control" min="1" />
                 <span asp-validation-for="OverTimeRate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CostPerMile" class="control-label"></label>
                 <input asp-for="CostPerMile" class="form-control" value="@Constants.CostPerMile" />
                 <span asp-validation-for="CostPerMile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="form-check-label">
+                    <input type="checkbox" asp-for="Active" class="form-check-input">
+                    Active
+                </label>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" style="width: 100px;"><i class="fa fa-save fa-lg"></i> Save</button>

@@ -14,8 +14,8 @@ namespace sbpc.Timesheet.Data.Repository
             if (!context.Jobs.Any())
             {
                 context.Jobs.AddRange(
-                    new Entity.Job { Name = "SBP", OverTimeRate = 1, CostPerMile = 0.56 },
-                    new Entity.Job { Name = "Motorola Inc.:State of MD", OverTimeRate = 1, CostPerMile = 0.56 }
+                    new Entity.Job { Name = "SBP", OverTimeRate = 1, CostPerMile = 0.56, Active = true },
+                    new Entity.Job { Name = "Motorola Inc.:State of MD", OverTimeRate = 1, CostPerMile = 0.56, Active = true }
                     );
             }
             context.SaveChanges();

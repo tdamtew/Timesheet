@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace sbpc.Timesheet.Models.AdminViewModels
 {
@@ -23,6 +18,7 @@ namespace sbpc.Timesheet.Models.AdminViewModels
         [DataType(DataType.Currency)]
         public double CostPerMile { get; set; }
 
-        public string StatusMessage { get; set; }
+        public bool Active { get; set; }
+
     }
 }

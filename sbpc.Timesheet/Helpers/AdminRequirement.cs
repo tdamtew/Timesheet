@@ -1,9 +1,4 @@
-﻿using AutoMapper.Configuration;
-using Microsoft.AspNetCore.Authorization;
-using sbpc.Timesheet.Data.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 
 namespace sbpc.Timesheet.Helpers
@@ -16,6 +11,23 @@ namespace sbpc.Timesheet.Helpers
             _userId = userId;
         }
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminRequirement requirement)
+        {
+            if (string.Compare(context.User.Identity.Name, _userId, true) == 0)
+            {
+                context.Succeed(requirement);
+            }
+            return Task.CompletedTask;
+        }
+    }
+
+    public class TimesheetAdminRequirement : AuthorizationHandler<TimesheetAdminRequirement>, IAuthorizationRequirement
+    {
+        private readonly string _userId;
+        public TimesheetAdminRequirement(string userId)
+        {
+            _userId = userId;
+        }
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, TimesheetAdminRequirement requirement)
         {
             if (string.Compare(context.User.Identity.Name, _userId, true) == 0)
             {
