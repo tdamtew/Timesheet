@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace sbpc.Timesheet.Helpers
 {
     public class AdminRequirement : AuthorizationHandler<AdminRequirement>, IAuthorizationRequirement
     {
-        private readonly string _userId;
-        public AdminRequirement(string userId)
+        private readonly string[] _users;
+        public AdminRequirement(string [] users)
         {
-            _userId = userId;
+            _users = users;
         }
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminRequirement requirement)
         {
-            if (string.Compare(context.User.Identity.Name, _userId, true) == 0)
+            if(_users.Contains(context.User.Identity.Name))
             {
                 context.Succeed(requirement);
             }
@@ -22,14 +23,14 @@ namespace sbpc.Timesheet.Helpers
 
     public class TimesheetAdminRequirement : AuthorizationHandler<TimesheetAdminRequirement>, IAuthorizationRequirement
     {
-        private readonly string _userId;
-        public TimesheetAdminRequirement(string userId)
+        private readonly string[] _users;
+        public TimesheetAdminRequirement(string[] users)
         {
-            _userId = userId;
+            _users = users;
         }
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, TimesheetAdminRequirement requirement)
         {
-            if (string.Compare(context.User.Identity.Name, _userId, true) == 0)
+            if (_users.Contains(context.User.Identity.Name))
             {
                 context.Succeed(requirement);
             }

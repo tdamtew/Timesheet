@@ -16,7 +16,7 @@ using System;
 
 namespace sbpc.Timesheet.Controllers
 {
-   // [Authorize(policy: "AdminRole")]
+    [Authorize(policy: "AdminRole")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -59,7 +59,7 @@ namespace sbpc.Timesheet.Controllers
             }
             if (employeesData != null)
             {
-                var employeeList = employeesData.Select(x => new SelectListItem { Value = x.UserName, Text = $"{x.FirstName} {x.LastName}" }).ToList();
+                var employeeList = employeesData.Select(x => new SelectListItem { Value = $"{x.FirstName} {x.LastName}", Text = $"{x.FirstName} {x.LastName}" }).ToList();
                 employeeList.Add(new SelectListItem { Value = "", Text = "All", Selected = true });
                 ViewBag.employeeList = employeeList;
             }

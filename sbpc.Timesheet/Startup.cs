@@ -40,8 +40,8 @@ namespace sbpc.Timesheet
             services.AddMvc();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("AdminRole", policy => policy.Requirements.Add(new AdminRequirement(Configuration.GetValue<string>("Data:MasterUser"))));
-                options.AddPolicy("TimesheetAdminRole", policy => policy.Requirements.Add(new TimesheetAdminRequirement(Configuration.GetValue<string>("Data:TimesheetAdminUser"))));
+                options.AddPolicy("AdminRole", policy => policy.Requirements.Add(new AdminRequirement(Configuration.GetSection("Data:MasterAdmin").Get<string[]>())));
+                options.AddPolicy("TimesheetAdminRole", policy => policy.Requirements.Add(new TimesheetAdminRequirement(Configuration.GetSection("Data:TimesheetAdmin").Get<string[]>())));
             });
         }
 

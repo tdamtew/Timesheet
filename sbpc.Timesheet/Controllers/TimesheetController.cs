@@ -6,7 +6,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using sbpc.Timesheet.Data.Entity;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 
 namespace sbpc.Timesheet.Controllers
 {
@@ -14,13 +16,15 @@ namespace sbpc.Timesheet.Controllers
     public class TimesheetController : Controller
     {
         private readonly ITimesheetRepository _timesheetRepository;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private string _currentEmployee;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public TimesheetController(ITimesheetRepository timesheetRepository,
-            IMapper mapper, UserManager<ApplicationUser> userManager)
+            IMapper mapper, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
+            _configuration = configuration;
             _timesheetRepository = timesheetRepository;
             _userManager = userManager;
             _mapper = mapper;
@@ -30,20 +34,45 @@ namespace sbpc.Timesheet.Controllers
         {
             if (!string.IsNullOrEmpty(_currentEmployee)) return _currentEmployee;
             var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
-            _currentEmployee = $"{user.FirstName} {user.MiddleName} {user.LastName}";
+            _currentEmployee = $"{user.FirstName} {user.LastName}";
             return _currentEmployee;
         }
 
+        //get timesheet for current employee
         public IActionResult Index()
         {
+            if (_configuration.GetSection("Data:TimesheetAdmin").Get<string[]>().Contains(User.Identity.Name))
+                return RedirectToAction(nameof(Admin));
             ViewBag.date = DateTime.Now;
             ViewBag.currentUser = CurrentEmployee();
             return View();
         }
 
-        public IActionResult GetDate(DateTime date)
+        //admin timesheet entry for another employee.
+        [Authorize(policy: "TimesheetAdminRole")]
+        public IActionResult Admin()
         {
-            return ViewComponent("TimesheetWidget", new { userName = CurrentEmployee(), dateTime = date });
+            var employeesData = _timesheetRepository.GetAllUsers().Where(x => x.IsEnabled);
+            var currentUser = CurrentEmployee();
+            if (employeesData != null)
+            {
+                var employeeList = employeesData.Select(x => new SelectListItem
+                {
+                    Value = $"{x.FirstName} {x.LastName}",
+                    Text = $"{x.FirstName} {x.LastName}",
+                    Selected = string.Compare($"{x.FirstName} {x.LastName}", currentUser, true) == 0
+                }).ToList();
+
+                ViewBag.employeeList = employeeList;
+            }
+            ViewBag.date = DateTime.Now;
+            ViewBag.currentUser = currentUser;
+            return View("Index");
+        }
+
+        public IActionResult GetDate(DateTime date, string employee)
+        {
+            return ViewComponent("TimesheetWidget", new { userName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee, dateTime = date });
         }
 
         #region manage your hours
@@ -54,12 +83,12 @@ namespace sbpc.Timesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SaveHour(HourViewModel hour, string employeeName)
+        public IActionResult SaveHour(HourViewModel hour, string employee)
         {
             if (ModelState.IsValid)
             {
-                if (string.IsNullOrEmpty(employeeName))
-                    hour.EmployeeName = CurrentEmployee();
+                hour.EmployeeName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee;
+                hour.Note = hour.IsTravel ? $"Travel : {hour.Note}" : hour.Note;
                 var data = _mapper.Map<Hour>(hour);
                 _timesheetRepository.AddorUpdateHour(data);
             }
@@ -67,10 +96,10 @@ namespace sbpc.Timesheet.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteHour(int Id, DateTime date, string employeeName)
+        public IActionResult DeleteHour(int Id, DateTime date, string employee)
         {
             _timesheetRepository.RemoveHour(Id);
-            return ViewComponent("TimesheetWidget", new { userName = string.IsNullOrEmpty(employeeName) ? CurrentEmployee() : employeeName, dateTime = date });
+            return ViewComponent("TimesheetWidget", new { userName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee, dateTime = date });
         }
 
         #endregion
@@ -83,12 +112,11 @@ namespace sbpc.Timesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SaveExpense(ExpenseViewModel expense, string employeeName)
+        public IActionResult SaveExpense(ExpenseViewModel expense, string employee)
         {
             if (ModelState.IsValid)
             {
-                if (string.IsNullOrEmpty(employeeName))
-                    expense.EmployeeName = CurrentEmployee();
+                expense.EmployeeName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee;
                 var data = _mapper.Map<Expense>(expense);
                 _timesheetRepository.AddorUpdateExpense(data);
             }
@@ -96,10 +124,10 @@ namespace sbpc.Timesheet.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteExpense(int Id, DateTime date, string employeeName)
+        public IActionResult DeleteExpense(int Id, DateTime date, string employee)
         {
             _timesheetRepository.RemoveExpense(Id);
-            return ViewComponent("TimesheetWidget", new { userName = string.IsNullOrEmpty(employeeName) ? CurrentEmployee() : employeeName, dateTime = date });
+            return ViewComponent("TimesheetWidget", new { userName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee, dateTime = date });
         }
         #endregion
 
@@ -111,12 +139,11 @@ namespace sbpc.Timesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SaveMileage(MileageViewModel mileage, string employeeName)
+        public IActionResult SaveMileage(MileageViewModel mileage, string employee)
         {
             if (ModelState.IsValid)
             {
-                if (string.IsNullOrEmpty(employeeName))
-                    mileage.EmployeeName = CurrentEmployee();
+                mileage.EmployeeName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee;
                 var data = _mapper.Map<Mileage>(mileage);
                 _timesheetRepository.AddorUpdateMileage(data);
             }
@@ -124,10 +151,10 @@ namespace sbpc.Timesheet.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteMileage(int Id, DateTime date, string employeeName)
+        public IActionResult DeleteMileage(int Id, DateTime date, string employee)
         {
             _timesheetRepository.RemoveMileage(Id);
-            return ViewComponent("TimesheetWidget", new { userName = string.IsNullOrEmpty(employeeName) ? CurrentEmployee() : employeeName, dateTime = date });
+            return ViewComponent("TimesheetWidget", new { userName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee, dateTime = date });
         }
         #endregion
     }

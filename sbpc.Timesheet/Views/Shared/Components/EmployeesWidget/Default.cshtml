@@ -44,7 +44,7 @@
                                     </td>
                                     <td>
                                         <a href="#" data-user="@item.UserName" class="edit-user">Edit</a>
-                                        @if (string.Compare(item.UserName, _configuration.GetValue<string>("Data:MasterUser")) != 0 && !item.IsEnabled)
+                                        @if (!_configuration.GetSection("Data:MasterAdmin").Get<string[]>().Contains(item.UserName) && !item.IsEnabled)
                                         { <span>|</span>
                                         <a href="#" data-user="@item.UserName" class="delete-user">Delete</a>
                                         }

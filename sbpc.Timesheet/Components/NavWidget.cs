@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace sbpc.Timesheet.Components
@@ -18,9 +19,13 @@ namespace sbpc.Timesheet.Components
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             var navpage = new List<NavPage>();
-            if (String.CompareOrdinal(userName, _configuration.GetValue<string>("Data:MasterUser")) == 0)
+            if (_configuration.GetSection("Data:MasterAdmin").Get<string[]>().Contains(userName))
             {
                 return View(AdminPages());
+            }
+            else if(_configuration.GetSection("Data:TimesheetAdmin").Get<string[]>().Contains(userName))
+            {
+                return View(TimesheetAdminPages());
             }
             return View(UserPages());
         }
@@ -39,7 +44,7 @@ namespace sbpc.Timesheet.Components
                         root = "Home",
                         links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
                         {
-                            new KeyValuePair<string, string>("My Timesheet",Url.Action("Index","Timesheet"))
+                            new KeyValuePair<string, string>("Timesheet",Url.Action("Index","Timesheet"))
                         })
                     },
                 new NavPage {
@@ -49,6 +54,27 @@ namespace sbpc.Timesheet.Components
                             new KeyValuePair<string, string>("Timesheets",Url.Action("Index","Admin")),
                             new KeyValuePair<string, string>("Employees",Url.Action("Users","Admin")),
                             new KeyValuePair<string, string>("Jobs",Url.Action("Jobs","Admin"))
+                        })
+                    },
+                new NavPage {
+                    root = "Account",
+                    links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string, string>("Profile",Url.Action("Index","Manage")),
+                        new KeyValuePair<string, string>("Password", Url.Action("ChangePassword","Manage"))
+                    })
+                }
+            };
+        }
+        private IEnumerable<NavPage> TimesheetAdminPages()
+        {
+            return new List<NavPage>
+            {
+                new NavPage {
+                        root = "Home",
+                        links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
+                        {
+                            new KeyValuePair<string, string>("Timesheet",Url.Action("Index","Timesheet"))
                         })
                     },
                 new NavPage {

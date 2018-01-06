@@ -40,6 +40,9 @@
                                         Job
                                     </th>
                                     <th>
+                                        Travel?
+                                    </th>
+                                    <th>
                                         Note
                                     </th>
                                 </tr>
@@ -61,6 +64,9 @@
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.JobName)
+                                            </td>
+                                            <td>
+                                                @(item.IsTravel? "Yes" : "No")
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Note)
@@ -179,10 +185,6 @@
                                     }
                                 </tbody>
                             }
-                            else
-                            {
-                                <tbody><tr><td colspan="5" class="alert alert-warning">No mileage logged yet.</td></tr></tbody>
-                            }
                         </table>
                     </div>
                 </div>
@@ -210,11 +212,11 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Work hours
-                            <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0" : Model.Hours.Where(a => a.Item != Constants.Item.Overtime).Sum(x => x.Hours).ToString())</span>
+                            <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0" : Model.Hours.Where(a => !a.IsTravel).Sum(x => x.Hours).ToString())</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            OT hours
-                            <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0" : Model.Hours.Where(a => a.Item == Constants.Item.Overtime).Sum(x => x.Hours).ToString())</span>
+                            Travel hours
+                            <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0" : Model.Hours.Where(a => a.IsTravel).Sum(x => x.Hours).ToString())</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Expenses
