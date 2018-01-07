@@ -30,7 +30,7 @@
     <div class="col-lg-8">
         <h1 class="page-header">
             @ViewData["Title"] <br />
-           <small> Add/update employees</small>
+            <small> Add/update employees</small>
         </h1>
     </div>
     <div class="col-lg-4 text-right notify"></div>
@@ -43,5 +43,11 @@
 
 @section scripts
     {
-    <script src="~/js/admin-users.js"></script>
+    <environment names="development">
+        <script src="~/js/admin-users.js"></script>
+    </environment>
+    <environment names="staging, production, release">
+        <script src="~/js/admin-users.min.js"></script>
+    </environment>
+
 }

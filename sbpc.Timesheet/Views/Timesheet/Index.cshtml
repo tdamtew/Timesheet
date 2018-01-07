@@ -33,5 +33,11 @@
 
 @section scripts
     {
-    <script src="~/js/users-timesheet.js"></script>
+    <environment names="development">
+        <script src="~/js/users-timesheet.js"></script>
+    </environment>
+    <environment names="staging, production, release">
+        <script src="~/js/users-timesheet.min.js"></script>
+    </environment>
+
 }
