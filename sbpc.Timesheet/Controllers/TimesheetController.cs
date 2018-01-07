@@ -88,7 +88,17 @@ namespace sbpc.Timesheet.Controllers
             if (ModelState.IsValid)
             {
                 hour.EmployeeName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee;
-                hour.Note = hour.IsTravel ? (!hour.Note.Contains("Travel :") ? $"Travel : {hour.Note}" : hour.Note) : hour.Note;
+                if(hour.IsTravel)
+                {
+                    if(!string.IsNullOrEmpty(hour.Note))
+                    {
+                        hour.Note = hour.Note.Contains("Travel") ? hour.Note : $"Travel {hour.Note}";
+                    }
+                    else
+                    {
+                        hour.Note = "Travel";
+                    }
+                }
                 var data = _mapper.Map<Hour>(hour);
                 _timesheetRepository.AddorUpdateHour(data);
             }
