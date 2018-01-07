@@ -8,11 +8,12 @@
     <div class="col-lg-12">
         <h1 class="page-header">
             @ViewData["Title"] <br />
+            <small> update your phone number</small>
         </h1>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         @Html.Partial("_StatusMessage", Model.StatusMessage)
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>

@@ -56,6 +56,7 @@ namespace sbpc.Timesheet
             }
             else
             {
+                app.UseHttpsEnforcement();
                 app.UseExceptionHandler("/Home/Error");
             }
 

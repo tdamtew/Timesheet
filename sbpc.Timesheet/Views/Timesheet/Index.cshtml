@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Timesheet Entry";
+    ViewData["Title"] = "Timesheet entry";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div id="wait" class="modal" style="display:none; position:absolute; top:50%; left:50%;"><img src='~/images/pIkfp.gif' /></div>
@@ -13,7 +13,9 @@
     </div>
     <div class="col-lg-4 text-right notify"></div>
 </div>
-<div class="row alert alert-info"><i class="fa fa-info-circle"></i> please click on <strong>edit</strong> next to the corresponding record to start updating.</div>
+<div class="row" style="padding:10px;">
+    <div class="alert alert-info"><i class="fa fa-info-circle"></i> please click on <strong>edit</strong> next to the corresponding record to start updating.</div>
+</div>
 @if (ViewBag.employeeList != null)
 {
     <div class="row">

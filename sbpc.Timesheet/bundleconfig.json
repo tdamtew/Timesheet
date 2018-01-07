@@ -20,5 +20,23 @@
     "inputFiles": [
       "wwwroot/lib/bootstrap/dist/css/bootstrap.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/admin-jobs.min.js",
+    "inputFiles": [
+      "wwwroot/js/admin-jobs.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/admin-users.min.js",
+    "inputFiles": [
+      "wwwroot/js/admin-users.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/users-timesheet.min.js",
+    "inputFiles": [
+      "wwwroot/js/users-timesheet.js"
+    ]
   }
 ]
