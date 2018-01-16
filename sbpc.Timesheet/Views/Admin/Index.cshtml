@@ -56,7 +56,7 @@
             @await Component.InvokeAsync("TimesheetAdminWidget", new { startDate = ViewBag.startDate, endDate = ViewBag.endDate })
         </div>
     </div>
-    <div class="col-md-7 text-right">
+    <div class="col-md-9 text-right">
         <a href='@Url.Action("Index", "Export", new { startDate = ViewBag.startDate, endDate = ViewBag.endDate})' class="btn btn-primary export"><i class="fa fa-download"> Export</i></a> |
         <label class="form-check-label small">
             @Html.CheckBox("exportAll", exportAll, new { @class = "form-check-input" })
