@@ -15,6 +15,7 @@ namespace sbpc.Timesheet.Data
         Job GetJob(int Id);
         int UpdateUser(ApplicationUser user);
         Hour GetHour(int Id);
+        IEnumerable<Hour> GetHours(DateTime startDate, DateTime endDate, string employee = "");
         int AddorUpdateJob(Job job);
         int RemoveJob(int Id);
         int AddorUpdateExpense(Expense expense);

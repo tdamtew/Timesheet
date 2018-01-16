@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace sbpc.Timesheet.Helpers
 {
@@ -18,12 +15,18 @@ namespace sbpc.Timesheet.Helpers
         }
         public static class Item
         {
-            public static string Billable = "Billable";
-            public static string NonBillable = "Non-Billable";
-            public static string Overtime = "Overtime";
-            public static string Travel = "Travel";
+            public static string LeadEngineer = "Lead Engineer";
+            public static string Engineer = "Engineer";
+            public static string CATP = "CATP Tech";
             public static string Driver = "Driver";
-            public static string DriverOT = "Driver OT";
+        }
+        public static class PItem
+        {
+            public static string Hourly = "Hourly";
+            public static string RegularOT = "Hourly OT";
+            public static string SBP = "SBP";
+            public static string SBPOT = "SBP OT";
+            public static string Travel = "Travel";
         }
         public static class Category
         {

@@ -94,6 +94,16 @@ namespace sbpc.Timesheet.Data.Repository
         #endregion
 
         #region hour
+
+        public IEnumerable<Hour> GetHours(DateTime startDate, DateTime endDate, string employee = "")
+        {
+            var hours = _timesheetDbContext.Hours.Where(a => a.Date >= startDate.Date && a.Date <= endDate.Date);
+            if(!string.IsNullOrEmpty(employee))
+            {
+                hours = hours.Where(x => x.EmployeeName == employee);
+            }
+            return hours;
+        }
         public int AddorUpdateHour(Hour hour)
         {
             if (hour.Id == 0)
@@ -179,6 +189,7 @@ namespace sbpc.Timesheet.Data.Repository
                 _timesheetDbContext.Mileages.Remove(mileage);
             return _timesheetDbContext.SaveChanges();
         }
+
         #endregion
     }
 }
