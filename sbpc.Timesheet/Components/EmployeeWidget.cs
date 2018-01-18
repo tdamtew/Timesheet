@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using sbpc.Timesheet.Data;
-using sbpc.Timesheet.Models;
 using sbpc.Timesheet.Models.AccountViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace sbpc.Timesheet.Components
@@ -23,9 +19,9 @@ namespace sbpc.Timesheet.Components
         public async Task<IViewComponentResult> InvokeAsync(string userId = "")
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            if (string.IsNullOrEmpty(userId)) return View(new UserViewModel { });
+            if (string.IsNullOrEmpty(userId)) return View(new UserViewModel { IsEnabled = true});
             var data = _timesheetRepository.GetUser(userId);
-            if (data == null) return View( new UserViewModel { });
+            if (data == null) return View( new UserViewModel { IsEnabled = true });
             return View(_mapper.Map<UserViewModel>(data));
         }
     }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using static sbpc.Timesheet.Helpers.Constants;
 
 namespace sbpc.Timesheet.Controllers
 {
@@ -100,6 +101,7 @@ namespace sbpc.Timesheet.Controllers
                     }
                 }
                 var data = _mapper.Map<Hour>(hour);
+                data.Billable = !hour.JobName.Contains(PItem.SBP);
                 _timesheetRepository.AddorUpdateHour(data);
             }
             return ViewComponent("TimesheetWidget", new { userName = hour.EmployeeName, dateTime = hour.Date });

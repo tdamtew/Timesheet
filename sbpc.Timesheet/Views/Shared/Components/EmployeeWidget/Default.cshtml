@@ -33,10 +33,18 @@
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="form-check-label">
-                    <input type="checkbox" asp-for="IsEnabled" class="form-check-input" disabled="@(Model.IsEnabled && _configuration.GetSection("Data:MasterAdmin").Get<string[]>().Contains(Model.UserName))">
-                    Active
-                </label>
+                @if (Model.IsEnabled && _configuration.GetSection("Data:MasterAdmin").Get<string[]>().Contains(Model.UserName))
+                {
+                    <input type="hidden" asp-for="IsEnabled" />
+                }
+                else
+                {
+                    <label class="form-check-label">
+                        <input type="checkbox" asp-for="IsEnabled" class="form-check-input">
+                        Active
+                    </label>
+                }
+
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" style="width: 100px;"><i class="fa fa-save fa-lg"></i> Save</button>

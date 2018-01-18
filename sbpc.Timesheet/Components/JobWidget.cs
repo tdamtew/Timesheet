@@ -19,9 +19,9 @@ namespace sbpc.Timesheet.Components
         public async Task<IViewComponentResult> InvokeAsync(int jobId = 0)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            if (jobId == 0) return View(new JobViewModel { });
+            if (jobId == 0) return View(new JobViewModel { Active = true});
             var data = _timesheetRepository.GetJob(jobId);
-            if (data == null) return View( new JobViewModel { });
+            if (data == null) return View( new JobViewModel { Active = true });
             return View(_mapper.Map<JobViewModel>(data));
         }
     }

@@ -7,9 +7,8 @@ using sbpc.Timesheet.Models;
 using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
-using static sbpc.Timesheet.Helpers.Constants;
 using Microsoft.Extensions.Configuration;
-using sbpc.Timesheet.Data.Entity;
+using static sbpc.Timesheet.Helpers.Constants;
 
 namespace sbpc.Timesheet.Controllers
 {
@@ -78,7 +77,7 @@ namespace sbpc.Timesheet.Controllers
                     }
                     foreach (var t in data)
                     {
-                        _dataToExport.AppendLine($"TIMEACT\t{t.Date.ToShortDateString()}\t{t.Job}\t{t.Employee}\t{t.Item}\t{t.PItem}\t{t.Duration}\t{t.Project}\t{t.Note}\t{t.BillingStatus}");
+                        _dataToExport.AppendLine($"TIMEACT\t{t.Date.ToShortDateString()}\t{t.Job}\t{t.Employee}\t{t.Item}\t{t.PayableItem}\t{t.Duration}\t{t.Project}\t{t.Note}\t{t.BillingStatus}");
                     }
                     d = d.AddDays(7);
                 }
@@ -96,103 +95,38 @@ namespace sbpc.Timesheet.Controllers
                 data = data.Where(x => !x.IsExported);
             }
             if (data == null || !data.Any()) return null;
-            var totalHours = 0;
             var exportView = new List<ExportViewModel>();
             foreach (var d in data.OrderBy(a => a.Date))
             {
-                if (d.IsTravel)
+                exportView.Add(new ExportViewModel
+                {
+                    Date = d.Date,
+                    Job = d.JobName,
+                    Employee = d.EmployeeName,
+                    Duration = d.Hours - d.OTHours,
+                    Item = items.Where(x => x.Job == d.JobName).Select(x => x.Type).FirstOrDefault(),
+                    PayableItem = d.Billable ? PItem.Hourly : PItem.SBP,
+                    BillingStatus = d.Billable ? 1 : 0,
+                    Note = d.Note
+                });
+                if (d.OTHours > 0)
                 {
                     exportView.Add(new ExportViewModel
                     {
                         Date = d.Date,
                         Job = d.JobName,
                         Employee = d.EmployeeName,
-                        Duration = d.Hours,
+                        Duration = d.OTHours,
                         Item = items.Where(x => x.Job == d.JobName).Select(x => x.Type).FirstOrDefault(),
-                        PItem = PItem.Travel,
-                        BillingStatus = d.JobName.Contains(PItem.SBP) ? 0 : 1,
+                        PayableItem = PItem.RegularOT,
+                        BillingStatus = d.Billable ? 1 : 0,
                         Note = d.Note
                     });
-                    UpdateExportFlag(d);
-                    continue;
                 }
-                totalHours += d.Hours;
-                if (totalHours > 40)
-                {
-                    //classify jobs.
-                    var otHour = totalHours % 40;
-                    if (d.Hours > otHour && totalHours / 40 == 1)
-                    {
-                        //regular hours
-                        exportView.Add(new ExportViewModel
-                        {
-                            Date = d.Date,
-                            Job = d.JobName,
-                            Employee = d.EmployeeName,
-                            Duration = d.Hours - otHour,
-                            Item = items.Where(x => x.Job == d.JobName).Select(x => x.Type).FirstOrDefault(),
-                            PItem = d.JobName.Contains(PItem.SBP) ? PItem.SBP : PItem.Hourly,
-                            BillingStatus = d.JobName.Contains(PItem.SBP) ? 0 : 1,
-                            Note = d.Note
-                        });
-
-                        //overtime hours.
-                        exportView.Add(new ExportViewModel
-                        {
-                            Date = d.Date,
-                            Job = d.JobName,
-                            Employee = d.EmployeeName,
-                            Duration = otHour,
-                            Item = items.Where(x => x.Job == d.JobName).Select(x => x.Type).FirstOrDefault(),
-                            PItem = d.JobName.Contains(PItem.SBP) ? PItem.SBPOT : PItem.RegularOT,
-                            BillingStatus = d.JobName.Contains(PItem.SBP) ? 0 : 1,
-                            Note = d.Note
-                        });
-                        UpdateExportFlag(d);
-                        continue;
-                    }
-                    else
-                    {
-                        //overtime hours.
-                        exportView.Add(new ExportViewModel
-                        {
-                            Date = d.Date,
-                            Job = d.JobName,
-                            Employee = d.EmployeeName,
-                            Duration = d.Hours,
-                            Item = items.Where(x => x.Job == d.JobName).Select(x => x.Type).FirstOrDefault(),
-                            PItem = d.JobName.Contains(PItem.SBP) ? PItem.SBPOT : PItem.RegularOT,
-                            BillingStatus = d.JobName.Contains(PItem.SBP) ? 0 : 1,
-                            Note = d.Note
-                        });
-                        UpdateExportFlag(d);
-                        continue;
-                    }
-                }
-                else
-                {
-                    exportView.Add(new ExportViewModel
-                    {
-                        Date = d.Date,
-                        Job = d.JobName,
-                        Employee = d.EmployeeName,
-                        Duration = d.Hours,
-                        Item = items.Where(x => x.Job == d.JobName).Select(x => x.Type).FirstOrDefault(),
-                        PItem = d.JobName.Contains(PItem.SBP) ? PItem.SBP : PItem.Hourly,
-                        BillingStatus = d.JobName.Contains(PItem.SBP) ? 0 : 1,
-                        Note = d.Note
-                    });
-                    UpdateExportFlag(d);
-                    continue;
-                }
+                _timesheetRepository.UpdateExportFlag(d);
+                continue;
             }
             return exportView;
-        }
-
-        private void UpdateExportFlag(Hour hour)
-        {
-            hour.IsExported = true;
-            _timesheetRepository.AddorUpdateHour(hour);
         }
     }
 }

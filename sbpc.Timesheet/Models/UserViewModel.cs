@@ -23,7 +23,7 @@ namespace sbpc.Timesheet.Models.AccountViewModels
         public string LastName { get; set; }
 
         [Display(Name = "Phone Number")]
-        [DataType(DataType.PhoneNumber)]
+        [Phone]
         public string PhoneNumber { get; set; }
 
         public bool IsEnabled { get; set; } 

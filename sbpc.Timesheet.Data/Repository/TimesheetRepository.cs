@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace sbpc.Timesheet.Data.Repository
 {
@@ -20,14 +21,41 @@ namespace sbpc.Timesheet.Data.Repository
         public ApplicationUser GetUser(string userId) => _timesheetDbContext.Users.FirstOrDefault(x => x.UserName == userId);
         public int UpdateUser(ApplicationUser user)
         {
-            var updatedUser = _timesheetDbContext.Users.First(x => x.UserName == user.UserName);
-            if (updatedUser == null) throw new ApplicationException($"Unable to find the user : {user.UserName}");
-            updatedUser.FirstName = user.FirstName;
-            updatedUser.LastName = user.LastName;
-            updatedUser.MiddleName = user.MiddleName;
-            updatedUser.PhoneNumber = user.PhoneNumber;
-            updatedUser.IsEnabled = user.IsEnabled;
-            _timesheetDbContext.Users.Update(updatedUser);
+            var updateUser = _timesheetDbContext.Users.First(x => x.UserName == user.UserName);
+            if (updateUser == null) throw new ApplicationException($"Unable to find the user : {user.UserName}");
+            var expenses = _timesheetDbContext.Expenses.Where(x => x.EmployeeName == $"{updateUser.FirstName} {updateUser.LastName}");
+            if (expenses != null)
+            {
+                foreach (var exp in expenses)
+                {
+                    exp.EmployeeName = $"{user.FirstName} {user.LastName}";
+                    _timesheetDbContext.Expenses.Update(exp);
+                }
+            }
+            var hours = _timesheetDbContext.Hours.Where(x => x.EmployeeName == $"{updateUser.FirstName} {updateUser.LastName}");
+            if (hours != null)
+            {
+                foreach (var hour in hours)
+                {
+                    hour.EmployeeName = $"{user.FirstName} {user.LastName}";
+                    _timesheetDbContext.Hours.Update(hour);
+                }
+            }
+            var mileages = _timesheetDbContext.Mileages.Where(x => x.EmployeeName == $"{updateUser.FirstName} {updateUser.LastName}");
+            if (mileages != null)
+            {
+                foreach (var mile in mileages)
+                {
+                    mile.EmployeeName = $"{user.FirstName} {user.LastName}";
+                    _timesheetDbContext.Mileages.Update(mile);
+                }
+            }
+            updateUser.FirstName = user.FirstName;
+            updateUser.MiddleName = user.MiddleName;
+            updateUser.LastName = user.LastName;
+            updateUser.IsEnabled = user.IsEnabled;
+            updateUser.PhoneNumber = user.PhoneNumber;
+            _timesheetDbContext.Users.Update(updateUser);
             return _timesheetDbContext.SaveChanges();
         }
         #endregion
@@ -37,19 +65,50 @@ namespace sbpc.Timesheet.Data.Repository
         public Job GetJob(int Id) => _timesheetDbContext.Jobs.FirstOrDefault(x => x.Id == Id);
         public int AddorUpdateJob(Job job)
         {
-            if (job.Id == 0)
+            if (!_timesheetDbContext.Jobs.Any(x => x.Id == job.Id))
+            {
+                job.Id = 0;
+                var existingJob = _timesheetDbContext.Jobs.FirstOrDefault(x => string.Compare(x.Name, job.Name) == 0);
+                if(existingJob != null)
+                {
+                    existingJob.CostPerMile = job.CostPerMile;
+                    existingJob.OverTimeRate = job.OverTimeRate;
+                    _timesheetDbContext.Jobs.Update(existingJob);
+                    return _timesheetDbContext.SaveChanges();
+                }
                 _timesheetDbContext.Jobs.Add(job);
+            }
             else
             {
-                if (!_timesheetDbContext.Jobs.Any(x => x.Id == job.Id))
+                var oldName = _timesheetDbContext.Jobs.AsNoTracking().FirstOrDefault(x => x.Id == job.Id).Name;
+                var expenses = _timesheetDbContext.Expenses.Where(x => x.JobName == oldName);
+                if (expenses != null)
                 {
-                    job.Id = 0;
-                    _timesheetDbContext.Jobs.Add(job);
+                    foreach (var exp in expenses)
+                    {
+                        exp.JobName = job.Name;
+                        _timesheetDbContext.Expenses.Update(exp);
+                    }
                 }
-                else
+                var hours = _timesheetDbContext.Hours.Where(x => x.JobName == oldName);
+                if (hours != null)
                 {
-                    _timesheetDbContext.Jobs.Update(job);
+                    foreach (var hour in hours)
+                    {
+                        hour.JobName = job.Name;
+                        _timesheetDbContext.Hours.Update(hour);
+                    }
                 }
+                var mileages = _timesheetDbContext.Mileages.Where(x => x.JobName == oldName);
+                if (mileages != null)
+                {
+                    foreach (var mile in mileages)
+                    {
+                        mile.JobName = job.Name;
+                        _timesheetDbContext.Mileages.Update(mile);
+                    }
+                }
+                _timesheetDbContext.Jobs.Update(job);
             }
             return _timesheetDbContext.SaveChanges();
         }
@@ -98,7 +157,7 @@ namespace sbpc.Timesheet.Data.Repository
         public IEnumerable<Hour> GetHours(DateTime startDate, DateTime endDate, string employee = "")
         {
             var hours = _timesheetDbContext.Hours.Where(a => a.Date >= startDate.Date && a.Date <= endDate.Date);
-            if(!string.IsNullOrEmpty(employee))
+            if (!string.IsNullOrEmpty(employee))
             {
                 hours = hours.Where(x => x.EmployeeName == employee);
             }
@@ -106,29 +165,86 @@ namespace sbpc.Timesheet.Data.Repository
         }
         public int AddorUpdateHour(Hour hour)
         {
-            if (hour.Id == 0)
-                _timesheetDbContext.Hours.Add(hour);
-            else
+            //get hours for the week.
+            var startOfWeek = hour.Date.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)hour.Date.DayOfWeek);
+            var endOfWeek = startOfWeek.AddDays(7);
+            if(hour.IsTravel)
             {
-                if (!_timesheetDbContext.Hours.Any(x => x.Id == hour.Id))
-                {
-                    hour.Id = 0;
-                    _timesheetDbContext.Hours.Add(hour);
-                }
-                else
-                {
-                    _timesheetDbContext.Hours.Update(hour);
-                }
+                _timesheetDbContext.Hours.Add(hour);
+                return _timesheetDbContext.SaveChanges();
             }
+            var weeklyHours = GetHours(startOfWeek, endOfWeek, hour.EmployeeName);
+            if (weeklyHours == null || !weeklyHours.Any())
+            {
+                _timesheetDbContext.Hours.Add(hour);
+                return _timesheetDbContext.SaveChanges();
+            }
+            var workHours = weeklyHours.Where(x => !x.IsTravel);
+            if (workHours == null || !workHours.Any())
+            {
+                _timesheetDbContext.Hours.Add(hour);
+                return _timesheetDbContext.SaveChanges();
+            }
+            var totalHours = workHours.Sum(x => x.Hours);
+            if (totalHours >= 40)
+            {
+                hour.OTHours = hour.Hours;
+                _timesheetDbContext.Hours.Add(hour);
+                return _timesheetDbContext.SaveChanges();
+            }
+            if (totalHours + hour.Hours > 40)
+                hour.OTHours = (totalHours + hour.Hours) % 40;
+            _timesheetDbContext.Hours.Add(hour);
             return _timesheetDbContext.SaveChanges();
         }
         public Hour GetHour(int Id) => _timesheetDbContext.Hours.First(x => x.Id == Id);
-        public int RemoveHour(int Id)
+        public void RemoveHour(int Id)
         {
             var hour = _timesheetDbContext.Hours.First(x => x.Id == Id);
             if (hour != null)
                 _timesheetDbContext.Hours.Remove(hour);
-            return _timesheetDbContext.SaveChanges();
+            _timesheetDbContext.SaveChanges();
+
+            //recalculate overtime for the week.
+            var startOfWeek = hour.Date.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)hour.Date.DayOfWeek);
+            var endOfWeek = startOfWeek.AddDays(7);
+            var weeklyHours = GetHours(startOfWeek, endOfWeek, hour.EmployeeName);
+            if (weeklyHours == null || !weeklyHours.Any()) return;
+            var workHours = weeklyHours.Where(x => !x.IsTravel);
+            if (workHours == null || !workHours.Any() || !workHours.Any(x => x.OTHours > 0)) return;
+            var flaggedHours = workHours.Where(x => x.OTHours > 0).OrderBy(x => x.Date);
+            var totalHours = workHours.Sum(x => x.Hours);
+            if (totalHours <= 40)
+            {
+                foreach(var h in flaggedHours)
+                {
+                    h.OTHours = 0;
+                    _timesheetDbContext.Hours.Update(h);
+                }
+                _timesheetDbContext.SaveChanges();
+                return;
+            }
+            var otHours = totalHours - 40;
+            foreach(var h in flaggedHours)
+            {
+                if(h.OTHours >= otHours)
+                {
+                    h.OTHours = otHours;
+                    _timesheetDbContext.Hours.Update(h);
+                    break;
+                }
+                otHours -= h.OTHours;
+                h.OTHours = 0;
+                _timesheetDbContext.Hours.Update(h);
+            }
+            _timesheetDbContext.SaveChanges();
+        }
+
+        public void UpdateExportFlag(Hour hour)
+        {
+            hour.IsExported = true;
+            _timesheetDbContext.Hours.Update(hour);
+            _timesheetDbContext.SaveChanges();
         }
         #endregion
 

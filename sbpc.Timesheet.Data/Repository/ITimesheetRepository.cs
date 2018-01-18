@@ -25,6 +25,7 @@ namespace sbpc.Timesheet.Data
         Mileage GetMileage(int Id);
         int RemoveExpense(int Id);
         int RemoveMileage(int Id);
-        int RemoveHour(int Id);
+        void RemoveHour(int Id);
+        void UpdateExportFlag(Hour hour);
     }
 }

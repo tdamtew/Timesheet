@@ -1,9 +1,11 @@
 ﻿@model sbpc.Timesheet.Models.TimesheetViewModel
 @using sbpc.Timesheet.Helpers
 @using System.Globalization
-@{ 
+@{
     var startOfWeek = Model.date.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)Model.date.DayOfWeek);
     var endOfWeek = startOfWeek.AddDays(7);
+    var startOfMonth = new DateTime(Model.date.Year, Model.date.Month, 1);
+    var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 }
 <div class="row">
     <div class="col-md-3">
@@ -52,7 +54,7 @@
                                 <i class="fa fa-calendar"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <strong style="font-size:13pt;">Week of @Model.date.ToString("MM/dd/yyyy")</strong>
+                                <strong style="font-size:13pt;">Week of @startOfWeek.ToString("MM/dd/yyyy")</strong>
                             </div>
                         </div>
                     </div>
@@ -60,9 +62,9 @@
                         <div class="row">
                             <ul class="list-group">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Work hours
+                                    Total hours
                                     <span class="badge badge-pill alert-success">
-                                        @(Model.Hours == null ? "0" : Model.Hours.Where(a => !a.IsTravel && a.Date.Date >= startOfWeek.Date && a.Date.Date <= endOfWeek.Date).Sum(x => x.Hours).ToString())
+                                        @(Model.Hours == null ? "0" : Model.Hours.Where(a => a.Date.Date >= startOfWeek.Date && a.Date.Date <= endOfWeek.Date).Sum(x => x.Hours).ToString())
                                     </span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -70,12 +72,14 @@
                                     <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0" : Model.Hours.Where(a => a.IsTravel && a.Date.Date >= startOfWeek.Date && a.Date.Date <= endOfWeek.Date).Sum(x => x.Hours).ToString())</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Expenses
-                                    <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Where(a => a.Date.Date >= startOfWeek.Date && a.Date.Date <= endOfWeek.Date).Sum(x => x.Amount).ToString("C"))</span>
+                                    Expenses (Reimbursable)
+                                    <span class="badge badge-pill alert-success">
+                                        @(Model.Expenses == null ? "$0.00 ($0.00)" : $"{ Model.Expenses.Where(a => a.Date.Date >= startOfWeek.Date && a.Date.Date <= endOfWeek.Date).Sum(x => x.Amount).ToString("C")} ({ Model.Expenses.Where(a => a.Method == Constants.Method.Personal && a.Date.Date >= startOfWeek.Date && a.Date.Date <= endOfWeek.Date).Sum(x => x.Amount).ToString("C")})")
+                                    </span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Reimbursement
-                                    <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Where(a => a.Method == Constants.Method.Personal && a.Date.Date >= startOfWeek.Date && a.Date.Date <= endOfWeek.Date).Sum(x => x.Amount).ToString("C"))</span>
+                                    Mileage
+                                    <span class="badge badge-pill alert-success">@(Model.Mileages == null ? "0" : Model.Mileages.Where(a => a.Date.Date >= startOfWeek.Date && a.Date.Date <= endOfWeek.Date).Sum(x => x.mile).ToString())</span>
                                 </li>
                             </ul>
                         </div>
@@ -97,22 +101,22 @@
                         <div class="row">
                             <ul class="list-group">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Work hours
+                                    SBP Hours (Overtime)
                                     <span class="badge badge-pill alert-success">
-                                        @(Model.Hours == null ? "0" : Model.Hours.Where(a => !a.IsTravel).Sum(x => x.Hours).ToString())
+                                        @(Model.Hours == null ? "0 (0)" : $"{Model.Hours.Where(a => !a.Billable && a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date).Sum(x => x.Hours).ToString()} ({Model.Hours.Where(a => !a.Billable && a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date).Sum(x => x.OTHours).ToString()})")
                                     </span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Travel hours
-                                    <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0" : Model.Hours.Where(a => a.IsTravel).Sum(x => x.Hours).ToString())</span>
+                                    Billable Hours (Overtime)
+                                    <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0 (0)" : $"{Model.Hours.Where(a => a.Billable && a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date).Sum(x => x.Hours).ToString()} ({Model.Hours.Where(a => a.Billable && a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date).Sum(x => x.OTHours).ToString()})")</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Expenses
-                                    <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Sum(x => x.Amount).ToString("C"))</span>
+                                    Expenses (Reimbursable)
+                                    <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00 ($0.00)" : $"{Model.Expenses.Where(a => a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date).Sum(x => x.Amount).ToString("C")} ({Model.Expenses.Where(a => a.Method == Constants.Method.Personal && a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date).Sum(x => x.Amount).ToString("C")})")</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Reimbursement
-                                    <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00" : Model.Expenses.Where(a => a.Method == Constants.Method.Personal).Sum(x => x.Amount).ToString("C"))</span>
+                                    Mileage
+                                    <span class="badge badge-pill alert-success">@(Model.Mileages == null ? "0" : Model.Mileages.Where(a => a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date).Sum(x => x.mile).ToString())</span>
                                 </li>
                             </ul>
                         </div>
@@ -141,7 +145,7 @@
                     <!--Hours tab content-->
                     <div class="tab-pane active" id="hour" role="tabpanel" aria-labelledby="hour-tab">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <i class="fa fa-hourglass fa-fw"></i><strong> Hours for the selected month</strong>
@@ -155,43 +159,44 @@
                                                         Job
                                                     </th>
                                                     <th>
-                                                        Duration
+                                                        Total hours (Overtime)
                                                     </th>
                                                     <th>
                                                         Travel?
                                                     </th>
+                                                    <th>Note</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            @if (Model.Hours != null)
+                                            @if (Model.Hours != null && Model.Hours.Where(a => a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date) != null)
                                             {
-                                            <tbody>
-                                                @foreach (var item in Model.Hours)
+                                                <tbody>
+                                                    @foreach (var item in Model.Hours)
                                                     {
-                                                    <tr>
-                                                        <td>@item.Date.ToShortDateString()</td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.JobName)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.Hours)
-                                                        </td>
-                                                        <td>
-                                                            @(item.IsTravel? "Yes" : "No")
-                                                        </td>
-                                                        <td>
-                                                            <a href="#" data-hour="@item.Id" class="edit-hour">Edit</a> |
-                                                            <a href="#" data-hour="@item.Id" data-date="@Model.date" class="delete-hour">Delete</a>
-                                                        </td>
-                                                    </tr>
+                                                        <tr>
+                                                            <td>@item.Date.ToString("MM-dd-yyyy")</td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.JobName)
+                                                            </td>
+                                                            <td>
+                                                                @($"{item.Hours} ({item.OTHours})") 
+                                                            </td>
+                                                            <td>
+                                                                @(item.IsTravel ? "Yes" : "No")
+                                                            </td>
+                                                            <td>@item.Note</td>
+                                                            <td>
+                                                                <a href="#" data-hour="@item.Id" data-date="@Model.date" class="delete-hour">Delete</a>
+                                                            </td>
+                                                        </tr>
                                                     }
-                                            </tbody>
+                                                </tbody>
                                             }
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4" id="HourWidget">
+                            <div class="col-md-3" id="HourWidget">
                                 @await Component.InvokeAsync("HourWidget", new { date = Model.date, hourId = 0 })
                             </div>
                         </div>
@@ -200,7 +205,7 @@
                     <!--expense tab-->
                     <div class="tab-pane fade" id="expense" role="tabpanel" aria-labelledby="expense-tab">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <i class="fa fa-money fa-fw"></i><strong> Expenses for the selected month</strong>
@@ -222,41 +227,43 @@
                                                     <th>
                                                         Method
                                                     </th>
+                                                    <th>Note</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            @if (Model.Expenses != null)
+                                            @if (Model.Expenses != null && Model.Expenses.Where(a => a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date) != null)
                                             {
-                                            <tbody>
-                                                @foreach (var item in Model.Expenses)
+                                                <tbody>
+                                                    @foreach (var item in Model.Expenses)
                                                     {
-                                                    <tr>
-                                                        <td>@item.Date.ToShortDateString()</td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.JobName)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.Amount)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.Category)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.Method)
-                                                        </td>
-                                                        <td>
-                                                            <a href="#" data-expense="@item.Id" class="edit-expense">Edit</a> |
-                                                            <a href="#" data-expense="@item.Id" data-date="@Model.date" class="delete-expense">Delete</a>
-                                                        </td>
-                                                    </tr>
+                                                        <tr>
+                                                            <td>@item.Date.ToString("MM-dd-yyyy")</td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.JobName)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Amount)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Category)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Method)
+                                                            </td>
+                                                            <td>@item.Note</td>
+                                                            <td>
+                                                                <a href="#" data-expense="@item.Id" class="edit-expense">Edit</a> |
+                                                                <a href="#" data-expense="@item.Id" data-date="@Model.date" class="delete-expense">Delete</a>
+                                                            </td>
+                                                        </tr>
                                                     }
-                                            </tbody>
+                                                </tbody>
                                             }
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4" id="ExpenseWidget">
+                            <div class="col-md-3" id="ExpenseWidget">
                                 @await Component.InvokeAsync("ExpenseWidget", new { date = Model.date, expenseId = 0 })
                             </div>
                         </div>
@@ -265,7 +272,7 @@
                     <!--mileage tab-->
                     <div class="tab-pane fade" id="mileage" role="tabpanel" aria-labelledby="mileage-tab">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <i class="fa fa-cc-discover fa-fw"></i><strong> mileage for the selected month</strong>
@@ -281,35 +288,39 @@
                                                     <th>
                                                         Mileage
                                                     </th>
+                                                    <th>
+                                                        Note
+                                                    </th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            @if (Model.Mileages != null)
+                                            @if (Model.Mileages != null && Model.Mileages.Where(a => a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date) != null)
                                             {
-                                            <tbody>
-                                                @foreach (var item in Model.Mileages)
+                                                <tbody>
+                                                    @foreach (var item in Model.Mileages)
                                                     {
-                                                    <tr>
-                                                        <td>@item.Date.ToShortDateString()</td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.JobName)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => item.mile)
-                                                        </td>
-                                                        <td>
-                                                            <a href="#" data-mileage="@item.Id" class="edit-mileage">Edit</a> |
-                                                            <a href="#" data-mileage="@item.Id" data-date="@Model.date" class="delete-mileage">Delete</a>
-                                                        </td>
-                                                    </tr>
+                                                        <tr>
+                                                            <td>@item.Date.ToString("MM-dd-yyyy")</td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.JobName)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.mile)
+                                                            </td>
+                                                            <td>@item.Note</td>
+                                                            <td>
+                                                                <a href="#" data-mileage="@item.Id" class="edit-mileage">Edit</a> |
+                                                                <a href="#" data-mileage="@item.Id" data-date="@Model.date" class="delete-mileage">Delete</a>
+                                                            </td>
+                                                        </tr>
                                                     }
-                                            </tbody>
+                                                </tbody>
                                             }
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4" id="MileageWidget">
+                            <div class="col-md-3" id="MileageWidget">
                                 @await Component.InvokeAsync("MileageWidget", new { date = Model.date, mileageId = 0 })
                             </div>
                         </div>

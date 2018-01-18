@@ -30,7 +30,6 @@ namespace sbpc.Timesheet.Models
     public class ExpenseViewModel : TimeLogViewModel
     {
         [Required]
-        [DataType(DataType.Currency)]
         public Decimal Amount { get; set; }
 
         [Required]
@@ -44,9 +43,11 @@ namespace sbpc.Timesheet.Models
     public class HourViewModel : TimeLogViewModel
     {
         [Required]
-        public int Hours { get; set; }
-
+        public float Hours { get; set; }
         public bool IsTravel { get; set; }
+        public bool Billable { get; set; }
+        public float OTHours { get; set; }
+
     }
 
     public class MileageViewModel : TimeLogViewModel

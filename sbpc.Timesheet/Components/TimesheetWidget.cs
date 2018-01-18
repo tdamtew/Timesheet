@@ -23,11 +23,14 @@ namespace sbpc.Timesheet.Components
         public async Task<IViewComponentResult> InvokeAsync(string userName, DateTime dateTime)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            //get monthly data
+            //get extended month data
             var startOfMonth = new DateTime(dateTime.Year, dateTime.Month, 1);
+            var startWeekOfStartOfMonth = startOfMonth.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)startOfMonth.DayOfWeek);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
+            var startWeekOfEndOfMonth = endOfMonth.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)endOfMonth.DayOfWeek);
+            var endWeekOfEndOfMonth = startWeekOfEndOfMonth.AddDays(7);
 
-            var data = _timesheetRepository.GetTimesheet(startOfMonth, endOfMonth, userName);
+            var data = _timesheetRepository.GetTimesheet(startWeekOfStartOfMonth, endWeekOfEndOfMonth, userName);
             if (data == null) return View(new TimesheetViewModel { date = dateTime });
 
             return View(new TimesheetViewModel

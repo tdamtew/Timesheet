@@ -16,7 +16,6 @@ using System;
 
 namespace sbpc.Timesheet.Controllers
 {
-    [Authorize(policy: "AdminRole")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -121,7 +120,7 @@ namespace sbpc.Timesheet.Controllers
                     return StatusCode(500);
                 }
             }
-            return ViewComponent("EmployeesWidget");
+            return StatusCode(403);
         }
 
         [HttpGet]

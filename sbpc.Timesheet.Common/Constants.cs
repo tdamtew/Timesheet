@@ -13,18 +13,18 @@ namespace sbpc.Timesheet.Helpers
             public static string Personal = "Personal";
             public static string Company = "Company";
         }
-        public static class PItem
-        {
-            public static string Hourly = "Hourly";
-            public static string RegularOT = "Hourly OT";
-            public static string SBP = "SBP";
-        }
         public static class Item
         {
             public static string LeadEngineer = "Lead Engineer";
             public static string Engineer = "Engineer";
             public static string CATP = "CATP Tech";
             public static string Driver = "Driver";
+        }
+        public static class PItem
+        {
+            public static string Hourly = "Hourly";
+            public static string RegularOT = "Hourly OT";
+            public static string SBP = "SBP";
         }
         public static class Category
         {
