@@ -8,5 +8,6 @@ namespace sbpc.Timesheet.Data.Entity
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public bool IsEnabled { get; set; }
+        public bool TempPassword { get; set; }
     }
 }

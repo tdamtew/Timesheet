@@ -13,6 +13,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace sbpc.Timesheet.Controllers
 {
@@ -25,12 +26,14 @@ namespace sbpc.Timesheet.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
+        private readonly IConfiguration _configuration;
 
         public AdminController(UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ITimesheetRepository timesheetRepository,
           IMapper mapper,
+          IConfiguration configuration,
           ILogger<ManageController> logger,
           UrlEncoder urlEncoder)
         {
@@ -41,6 +44,7 @@ namespace sbpc.Timesheet.Controllers
             _timesheetRepository = timesheetRepository;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            _configuration = configuration;
         }
 
 
@@ -97,8 +101,8 @@ namespace sbpc.Timesheet.Controllers
                     if (data == null)
                     {
                         user.UserName = model.Email;
-                        var tempPassword = "Welcome321!";
-                        var createUserResult = await _userManager.CreateAsync(user, tempPassword);
+                        user.TempPassword = true;
+                        var createUserResult = await _userManager.CreateAsync(user, _configuration.GetValue<string>("Data:TempPassword"));
                         if (createUserResult.Succeeded)
                         {
                             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -117,6 +121,36 @@ namespace sbpc.Timesheet.Controllers
                 catch (Exception ex)
                 {
                     _logger.LogError($"Error while creating new employee {model.Email} with message {ex.Message}");
+                    return StatusCode(500);
+                }
+            }
+            return StatusCode(403);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetUserPassword(UserViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    var user = await _userManager.FindByNameAsync(model.Email);
+                    var result = await _userManager.RemovePasswordAsync(user);
+                    if(result.Succeeded)
+                    {
+                        var set = await _userManager.AddPasswordAsync(user, _configuration.GetValue<string>("Data:TempPassword"));
+                        if(set.Succeeded)
+                        {
+                            _timesheetRepository.UpdateTempPasswordFlag(model.Email, true);
+                            return StatusCode(200);
+                        }
+                    }
+                    return StatusCode(500);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error while resetting password for {model.Email} with message {ex.Message}");
                     return StatusCode(500);
                 }
             }

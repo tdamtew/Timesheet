@@ -58,7 +58,12 @@ namespace sbpc.Timesheet.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    _logger.LogInformation($"User {model.Email} logged in.");
+
+                    //check if user has TempPassword set.
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    if (user.TempPassword)
+                        return RedirectToAction("ChangePassword", "Manage", new { set = user.TempPassword });
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.IsLockedOut)

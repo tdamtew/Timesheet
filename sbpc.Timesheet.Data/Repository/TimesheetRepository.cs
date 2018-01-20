@@ -19,6 +19,14 @@ namespace sbpc.Timesheet.Data.Repository
         #region users
         public IEnumerable<ApplicationUser> GetAllUsers() => _timesheetDbContext.Users;
         public ApplicationUser GetUser(string userId) => _timesheetDbContext.Users.FirstOrDefault(x => x.UserName == userId);
+        public int UpdateTempPasswordFlag(string userId, bool set)
+        {
+            var user = _timesheetDbContext.Users.FirstOrDefault(x => x.UserName == userId);
+            if (user == null) return 0;
+            user.TempPassword = set;
+            _timesheetDbContext.Users.Update(user);
+            return _timesheetDbContext.SaveChanges();
+        }
         public int UpdateUser(ApplicationUser user)
         {
             var updateUser = _timesheetDbContext.Users.First(x => x.UserName == user.UserName);

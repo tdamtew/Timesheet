@@ -12,6 +12,7 @@ namespace sbpc.Timesheet.Data
 
         TimeLog GetTimesheet(DateTime startDate, DateTime endDate, string userId = "", string jobName = "");
         ApplicationUser GetUser(string userId);
+        int UpdateTempPasswordFlag(string userId, bool set);
         Job GetJob(int Id);
         int UpdateUser(ApplicationUser user);
         Hour GetHour(int Id);

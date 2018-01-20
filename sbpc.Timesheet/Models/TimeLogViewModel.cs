@@ -53,6 +53,6 @@ namespace sbpc.Timesheet.Models
     public class MileageViewModel : TimeLogViewModel
     {
         [Required]
-        public int mile { get; set; }
+        public float mile { get; set; }
     }
 }

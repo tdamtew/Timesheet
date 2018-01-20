@@ -7,7 +7,7 @@
             @Html.HiddenFor(Model => Model.Id)
             <div class="form-group">
                 <label class="control-label"><strong>Choose a Date:</strong></label>
-                <input class="form-control" type="date" asp-for="Date" value="@Model.Date.ToString("yyyy-MM-dd")" />
+                <input type="text" class="form-control" id="mileageDate" name="Date" asp-for="Date" value="@Model.Date.ToString("MM/dd/yyyy")" />
             </div>
             <div class="form-group">
                 <span class="control-label">Select Job:</span>
@@ -15,12 +15,11 @@
             </div>
             <div class="form-group">
                 <span class="control-label">Miles:</span>
-                <input asp-for="mile" class="form-control" min="1" />
-                <span asp-validation-for="mile" class="text-danger"></span>
+                <input asp-for="mile" class="form-control" placeholder="12.5" />
             </div>
             <div class="form-group">
                 <span class="control-label">Note:</span>
-                <input asp-for="Note" class="form-control"  />
+                <input asp-for="Note" class="form-control" placeholder="Note" />
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" style="width:100px;"><i class="fa fa-save"></i> Save</button>

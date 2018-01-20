@@ -1,12 +1,11 @@
 ﻿@model sbpc.Timesheet.Models.TimesheetViewModel
 @using Microsoft.AspNetCore.Identity
 @using sbpc.Timesheet.Data.Entity
-@using sbpc.Timesheet.Data.Model
 @using sbpc.Timesheet.Helpers
 @inject UserManager<ApplicationUser> UserManager
 
 <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-8">
         <div class="panel panel-default" style="min-height:408px;">
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
@@ -69,7 +68,15 @@
                                             <td>
                                                 @(item.IsTravel? "Yes" : "No")
                                             </td>
-                                            <td><a href="#" title="@item.Note">...</a></td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Note))
+                                                {
+                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                    </button>
+                                                }
+                                            </td>
+
                                         </tr>
                                     }
                             </tbody>
@@ -128,7 +135,15 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.JobName)
                                             </td>
-                                            <td><a href="#" title="@item.Note">...</a></td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Note))
+                                                {
+                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                    </button>
+                                                }
+                                            </td>
+
                                         </tr>
                                     }
                             </tbody>
@@ -175,7 +190,15 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.JobName)
                                             </td>
-                                            <td><a href="#" title="@item.Note">...</a></td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Note))
+                                                {
+                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                    </button>
+                                                }
+                                            </td>
+
                                         </tr>
                                     }
                                 </tbody>
@@ -186,7 +209,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="panel panel-green">
             <div class="panel-heading">
                 <div class="row">

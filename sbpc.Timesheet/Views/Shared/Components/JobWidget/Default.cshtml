@@ -10,18 +10,15 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="Name" class="form-control" placeholder="Motorola Inc.:ICE" />
             </div>
             <div class="form-group">
                 <label asp-for="OverTimeRate" class="control-label"></label>
-                <input asp-for="OverTimeRate" class="form-control" min="1" />
-                <span asp-validation-for="OverTimeRate" class="text-danger"></span>
+                <input asp-for="OverTimeRate" class="form-control" placeholder="1.00" />
             </div>
             <div class="form-group">
                 <label asp-for="CostPerMile" class="control-label"></label>
                 <input asp-for="CostPerMile" class="form-control" value="@Constants.CostPerMile" />
-                <span asp-validation-for="CostPerMile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="form-check-label">

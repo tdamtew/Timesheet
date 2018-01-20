@@ -17,7 +17,7 @@
                 <!--date picker-->
                 <div class="form-group">
                     <label class="control-label"><strong>Choose a Date:</strong></label>
-                    <input class="form-control" type="date" id="summaryDate" value="@Model.date.ToString("yyyy-MM-dd")" />
+                    <input type="text" class="form-control" asp-for="@Model.date" value="@Model.date.ToString("MM/dd/yyyy")" id="summaryDate" />
                 </div>
                 <!--daily total-->
                 <div class="panel panel-green">
@@ -171,20 +171,27 @@
                                             @if (Model.Hours != null && Model.Hours.Where(a => a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date) != null)
                                             {
                                                 <tbody>
-                                                    @foreach (var item in Model.Hours)
+                                                    @foreach (var item in Model.Hours.Where(a => a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date))
                                                     {
                                                         <tr>
-                                                            <td>@item.Date.ToString("MM-dd-yyyy")</td>
+                                                            <td>@item.Date.ToString("MM/dd/yyyy")</td>
                                                             <td>
                                                                 @Html.DisplayFor(modelItem => item.JobName)
                                                             </td>
                                                             <td>
-                                                                @($"{item.Hours} ({item.OTHours})") 
+                                                                @($"{item.Hours} ({item.OTHours})")
                                                             </td>
                                                             <td>
                                                                 @(item.IsTravel ? "Yes" : "No")
                                                             </td>
-                                                            <td>@item.Note</td>
+                                                            <td>
+                                                                @if (!string.IsNullOrEmpty(item.Note))
+                                                                {
+                                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                                    </button>
+                                                                }
+                                                            </td>
                                                             <td>
                                                                 <a href="#" data-hour="@item.Id" data-date="@Model.date" class="delete-hour">Delete</a>
                                                             </td>
@@ -234,10 +241,10 @@
                                             @if (Model.Expenses != null && Model.Expenses.Where(a => a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date) != null)
                                             {
                                                 <tbody>
-                                                    @foreach (var item in Model.Expenses)
+                                                    @foreach (var item in Model.Expenses.Where(a => a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date))
                                                     {
                                                         <tr>
-                                                            <td>@item.Date.ToString("MM-dd-yyyy")</td>
+                                                            <td>@item.Date.ToString("MM/dd/yyyy")</td>
                                                             <td>
                                                                 @Html.DisplayFor(modelItem => item.JobName)
                                                             </td>
@@ -250,7 +257,14 @@
                                                             <td>
                                                                 @Html.DisplayFor(modelItem => item.Method)
                                                             </td>
-                                                            <td>@item.Note</td>
+                                                            <td>
+                                                                @if (!string.IsNullOrEmpty(item.Note))
+                                                                {
+                                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                                    </button>
+                                                                }
+                                                            </td>
                                                             <td>
                                                                 <a href="#" data-expense="@item.Id" class="edit-expense">Edit</a> |
                                                                 <a href="#" data-expense="@item.Id" data-date="@Model.date" class="delete-expense">Delete</a>
@@ -297,17 +311,24 @@
                                             @if (Model.Mileages != null && Model.Mileages.Where(a => a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date) != null)
                                             {
                                                 <tbody>
-                                                    @foreach (var item in Model.Mileages)
+                                                    @foreach (var item in Model.Mileages.Where(a => a.Date.Date >= startOfMonth.Date && a.Date.Date <= endOfMonth.Date))
                                                     {
                                                         <tr>
-                                                            <td>@item.Date.ToString("MM-dd-yyyy")</td>
+                                                            <td>@item.Date.ToString("MM/dd/yyyy")</td>
                                                             <td>
                                                                 @Html.DisplayFor(modelItem => item.JobName)
                                                             </td>
                                                             <td>
                                                                 @Html.DisplayFor(modelItem => item.mile)
                                                             </td>
-                                                            <td>@item.Note</td>
+                                                            <td>
+                                                                @if (!string.IsNullOrEmpty(item.Note))
+                                                                {
+                                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                                    </button>
+                                                                }
+                                                            </td>
                                                             <td>
                                                                 <a href="#" data-mileage="@item.Id" class="edit-mileage">Edit</a> |
                                                                 <a href="#" data-mileage="@item.Id" data-date="@Model.date" class="delete-mileage">Delete</a>

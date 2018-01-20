@@ -60,8 +60,7 @@ namespace sbpc.Timesheet.Components
                     root = "Account",
                     links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
                     {
-                        new KeyValuePair<string, string>("Profile",Url.Action("Index","Manage")),
-                        new KeyValuePair<string, string>("Password", Url.Action("ChangePassword","Manage"))
+                        new KeyValuePair<string, string>("Change password", Url.Action("ChangePassword","Manage"))
                     })
                 }
             };
@@ -81,8 +80,7 @@ namespace sbpc.Timesheet.Components
                     root = "Account",
                     links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
                     {
-                        new KeyValuePair<string, string>("Profile",Url.Action("Index","Manage")),
-                        new KeyValuePair<string, string>("Password", Url.Action("ChangePassword","Manage"))
+                        new KeyValuePair<string, string>("Change password", Url.Action("ChangePassword","Manage"))
                     })
                 }
             };
@@ -103,8 +101,7 @@ namespace sbpc.Timesheet.Components
                     root = "Account",
                     links = new Dictionary<string, string>(new List<KeyValuePair<string, string>>
                     {
-                        new KeyValuePair<string, string>("Profile",Url.Action("Index","Manage")),
-                        new KeyValuePair<string, string>("Password", Url.Action("ChangePassword","Manage"))
+                        new KeyValuePair<string, string>("Change password", Url.Action("ChangePassword","Manage"))
                     })
                 }
             };

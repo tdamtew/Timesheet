@@ -28,5 +28,7 @@ namespace sbpc.Timesheet.Models.AccountViewModels
 
         public bool IsEnabled { get; set; } 
 
+        public bool TempPassword { get; set; }
+
     }
 }

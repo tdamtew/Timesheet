@@ -66,30 +66,23 @@ namespace sbpc.Timesheet.Controllers
             var employees = model.Select(x => x.Employee).Distinct().ToList();
             foreach (var emp in employees)
             {
-                var d = startOfMonth;
-                while (d <= endOfMonth)
+
+                var data = GetData(emp, startOfMonth, endOfMonth, model.Where(x => x.Employee == emp), exportAll);
+                if (data == null || !data.Any())
                 {
-                    var data = GetWeeklyData(emp, d, model.Where(x => x.Employee == emp), exportAll);
-                    if (data == null || !data.Any())
-                    {
-                        d = d.AddDays(7);
-                        continue;
-                    }
-                    foreach (var t in data)
-                    {
-                        _dataToExport.AppendLine($"TIMEACT\t{t.Date.ToShortDateString()}\t{t.Job}\t{t.Employee}\t{t.Item}\t{t.PayableItem}\t{t.Duration}\t{t.Project}\t{t.Note}\t{t.BillingStatus}");
-                    }
-                    d = d.AddDays(7);
+                    continue;
+                }
+                foreach (var t in data)
+                {
+                    _dataToExport.AppendLine($"TIMEACT\t{t.Date.ToShortDateString()}\t{t.Job}\t{t.Employee}\t{t.Item}\t{t.PayableItem}\t{t.Duration}\t{t.Project}\t{t.Note}\t{t.BillingStatus}");
                 }
             }
             return _dataToExport.ToString();
         }
 
-        private List<ExportViewModel> GetWeeklyData(string employee, DateTime dateOfWeek, IEnumerable<ItemViewModel> items, bool exportAll)
+        private List<ExportViewModel> GetData(string employee, DateTime startOfMonth, DateTime endOfMonth, IEnumerable<ItemViewModel> items, bool exportAll)
         {
-            var startOfWeek = dateOfWeek.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)dateOfWeek.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(7);
-            var data = _timesheetRepository.GetHours(startOfWeek, endOfWeek, employee);
+            var data = _timesheetRepository.GetHours(startOfMonth, endOfMonth, employee);
             if (!exportAll && data != null && data.Any())
             {
                 data = data.Where(x => !x.IsExported);

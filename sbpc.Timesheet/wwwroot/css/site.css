@@ -1,16 +1,4 @@
-﻿.navbar, footer {
-    background-color: #428bca;
-}
-
-.navbar-collapse {
-    max-height: none;
-}
-
-.navbar-default .navbar-brand {
-    color: white;
-}
-
-a.active {
+﻿a.active {
     background: #428bca;
 }
 
@@ -77,3 +65,6 @@ html body {
     font-size: 10pt;
 }
 
+.error {
+    color:darkred;
+}
