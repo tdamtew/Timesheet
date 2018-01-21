@@ -116,6 +116,8 @@ namespace sbpc.Timesheet.Controllers
                     }
                     else
                     {
+                        if (_timesheetRepository.DoesEmployeeExists($"{model.FirstName} {model.MiddleName} {model.LastName}"))
+                            return StatusCode(403);
                         _timesheetRepository.UpdateUser(user);
                         _logger.LogInformation($"user {model.Email} has been updated successfully!");
                     }
