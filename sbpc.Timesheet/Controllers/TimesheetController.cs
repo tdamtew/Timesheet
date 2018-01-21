@@ -35,7 +35,7 @@ namespace sbpc.Timesheet.Controllers
         {
             if (!string.IsNullOrEmpty(_currentEmployee)) return _currentEmployee;
             var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
-            _currentEmployee = $"{user.FirstName} {user.LastName}";
+            _currentEmployee = $"{user.FirstName} {user.MiddleName} {user.LastName}";
             return _currentEmployee;
         }
 
@@ -59,9 +59,9 @@ namespace sbpc.Timesheet.Controllers
             {
                 var employeeList = employeesData.Select(x => new SelectListItem
                 {
-                    Value = $"{x.FirstName} {x.LastName}",
-                    Text = $"{x.FirstName} {x.LastName}",
-                    Selected = string.Compare($"{x.FirstName} {x.LastName}", currentUser, true) == 0
+                    Value = $"{x.FirstName} {x.MiddleName} {x.LastName}",
+                    Text = $"{x.FirstName} {x.MiddleName} {x.LastName}",
+                    Selected = string.Compare($"{x.FirstName} {x.MiddleName} {x.LastName}", currentUser, true) == 0
                 }).ToList();
 
                 ViewBag.employeeList = employeeList;

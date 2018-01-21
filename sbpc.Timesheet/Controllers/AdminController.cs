@@ -62,7 +62,7 @@ namespace sbpc.Timesheet.Controllers
             }
             if (employeesData != null)
             {
-                var employeeList = employeesData.Select(x => new SelectListItem { Value = $"{x.FirstName} {x.LastName}", Text = $"{x.FirstName} {x.LastName}" }).ToList();
+                var employeeList = employeesData.Select(x => new SelectListItem { Value = $"{x.FirstName} {x.MiddleName} {x.LastName}", Text = $"{x.FirstName} {x.MiddleName} {x.LastName}" }).ToList();
                 employeeList.Add(new SelectListItem { Value = "", Text = "All", Selected = true });
                 ViewBag.employeeList = employeeList;
             }
@@ -100,6 +100,8 @@ namespace sbpc.Timesheet.Controllers
                     var data = await _userManager.FindByNameAsync(model.Email);
                     if (data == null)
                     {
+                        if (_timesheetRepository.DoesEmployeeExists($"{model.FirstName} {model.MiddleName} {model.LastName}"))
+                            return StatusCode(403);
                         user.UserName = model.Email;
                         user.TempPassword = true;
                         var createUserResult = await _userManager.CreateAsync(user, _configuration.GetValue<string>("Data:TempPassword"));
@@ -124,7 +126,7 @@ namespace sbpc.Timesheet.Controllers
                     return StatusCode(500);
                 }
             }
-            return StatusCode(403);
+            return StatusCode(404);
         }
 
         [HttpPost]

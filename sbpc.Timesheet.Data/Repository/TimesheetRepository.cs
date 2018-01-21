@@ -19,6 +19,8 @@ namespace sbpc.Timesheet.Data.Repository
         #region users
         public IEnumerable<ApplicationUser> GetAllUsers() => _timesheetDbContext.Users;
         public ApplicationUser GetUser(string userId) => _timesheetDbContext.Users.FirstOrDefault(x => x.UserName == userId);
+
+        public bool DoesEmployeeExists(string fullName) => _timesheetDbContext.Users.Any(x => string.Compare($"{x.FirstName} {x.MiddleName} {x.LastName}", fullName, true) == 0);
         public int UpdateTempPasswordFlag(string userId, bool set)
         {
             var user = _timesheetDbContext.Users.FirstOrDefault(x => x.UserName == userId);
@@ -31,30 +33,30 @@ namespace sbpc.Timesheet.Data.Repository
         {
             var updateUser = _timesheetDbContext.Users.First(x => x.UserName == user.UserName);
             if (updateUser == null) throw new ApplicationException($"Unable to find the user : {user.UserName}");
-            var expenses = _timesheetDbContext.Expenses.Where(x => x.EmployeeName == $"{updateUser.FirstName} {updateUser.LastName}");
+            var expenses = _timesheetDbContext.Expenses.Where(x => x.EmployeeName == $"{updateUser.FirstName} {updateUser.MiddleName} {updateUser.LastName}");
             if (expenses != null)
             {
                 foreach (var exp in expenses)
                 {
-                    exp.EmployeeName = $"{user.FirstName} {user.LastName}";
+                    exp.EmployeeName = $"{user.FirstName} {updateUser.MiddleName} {user.LastName}";
                     _timesheetDbContext.Expenses.Update(exp);
                 }
             }
-            var hours = _timesheetDbContext.Hours.Where(x => x.EmployeeName == $"{updateUser.FirstName} {updateUser.LastName}");
+            var hours = _timesheetDbContext.Hours.Where(x => x.EmployeeName == $"{updateUser.FirstName} {updateUser.MiddleName} {updateUser.LastName}");
             if (hours != null)
             {
                 foreach (var hour in hours)
                 {
-                    hour.EmployeeName = $"{user.FirstName} {user.LastName}";
+                    hour.EmployeeName = $"{user.FirstName} {updateUser.MiddleName} {user.LastName}";
                     _timesheetDbContext.Hours.Update(hour);
                 }
             }
-            var mileages = _timesheetDbContext.Mileages.Where(x => x.EmployeeName == $"{updateUser.FirstName} {updateUser.LastName}");
+            var mileages = _timesheetDbContext.Mileages.Where(x => x.EmployeeName == $"{updateUser.FirstName} {updateUser.MiddleName} {updateUser.LastName}");
             if (mileages != null)
             {
                 foreach (var mile in mileages)
                 {
-                    mile.EmployeeName = $"{user.FirstName} {user.LastName}";
+                    mile.EmployeeName = $"{user.FirstName} {updateUser.MiddleName} {user.LastName}";
                     _timesheetDbContext.Mileages.Update(mile);
                 }
             }
@@ -77,7 +79,7 @@ namespace sbpc.Timesheet.Data.Repository
             {
                 job.Id = 0;
                 var existingJob = _timesheetDbContext.Jobs.FirstOrDefault(x => string.Compare(x.Name, job.Name) == 0);
-                if(existingJob != null)
+                if (existingJob != null)
                 {
                     existingJob.CostPerMile = job.CostPerMile;
                     existingJob.OverTimeRate = job.OverTimeRate;
@@ -176,7 +178,7 @@ namespace sbpc.Timesheet.Data.Repository
             //get hours for the week.
             var startOfWeek = hour.Date.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)hour.Date.DayOfWeek);
             var endOfWeek = startOfWeek.AddDays(7);
-            if(hour.IsTravel)
+            if (hour.IsTravel)
             {
                 _timesheetDbContext.Hours.Add(hour);
                 return _timesheetDbContext.SaveChanges();
@@ -224,7 +226,7 @@ namespace sbpc.Timesheet.Data.Repository
             var totalHours = workHours.Sum(x => x.Hours);
             if (totalHours <= 40)
             {
-                foreach(var h in flaggedHours)
+                foreach (var h in flaggedHours)
                 {
                     h.OTHours = 0;
                     _timesheetDbContext.Hours.Update(h);
@@ -233,9 +235,9 @@ namespace sbpc.Timesheet.Data.Repository
                 return;
             }
             var otHours = totalHours - 40;
-            foreach(var h in flaggedHours)
+            foreach (var h in flaggedHours)
             {
-                if(h.OTHours >= otHours)
+                if (h.OTHours >= otHours)
                 {
                     h.OTHours = otHours;
                     _timesheetDbContext.Hours.Update(h);

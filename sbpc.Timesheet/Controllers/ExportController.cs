@@ -44,7 +44,7 @@ namespace sbpc.Timesheet.Controllers
         {
             var data = GetDataToExport(items, date, exportAll);
             var buffer = Encoding.ASCII.GetBytes(data);
-            return File(buffer, "text/iif", $"timesheet_{date.ToString("MMddyyyy")}.iff");
+            return File(buffer, "text/iif", $"timesheet_{date.ToString("MMddyyyy")}.iif");
         }
 
         private string GetDataToExport(List<ItemViewModel> model, DateTime date, bool exportAll)

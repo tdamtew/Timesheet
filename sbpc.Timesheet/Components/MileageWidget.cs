@@ -22,7 +22,7 @@ namespace sbpc.Timesheet.Components
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             var jobs = _timesheetRepository.GetAllJobs().Where(x => x.Active);
-            ViewBag.jobList = jobs == null ? null : jobs.ToList();
+            ViewBag.jobList = jobs?.ToList();
             if (mileageId == 0) return View(new MileageViewModel { Date = DateTime.Now });
             var data = _timesheetRepository.GetMileage(mileageId);
             return View(_mapper.Map<MileageViewModel>(data));
