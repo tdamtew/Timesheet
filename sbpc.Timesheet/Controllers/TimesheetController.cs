@@ -42,7 +42,7 @@ namespace sbpc.Timesheet.Controllers
         //get timesheet for current employee
         public IActionResult Index()
         {
-            if (_configuration.GetSection("Data:TimesheetAdmin").Get<string[]>().Contains(User.Identity.Name))
+            if (_configuration.GetSection("Data:TimesheetAdmin").Get<string[]>().Contains(User.Identity.Name, StringComparer.OrdinalIgnoreCase))
                 return RedirectToAction(nameof(Admin));
             ViewBag.date = DateTime.Now;
             ViewBag.currentUser = CurrentEmployee();

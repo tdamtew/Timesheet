@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace sbpc.Timesheet.Helpers
         }
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminRequirement requirement)
         {
-            if(_users.Contains(context.User.Identity.Name))
+            if(_users.Contains(context.User.Identity.Name, StringComparer.OrdinalIgnoreCase))
             {
                 context.Succeed(requirement);
             }
@@ -30,7 +31,7 @@ namespace sbpc.Timesheet.Helpers
         }
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, TimesheetAdminRequirement requirement)
         {
-            if (_users.Contains(context.User.Identity.Name))
+            if (_users.Contains(context.User.Identity.Name, StringComparer.OrdinalIgnoreCase))
             {
                 context.Succeed(requirement);
             }

@@ -19,11 +19,11 @@ namespace sbpc.Timesheet.Components
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             var navpage = new List<NavPage>();
-            if (_configuration.GetSection("Data:MasterAdmin").Get<string[]>().Contains(userName))
+            if (_configuration.GetSection("Data:MasterAdmin").Get<string[]>().Contains(userName, StringComparer.OrdinalIgnoreCase))
             {
                 return View(AdminPages());
             }
-            else if(_configuration.GetSection("Data:TimesheetAdmin").Get<string[]>().Contains(userName))
+            else if(_configuration.GetSection("Data:TimesheetAdmin").Get<string[]>().Contains(userName, StringComparer.OrdinalIgnoreCase))
             {
                 return View(TimesheetAdminPages());
             }
