@@ -20,7 +20,7 @@ namespace sbpc.Timesheet.Data.Repository
         public IEnumerable<ApplicationUser> GetAllUsers() => _timesheetDbContext.Users;
         public ApplicationUser GetUser(string userId) => _timesheetDbContext.Users.FirstOrDefault(x => x.UserName == userId);
 
-        public bool DoesEmployeeExists(string fullName) => _timesheetDbContext.Users.Any(x => string.Compare($"{x.FirstName} {x.MiddleName} {x.LastName}", fullName, true) == 0);
+        public ApplicationUser GetUserByFullName(string fullName) => _timesheetDbContext.Users.FirstOrDefault(x => string.Compare($"{x.FirstName} {x.MiddleName} {x.LastName}", fullName, true) == 0);
         public int UpdateTempPasswordFlag(string userId, bool set)
         {
             var user = _timesheetDbContext.Users.FirstOrDefault(x => x.UserName == userId);

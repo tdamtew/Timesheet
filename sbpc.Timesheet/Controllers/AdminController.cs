@@ -21,7 +21,7 @@ namespace sbpc.Timesheet.Controllers
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager  <ApplicationUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ITimesheetRepository _timesheetRepository;
         private readonly IMapper _mapper;
@@ -101,7 +101,7 @@ namespace sbpc.Timesheet.Controllers
                     var data = await _userManager.FindByNameAsync(model.Email);
                     if (data == null)
                     {
-                        if (_timesheetRepository.DoesEmployeeExists($"{model.FirstName} {model.MiddleName} {model.LastName}"))
+                        if (_timesheetRepository.GetUserByFullName($"{model.FirstName} {model.MiddleName} {model.LastName}") != null)
                             return StatusCode(403);
                         user.UserName = model.Email;
                         user.TempPassword = true;
@@ -116,7 +116,8 @@ namespace sbpc.Timesheet.Controllers
                     }
                     else
                     {
-                        if (_timesheetRepository.DoesEmployeeExists($"{model.FirstName} {model.MiddleName} {model.LastName}"))
+                        var currUser = _timesheetRepository.GetUserByFullName($"{model.FirstName} {model.MiddleName} {model.LastName}");
+                        if (currUser != null && String.Compare(currUser.Email, user.Email, true) != 0)
                             return StatusCode(403);
                         _timesheetRepository.UpdateUser(user);
                         _logger.LogInformation($"user {model.Email} has been updated successfully!");
@@ -136,16 +137,16 @@ namespace sbpc.Timesheet.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetUserPassword(UserViewModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
                     var user = await _userManager.FindByNameAsync(model.Email);
                     var result = await _userManager.RemovePasswordAsync(user);
-                    if(result.Succeeded)
+                    if (result.Succeeded)
                     {
                         var set = await _userManager.AddPasswordAsync(user, _configuration.GetValue<string>("Data:TempPassword"));
-                        if(set.Succeeded)
+                        if (set.Succeeded)
                         {
                             _timesheetRepository.UpdateTempPasswordFlag(model.Email, true);
                             return StatusCode(200);
