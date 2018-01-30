@@ -1,7 +1,6 @@
 ﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
-
 /sbpc.Timesheet/wwwroot/js
 /sbpc.Timesheet/wwwroot/lib/jquery.notify
 /sbpc.Timesheet/wwwroot/lib
@@ -14,3 +13,4 @@
 /sbpc.Timesheet.Data/obj/*
 /sbpc.Timesheet/Properties/*
 /sbpc.Timesheet/sbpc.Timesheet.csproj.user
+/sbpc.Timesheet.Common

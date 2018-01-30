@@ -16,9 +16,9 @@ C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\sbpc.Time
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\sbpc.Timesheet.Data.pdb
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\Microsoft.Extensions.Configuration.dll
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\bin\Debug\netcoreapp2.0\Microsoft.Extensions.Configuration.xml
-C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.csprojResolveAssemblyReference.cache
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.csproj.CoreCompileInputs.cache
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.AssemblyInfoInputs.cache
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.AssemblyInfo.cs
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.dll
 C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.pdb
+C:\Projects\sbpc.Timesheet\sbpc.Timesheet.Data\obj\Debug\netcoreapp2.0\sbpc.Timesheet.Data.csprojResolveAssemblyReference.cache
