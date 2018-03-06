@@ -14,3 +14,16 @@
 /sbpc.Timesheet/Properties/*
 /sbpc.Timesheet/sbpc.Timesheet.csproj.user
 /sbpc.Timesheet.Common
+/.vs/sbpc.Timesheet/v15/.suo
+/.vs/sbpc.Timesheet/v15/Server/sqlite3/db.lock
+/.vs/sbpc.Timesheet/v15/Server/sqlite3/storage.ide
+/.vs/sbpc.Timesheet/v15/Server/sqlite3/storage.ide-shm
+/.vs/sbpc.Timesheet/v15/Server/sqlite3/storage.ide-wal
+/sbpc.Timesheet.Data/obj/Debug/netcoreapp2.0/sbpc.Timesheet.Data.csproj.CoreCompileInputs.cache
+/sbpc.Timesheet.Data/obj/project.assets.json
+/sbpc.Timesheet.Data/obj/sbpc.Timesheet.Data.csproj.nuget.cache
+/sbpc.Timesheet.Data/obj/sbpc.Timesheet.Data.csproj.nuget.g.props
+/sbpc.Timesheet/.bowerrc
+/sbpc.Timesheet/wwwroot/images/banner1.svg
+/sbpc.Timesheet/wwwroot/images/banner2.svg
+/sbpc.Timesheet/wwwroot/images/banner3.svg
