@@ -1,0 +1,253 @@
+﻿@model sbpc.Timesheet.Models.TimesheetViewModel
+@using Microsoft.AspNetCore.Identity
+@using sbpc.Timesheet.Data.Entity
+@using sbpc.Timesheet.Helpers
+@inject UserManager<ApplicationUser> UserManager
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-default" style="min-height:408px;">
+            <div class="panel-heading">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item active">
+                        <a class="nav-link" id="hour-tab" data-toggle="tab" href="#hour" role="tab" aria-controls="home" aria-selected="true">Hours</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="expense-tab" data-toggle="tab" href="#expense" role="tab" aria-controls="profile" aria-selected="false">Expense</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="mileage-tab" data-toggle="tab" href="#mileage" role="tab" aria-controls="contact" aria-selected="false">Mileage</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <div class="tab-content">
+                    <!--Hours tab content-->
+                    <div class="tab-pane active" id="hour" role="tabpanel" aria-labelledby="hour-tab">
+                        <table class="table table-hover" id="hourtable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Employee
+                                    </th>
+                                    <th>
+                                        Day
+                                    </th>
+                                    <th>
+                                        Total hours (Overtime)
+                                    </th>
+                                    <th>
+                                        Job
+                                    </th>
+                                    <th>
+                                        Travel?
+                                    </th>
+                                    <th>
+                                        Note
+                                    </th>
+                                </tr>
+                            </thead>
+                            @if (Model.Hours != null)
+                            {
+                            <tbody>
+                                @foreach (var item in Model.Hours)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                                            </td>
+                                            <td>
+                                               @item.Date.ToString("MM/dd/yyyy")
+                                            </td>
+                                            <td>
+                                                @($"{item.Hours} ({item.OTHours})") 
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.JobName)
+                                            </td>
+                                            <td>
+                                                @(item.IsTravel? "Yes" : "No")
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Note))
+                                                {
+                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                    </button>
+                                                }
+                                            </td>
+
+                                        </tr>
+                                    }
+                            </tbody>
+                            }
+                        </table>
+                    </div>
+                    <!--expense tab-->
+                    <div class="tab-pane fade" id="expense" role="tabpanel" aria-labelledby="expense-tab">
+                        <table class="table table-hover" id="expensetable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Employee
+                                    </th>
+                                    <th>
+                                        Day
+                                    </th>
+                                    <th>
+                                        Category
+                                    </th>
+                                    <th>
+                                        Method
+                                    </th>
+                                    <th>
+                                        Cost
+                                    </th>
+                                    <th>
+                                        Job
+                                    </th>
+                                    <th>
+                                        Note
+                                    </th>
+                                </tr>
+                            </thead>
+                            @if (Model.Expenses != null)
+                            {
+                            <tbody>
+                                @foreach (var item in Model.Expenses)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                                            </td>
+                                            <td>
+                                                @item.Date.ToString("MM/dd/yyyy")
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Category)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Method)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Amount)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.JobName)
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Note))
+                                                {
+                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                    </button>
+                                                }
+                                            </td>
+
+                                        </tr>
+                                    }
+                            </tbody>
+                            }
+                        </table>
+                    </div>
+                    <!--mileage tab-->
+                    <div class="tab-pane fade" id="mileage" role="tabpanel" aria-labelledby="mileage-tab">
+                        <table class="table table-hover" id="mileagetable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Employee
+                                    </th>
+                                    <th>
+                                        Date
+                                    </th>
+                                    <th>
+                                        Mileage
+                                    </th>
+                                    <th>
+                                        Job
+                                    </th>
+                                    <th>
+                                        Note
+                                    </th>
+                                </tr>
+                            </thead>
+                            @if (Model.Mileages != null)
+                            {
+                                <tbody>
+                                    @foreach (var item in Model.Mileages)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                                            </td>
+                                            <td>
+                                               @item.Date.ToString("MM/dd/yyyy")
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.mile)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.JobName)
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Note))
+                                                {
+                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                    </button>
+                                                }
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <strong style="font-size:13pt;">Quick Statistics</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body" style="padding-top: 0px; padding-bottom: 0px;">
+                <div class="row">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            SBP Hours (Overtime)
+                            <span class="badge badge-pill alert-success">
+                                @(Model.Hours == null ? "0 (0)" : $"{Model.Hours.Where(a => !a.Billable).Sum(x => x.Hours).ToString()} ({Model.Hours.Where(a => !a.Billable).Sum(x => x.OTHours).ToString()})")
+                            </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Billable Hours (Overtime)
+                            <span class="badge badge-pill alert-success">@(Model.Hours == null ? "0 (0)" : $"{Model.Hours.Where(a => a.Billable).Sum(x => x.Hours).ToString()} ({Model.Hours.Where(a => a.Billable).Sum(x => x.OTHours).ToString()})")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Expenses (Reimbursable)
+                            <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00 ($0.00)" : $"{Model.Expenses.Sum(x => x.Amount).ToString("C")} ({Model.Expenses.Where(a => a.Method == Constants.Method.Personal).Sum(x => x.Amount).ToString("C")})")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Mileage
+                            <span class="badge badge-pill alert-success">@(Model.Mileages == null ? "0" : Model.Mileages.Sum(x => x.mile).ToString())</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

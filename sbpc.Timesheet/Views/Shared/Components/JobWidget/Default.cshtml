@@ -1,0 +1,34 @@
+﻿@model sbpc.Timesheet.Models.AdminViewModels.JobViewModel
+@using sbpc.Timesheet.Helpers
+
+<div class="panel panel-primary">
+    <div class="panel-heading"><i class="fa fa-edit"></i> <strong>Add/Edit Job</strong></div>
+    <div class="panel-body">
+        <form asp-action="SaveJob" asp-controller="Admin" class="job">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Id)
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" placeholder="Motorola Inc.:ICE" />
+            </div>
+            <div class="form-group">
+                <label asp-for="OverTimeRate" class="control-label"></label>
+                <input asp-for="OverTimeRate" class="form-control" placeholder="1.5" />
+            </div>
+            <div class="form-group">
+                <label asp-for="CostPerMile" class="control-label"></label>
+                <input asp-for="CostPerMile" type="number" class="form-control" value="@Constants.CostPerMile" />
+            </div>
+            <div class="form-group">
+                <label class="form-check-label">
+                    <input type="checkbox" asp-for="Active" class="form-check-input">
+                    Active
+                </label>
+            </div>
+            <div class="form-group">
+                <button type="submit" id="submitJob" class="btn btn-primary" style="width: 100px;"><i class="fa fa-save fa-lg"></i> Save</button>
+            </div>
+        </form>
+    </div>
+</div>
