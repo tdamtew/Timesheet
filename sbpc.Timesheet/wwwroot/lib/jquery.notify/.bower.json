@@ -1,0 +1,28 @@
+{
+  "name": "jquery.notify",
+  "main": "js/jquery.notify.min.js",
+  "ignore": [
+    "**/.*",
+    "bower_components",
+    "test"
+  ],
+  "homepage": "https://github.com/CreativeDream/jquery.notify",
+  "authors": [
+    "CreativeDream <yuliangagarin@mail.ru>"
+  ],
+  "description": "jQuery.notify is a jQuery plugin that makes it easy to create alert - success - error - warning - information messages as an alternative the standard alert dialog.",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": ">= 1.7.2"
+  },
+  "_release": "v1.0",
+  "_resolution": {
+    "type": "tag",
+    "tag": "v1.0",
+    "commit": "7018aee6dcde316a3f7722e39c990eb1a9bc0a65"
+  },
+  "_source": "https://github.com/CreativeDream/jquery.notify.git",
+  "_target": "v1.0",
+  "_originalSource": "jquery.notify",
+  "_direct": true
+}
