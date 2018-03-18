@@ -59,9 +59,9 @@ namespace sbpc.Timesheet.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation($"User {model.Email} logged in.");
-
                     //check if user has TempPassword set.
                     var user = await _userManager.FindByEmailAsync(model.Email);
+                    await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("Role", user.Role));
                     if (user.TempPassword)
                         return RedirectToAction("ChangePassword", "Manage", new { set = user.TempPassword });
                     return RedirectToLocal(returnUrl);

@@ -5,8 +5,8 @@
 /sbpc.Timesheet/sbpc.Timesheet/bin/*
 /sbpc.Timesheet/obj/*
 /sbpc.Timesheet/bin/*
-/sbpc.Timesheet.Data/bin/*
-/sbpc.Timesheet.Data/obj/*
+/sbpc.Timesheet.Data/bin
+/sbpc.Timesheet.Data/obj
 /sbpc.Timesheet/Properties/*
 /sbpc.Timesheet/sbpc.Timesheet.csproj.user
 /sbpc.Timesheet.Common

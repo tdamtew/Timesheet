@@ -17,7 +17,6 @@ namespace sbpc.Timesheet.Controllers
     public class TimesheetController : Controller
     {
         private readonly ITimesheetRepository _timesheetRepository;
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private string _currentEmployee;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -25,7 +24,6 @@ namespace sbpc.Timesheet.Controllers
         public TimesheetController(ITimesheetRepository timesheetRepository,
             IMapper mapper, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
-            _configuration = configuration;
             _timesheetRepository = timesheetRepository;
             _userManager = userManager;
             _mapper = mapper;
@@ -42,7 +40,7 @@ namespace sbpc.Timesheet.Controllers
         //get timesheet for current employee
         public IActionResult Index()
         {
-            if (_configuration.GetSection("Data:TimesheetAdmin").Get<string[]>().Contains(User.Identity.Name, StringComparer.OrdinalIgnoreCase))
+            if (User.HasClaim("Role", Role.MasterAdmin) || User.HasClaim("Role", Role.TimesheetAdmin))
                 return RedirectToAction(nameof(Admin));
             ViewBag.date = DateTime.Now;
             ViewBag.currentUser = CurrentEmployee();

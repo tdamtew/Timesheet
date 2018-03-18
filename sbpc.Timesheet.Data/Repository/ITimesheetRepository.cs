@@ -22,7 +22,7 @@ namespace sbpc.Timesheet.Data
         int RemoveJob(int Id);
         int AddorUpdateExpense(Expense expense);
         int AddorUpdateMileage(Mileage mileage);
-        int AddorUpdateHour(Hour hour);
+        void AddorUpdateHour(Hour hour);
         Expense GetExpense(int Id);
         Mileage GetMileage(int Id);
         int RemoveExpense(int Id);

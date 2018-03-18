@@ -8,10 +8,17 @@ namespace sbpc.Timesheet.Helpers
     public static class Constants
     {
         public static double CostPerMile = 0.56;
+        public static double OverTimeRate = 1.5;
         public static class Method
         {
             public static string Personal = "Personal";
             public static string Company = "Company";
+        }
+        public static class Role
+        {
+            public static string Employee = "Employee";
+            public static string TimesheetAdmin = "TimesheetAdmin";
+            public static string MasterAdmin = "MasterAdmin";
         }
         public static class PItem
         {
@@ -44,5 +51,6 @@ namespace sbpc.Timesheet.Helpers
         public static IEnumerable<SelectListItem> Methods => typeof(Method).GetFields(BindingFlags.Public | BindingFlags.Static).Select(x => new SelectListItem { Text = x.GetValue(null).ToString(), Value = x.GetValue(null).ToString() });
         public static IEnumerable<SelectListItem> Items => typeof(Item).GetFields(BindingFlags.Public | BindingFlags.Static).Select(x => new SelectListItem { Text = x.GetValue(null).ToString(), Value = x.GetValue(null).ToString() });
         public static IEnumerable<SelectListItem> Categories => typeof(Category).GetFields(BindingFlags.Public | BindingFlags.Static).Select(x => new SelectListItem { Text = x.GetValue(null).ToString(), Value = x.GetValue(null).ToString() });
+        public static IEnumerable<SelectListItem> Roles => typeof(Role).GetFields(BindingFlags.Public | BindingFlags.Static).Select(x => new SelectListItem { Text = x.GetValue(null).ToString(), Value = x.GetValue(null).ToString() });
     }
 }

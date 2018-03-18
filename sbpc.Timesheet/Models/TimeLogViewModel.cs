@@ -54,5 +54,6 @@ namespace sbpc.Timesheet.Models
     {
         [Required]
         public float mile { get; set; }
+        public decimal CalculatedCost { get; set; }
     }
 }

@@ -65,6 +65,7 @@ namespace sbpc.Timesheet.Data.Repository
             updateUser.LastName = user.LastName;
             updateUser.IsEnabled = user.IsEnabled;
             updateUser.PhoneNumber = user.PhoneNumber;
+            updateUser.Role = user.Role;
             _timesheetDbContext.Users.Update(updateUser);
             return _timesheetDbContext.SaveChanges();
         }
@@ -173,39 +174,38 @@ namespace sbpc.Timesheet.Data.Repository
             }
             return hours;
         }
-        public int AddorUpdateHour(Hour hour)
+        public void AddorUpdateHour(Hour hour)
         {
-            //get hours for the week.
+            if (hour.Id == 0)
+                _timesheetDbContext.Hours.Add(hour);
+            else
+            {
+                if (_timesheetDbContext.Hours.Any(x => x.Id == hour.Id))
+                    _timesheetDbContext.Hours.Update(hour);
+                else
+                    _timesheetDbContext.Hours.Add(hour);
+            }
+            _timesheetDbContext.SaveChanges();
             var startOfWeek = hour.Date.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)hour.Date.DayOfWeek);
             var endOfWeek = startOfWeek.AddDays(7);
-            if (hour.IsTravel)
-            {
-                _timesheetDbContext.Hours.Add(hour);
-                return _timesheetDbContext.SaveChanges();
-            }
             var weeklyHours = GetHours(startOfWeek, endOfWeek, hour.EmployeeName);
-            if (weeklyHours == null || !weeklyHours.Any())
-            {
-                _timesheetDbContext.Hours.Add(hour);
-                return _timesheetDbContext.SaveChanges();
-            }
+            CalculateOverTime(weeklyHours);
+        }
+
+        private void CalculateOverTime(IEnumerable<Hour> weeklyHours)
+        {
             var workHours = weeklyHours.Where(x => !x.IsTravel);
-            if (workHours == null || !workHours.Any())
+            var numHours = workHours.Sum(x => x.Hours);
+            foreach (var h in workHours.OrderByDescending(hour => hour.Date))
             {
-                _timesheetDbContext.Hours.Add(hour);
-                return _timesheetDbContext.SaveChanges();
+                if (h.OTHours != Math.Max(Math.Min(numHours - 40, h.Hours), 0))
+                {
+                    h.OTHours = Math.Max(Math.Min(numHours - 40, h.Hours), 0);
+                    _timesheetDbContext.Hours.Update(h);
+                    _timesheetDbContext.SaveChanges();
+                }
+                numHours -= h.OTHours;
             }
-            var totalHours = workHours.Sum(x => x.Hours);
-            if (totalHours >= 40)
-            {
-                hour.OTHours = hour.Hours;
-                _timesheetDbContext.Hours.Add(hour);
-                return _timesheetDbContext.SaveChanges();
-            }
-            if (totalHours + hour.Hours > 40)
-                hour.OTHours = (totalHours + hour.Hours) % 40;
-            _timesheetDbContext.Hours.Add(hour);
-            return _timesheetDbContext.SaveChanges();
         }
         public Hour GetHour(int Id) => _timesheetDbContext.Hours.First(x => x.Id == Id);
         public void RemoveHour(int Id)
@@ -219,35 +219,7 @@ namespace sbpc.Timesheet.Data.Repository
             var startOfWeek = hour.Date.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)hour.Date.DayOfWeek);
             var endOfWeek = startOfWeek.AddDays(7);
             var weeklyHours = GetHours(startOfWeek, endOfWeek, hour.EmployeeName);
-            if (weeklyHours == null || !weeklyHours.Any()) return;
-            var workHours = weeklyHours.Where(x => !x.IsTravel);
-            if (workHours == null || !workHours.Any() || !workHours.Any(x => x.OTHours > 0)) return;
-            var flaggedHours = workHours.Where(x => x.OTHours > 0).OrderBy(x => x.Date);
-            var totalHours = workHours.Sum(x => x.Hours);
-            if (totalHours <= 40)
-            {
-                foreach (var h in flaggedHours)
-                {
-                    h.OTHours = 0;
-                    _timesheetDbContext.Hours.Update(h);
-                }
-                _timesheetDbContext.SaveChanges();
-                return;
-            }
-            var otHours = totalHours - 40;
-            foreach (var h in flaggedHours)
-            {
-                if (h.OTHours >= otHours)
-                {
-                    h.OTHours = otHours;
-                    _timesheetDbContext.Hours.Update(h);
-                    break;
-                }
-                otHours -= h.OTHours;
-                h.OTHours = 0;
-                _timesheetDbContext.Hours.Update(h);
-            }
-            _timesheetDbContext.SaveChanges();
+            CalculateOverTime(weeklyHours);
         }
 
         public void UpdateExportFlag(Hour hour)
@@ -292,6 +264,7 @@ namespace sbpc.Timesheet.Data.Repository
         public Mileage GetMileage(int Id) => _timesheetDbContext.Mileages.First(x => x.Id == Id);
         public int AddorUpdateMileage(Mileage mileage)
         {
+            mileage.CalculatedCost = GetMileageCost(mileage);
             if (mileage.Id == 0)
                 _timesheetDbContext.Mileages.Add(mileage);
             else
@@ -307,6 +280,13 @@ namespace sbpc.Timesheet.Data.Repository
                 }
             }
             return _timesheetDbContext.SaveChanges();
+        }
+
+        private decimal GetMileageCost(Mileage mileage)
+        {
+            var job = _timesheetDbContext.Jobs.FirstOrDefault(x => string.Compare(x.Name, mileage.JobName) == 0);
+            if (job == null) return 0;
+            return (decimal)(job.CostPerMile * mileage.mile);
         }
         public int RemoveMileage(int Id)
         {

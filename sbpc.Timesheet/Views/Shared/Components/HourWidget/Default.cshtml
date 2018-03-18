@@ -7,7 +7,7 @@
             @Html.HiddenFor(Model => Model.Id)
             <div class="form-group">
                 <label class="control-label"><strong>Choose a Date:</strong></label>
-                <input type="text" class="form-control" id="hourDate" name="Date" asp-for="Date" value="@Model.Date.ToString("MM/dd/yyyy")"/>
+                <input type="text" class="form-control" id="hourDate" name="Date" asp-for="Date" value="@Model.Date.ToString("MM/dd/yyyy")" readonly="readonly"/>
             </div>
             <div class="form-group">
                 <span class="control-label">Select Job:</span>

@@ -17,7 +17,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace sbpc.Timesheet.Controllers
 {
-   // [Authorize(policy: "AdminRole")]
+    //[Authorize(policy: "AdminRole")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

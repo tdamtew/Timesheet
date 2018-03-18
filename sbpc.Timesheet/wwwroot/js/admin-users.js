@@ -93,7 +93,7 @@
 
     function init() {
         $("#usersTable").DataTable();
-        $("form.employee").find(":text, input[type='tel'], input[type='email'], select").val("");
+        $("form.employee").find(":text, input[type='tel'], input[type='email']").val("");
         InitValidator();
     }
 

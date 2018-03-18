@@ -9,5 +9,6 @@ namespace sbpc.Timesheet.Data.Entity
         public string LastName { get; set; }
         public bool IsEnabled { get; set; }
         public bool TempPassword { get; set; }
+        public string Role { get; set; }
     }
 }

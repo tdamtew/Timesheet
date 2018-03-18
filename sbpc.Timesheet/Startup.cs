@@ -49,8 +49,8 @@ namespace sbpc.Timesheet
             services.AddMvc();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("AdminRole", policy => policy.Requirements.Add(new AdminRequirement(Configuration.GetSection("Data:MasterAdmin").Get<string[]>())));
-                options.AddPolicy("TimesheetAdminRole", policy => policy.Requirements.Add(new TimesheetAdminRequirement(Configuration.GetSection("Data:TimesheetAdmin").Get<string[]>())));
+                options.AddPolicy("AdminRole", policy => policy.Requirements.Add(new AdminRequirement()));
+                options.AddPolicy("TimesheetAdminRole", policy => policy.Requirements.Add(new TimesheetAdminRequirement()));
             });
         }
 

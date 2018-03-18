@@ -3,27 +3,23 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace sbpc.Timesheet.Components
 {
     public class NavWidget : ViewComponent
     {
-        private readonly IConfiguration _configuration;
-        public NavWidget(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async Task<IViewComponentResult> InvokeAsync(string userName)
+        public async Task<IViewComponentResult> InvokeAsync(ClaimsPrincipal User)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             var navpage = new List<NavPage>();
-            if (_configuration.GetSection("Data:MasterAdmin").Get<string[]>().Contains(userName, StringComparer.OrdinalIgnoreCase))
+            if (User.HasClaim("Role", "MasterAdmin"))
             {
                 return View(AdminPages());
             }
-            else if(_configuration.GetSection("Data:TimesheetAdmin").Get<string[]>().Contains(userName, StringComparer.OrdinalIgnoreCase))
+            else if(User.HasClaim("Role", "TimesheetAdmin"))
             {
                 return View(TimesheetAdminPages());
             }

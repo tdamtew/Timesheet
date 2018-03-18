@@ -11,7 +11,7 @@ namespace sbpc.Timesheet.Models.AdminViewModels
 
         [Required]
         [Display(Name = "Overtime Rate ")]
-        public decimal OverTimeRate { get; set; }
+        public double OverTimeRate { get; set; }
 
         [Required]
         [Display(Name = "Cost Per Mile")]

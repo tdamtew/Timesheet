@@ -121,14 +121,31 @@
         });
     });
     function init() {
-        $("form.hour").find(":text,input[type='number']").val("");
+        $("form.hour").find(":text,input[type='number'],input[type='checkbox']").each(function () {
+            if ($(this).attr("Id").indexOf("Date") < 0) {
+                $(this).val("");
+            }
+            if ($(this).is(":checked")) {
+                $(this).removeAttr("checked");
+            }
+        });
         $("form.hour").find("input[name='Id']").val(0);
-        $("form.expense").find(":text,input[type='number']").val("");
+        $("form.expense").find(":text,input[type='number']").each(function () {
+            if ($(this).attr("Id").indexOf("Date") < 0) {
+                $(this).val("");
+            }
+        });
         $("form.expense").find("input[name='Id']").val(0);
-        $("form.mileage").find(":text,input[type='number']").val("");
+        $("form.mileage").find(":text,input[type='number']").each(function () {
+            if ($(this).attr("Id").indexOf("Date") < 0) {
+                $(this).val("");
+            }
+        });
         $("form.mileage").find("input[name='Id']").val(0);
         $("#summaryDate,#hourDate,#expenseDate,#mileageDate").datepicker();
-        $(".table").DataTable();
+        $(".table").DataTable({
+            "order": []
+        });
         $('[data-toggle="tooltip"]').tooltip();
         initValidator();
     }

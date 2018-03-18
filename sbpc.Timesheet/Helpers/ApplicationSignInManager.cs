@@ -30,7 +30,6 @@ namespace sbpc.Timesheet.Helpers
             {
                 return Task.FromResult(SignInResult.LockedOut);
             }
-
             return base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
         }
     }

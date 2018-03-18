@@ -10,7 +10,7 @@
     <div class="col-lg-12">
         <h1 class="page-header">
             @ViewData["Title"] <br />
-            <small>Assign items to each job/employee pair for @ViewBag.startDate.ToString("Y").</small>
+            <small>Assign items to each job/employee pair.</small>
         </h1>
     </div>
 </div>
@@ -19,7 +19,8 @@
     <div class="col-md-8">
         <form asp-controller="Export" asp-action="Export" class="export">
             @Html.AntiForgeryToken()
-            <input type="hidden" name="date" value="@ViewBag.startDate" />
+            <input type="hidden" name="startDate" value="@ViewBag.startDate" />
+            <input type="hidden" name="endDate" value="@ViewBag.endDate"/>
             <input type="hidden" name="exportAll" value="@ViewBag.exportAll.ToString().ToLower()" />
             <table class="table table-hover">
                 <thead>

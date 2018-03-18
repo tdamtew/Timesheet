@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<sbpc.Timesheet.Models.AccountViewModels.UserViewModel>
-@using Microsoft.Extensions.Configuration
-@inject IConfiguration _configuration
+@using sbpc.Timesheet.Helpers
 <div class="row">
     <div class="col-md-9">
         <div class="panel panel-primary">
@@ -19,6 +18,9 @@
                             </th>
                             <th>
                                 Phone Number
+                            </th>
+                            <th>
+                                Role
                             </th>
                             <th>Status</th>
                             <th></th>
@@ -40,11 +42,14 @@
                                         @Html.DisplayFor(modelItem => item.PhoneNumber)
                                     </td>
                                     <td>
+                                        @Html.DisplayFor(modelItem => item.Role)
+                                    </td>
+                                    <td>
                                         @(item.IsEnabled ? "Yes" : "No")
                                     </td>
                                     <td>
                                         <a href="#" data-user="@item.UserName" class="edit-user">Edit</a>
-                                        @if (!_configuration.GetSection("Data:MasterAdmin").Get<string[]>().Contains(item.UserName) && !item.IsEnabled)
+                                        @if (string.Compare(item.Role, Constants.Role.MasterAdmin) != 0 && !item.IsEnabled)
                                         { <span>|</span>
                                         <a href="#" data-user="@item.UserName" class="delete-user">Delete</a>
                                         }

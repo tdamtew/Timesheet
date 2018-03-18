@@ -16,12 +16,10 @@ namespace sbpc.Timesheet.Controllers
     public class ExportController : Controller
     {
         private readonly ITimesheetRepository _timesheetRepository;
-        private readonly IConfiguration _configuration;
 
         public ExportController(ITimesheetRepository timesheetRepository, IConfiguration configuration)
         {
             _timesheetRepository = timesheetRepository;
-            _configuration = configuration;
         }
 
         public IActionResult Index(DateTime startDate, DateTime endDate, bool exportAll = false)
@@ -40,20 +38,16 @@ namespace sbpc.Timesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public FileResult Export(List<ItemViewModel> items, DateTime date, bool exportAll = false)
+        public FileResult Export(List<ItemViewModel> items, DateTime startDate, DateTime endDate, bool exportAll = false)
         {
-            var data = GetDataToExport(items, date, exportAll);
+            var data = GetDataToExport(items, startDate, endDate, exportAll);
             var buffer = Encoding.ASCII.GetBytes(data);
-            return File(buffer, "text/iif", $"timesheet_{date.ToString("MMddyyyy")}.iif");
+            return File(buffer, "text/iif", $"timesheet_{startDate.ToString("MMddyyyy")}_{endDate.ToString("MMddyyyy")}.iif");
         }
 
-        private string GetDataToExport(List<ItemViewModel> model, DateTime date, bool exportAll)
+        private string GetDataToExport(List<ItemViewModel> model, DateTime startDate, DateTime endDate, bool exportAll)
         {
             var _dataToExport = new StringBuilder();
-
-            //define date range.
-            var startOfMonth = new DateTime(date.Year, date.Month, 1);
-            var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
             //create iif header.
             _dataToExport.AppendLine($"!TIMERHDR\tVER\tREL\tCOMPANYNAME\tIMPORTEDBEFORE\tFROMTIMER\tCOMPANYCREATETIME");
@@ -67,7 +61,7 @@ namespace sbpc.Timesheet.Controllers
             foreach (var emp in employees)
             {
 
-                var data = GetData(emp, startOfMonth, endOfMonth, model.Where(x => x.Employee == emp), exportAll);
+                var data = GetData(emp, startDate, endDate, model.Where(x => x.Employee == emp), exportAll);
                 if (data == null || !data.Any())
                 {
                     continue;
@@ -80,9 +74,9 @@ namespace sbpc.Timesheet.Controllers
             return _dataToExport.ToString();
         }
 
-        private List<ExportViewModel> GetData(string employee, DateTime startOfMonth, DateTime endOfMonth, IEnumerable<ItemViewModel> items, bool exportAll)
+        private List<ExportViewModel> GetData(string employee, DateTime startDate, DateTime endDate, IEnumerable<ItemViewModel> items, bool exportAll)
         {
-            var data = _timesheetRepository.GetHours(startOfMonth, endOfMonth, employee);
+            var data = _timesheetRepository.GetHours(startDate, endDate, employee);
             if (!exportAll && data != null && data.Any())
             {
                 data = data.Where(x => !x.IsExported);

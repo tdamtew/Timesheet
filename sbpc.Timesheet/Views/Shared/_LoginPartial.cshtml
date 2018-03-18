@@ -14,7 +14,7 @@
     <div class="navbar-collapse collapse">
         @if (SignInManager.IsSignedIn(User))
         {
-            @await Component.InvokeAsync("NavWidget", UserManager.GetUserName(User))
+            @await Component.InvokeAsync("NavWidget", User)
             <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="form-inline">
                 <div style="padding-right: 30px;">
                     <ul class="nav navbar-nav navbar-right">

@@ -14,11 +14,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="OverTimeRate" class="control-label"></label>
-                <input asp-for="OverTimeRate" class="form-control" placeholder="1.00" />
+                <input asp-for="OverTimeRate" type="number" class="form-control" value="@(Model.OverTimeRate == 0 ? Constants.OverTimeRate : Model.OverTimeRate)" />
             </div>
             <div class="form-group">
                 <label asp-for="CostPerMile" class="control-label"></label>
-                <input asp-for="CostPerMile" type="number" class="form-control" value="@Constants.CostPerMile" />
+                <input asp-for="CostPerMile" type="number" class="form-control" value="@(Model.CostPerMile == 0 ? Constants.CostPerMile : Model.CostPerMile)" />
             </div>
             <div class="form-group">
                 <label class="form-check-label">

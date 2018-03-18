@@ -26,6 +26,9 @@ namespace sbpc.Timesheet.Models.AccountViewModels
         [Phone]
         public string PhoneNumber { get; set; }
 
+        [Required]
+        public string Role { get; set; }
+
         public bool IsEnabled { get; set; } 
 
         public bool TempPassword { get; set; }
