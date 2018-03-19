@@ -3,6 +3,9 @@
 @using sbpc.Timesheet.Data.Entity
 @using sbpc.Timesheet.Helpers
 @inject UserManager<ApplicationUser> UserManager
+@{ 
+    var exportAll = false;
+}
 
 <div class="row">
     <div class="col-md-8">
@@ -49,18 +52,18 @@
                             </thead>
                             @if (Model.Hours != null)
                             {
-                            <tbody>
-                                @foreach (var item in Model.Hours)
+                                <tbody>
+                                    @foreach (var item in Model.Hours)
                                     {
                                         <tr>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.EmployeeName)
                                             </td>
                                             <td>
-                                               @item.Date.ToString("MM/dd/yyyy")
+                                                @item.Date.ToString("MM/dd/yyyy")
                                             </td>
                                             <td>
-                                                @($"{item.Hours} ({item.OTHours})") 
+                                                @($"{item.Hours} ({item.OTHours})")
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.JobName)
@@ -79,7 +82,7 @@
 
                                         </tr>
                                     }
-                            </tbody>
+                                </tbody>
                             }
                         </table>
                     </div>
@@ -113,8 +116,8 @@
                             </thead>
                             @if (Model.Expenses != null)
                             {
-                            <tbody>
-                                @foreach (var item in Model.Expenses)
+                                <tbody>
+                                    @foreach (var item in Model.Expenses)
                                     {
                                         <tr>
                                             <td>
@@ -146,7 +149,7 @@
 
                                         </tr>
                                     }
-                            </tbody>
+                                </tbody>
                             }
                         </table>
                     </div>
@@ -182,7 +185,7 @@
                                                 @Html.DisplayFor(modelItem => item.EmployeeName)
                                             </td>
                                             <td>
-                                               @item.Date.ToString("MM/dd/yyyy")
+                                                @item.Date.ToString("MM/dd/yyyy")
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.mile)
@@ -248,6 +251,16 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-9 text-right">
+        <a href='@Url.Action("Index", "Export", new { startDate = ViewBag.startDate, endDate = ViewBag.endDate})' class="btn btn-primary export"><i class="fa fa-download"> Export</i></a> |
+        <label class="form-check-label small">
+            @Html.CheckBox("exportAll", exportAll, new { @class = "form-check-input" })
+            Include previously exported data
+        </label>
+    </div>
+</div>
+
 
 
 

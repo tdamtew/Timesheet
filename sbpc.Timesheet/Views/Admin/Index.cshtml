@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Employees timesheet";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var exportAll = false;
 }
 <div id="wait" class="modal" style="display:none; position:absolute; top:50%; left:50%;"><img src='~/images/pIkfp.gif' /></div>
 <div class="row">
@@ -56,13 +55,7 @@
             @await Component.InvokeAsync("TimesheetAdminWidget", new { startDate = ViewBag.startDate, endDate = ViewBag.endDate })
         </div>
     </div>
-    <div class="col-md-9 text-right">
-        <a href='@Url.Action("Index", "Export", new { startDate = ViewBag.startDate, endDate = ViewBag.endDate})' class="btn btn-primary export"><i class="fa fa-download"> Export</i></a> |
-        <label class="form-check-label small">
-            @Html.CheckBox("exportAll", exportAll, new { @class = "form-check-input" })
-            Include previously exported data
-        </label>
-    </div>
+
 </div>
 
 
@@ -101,6 +94,7 @@
                 });
                 $("#startDate").datepicker({
                     onSelect: function (selected) {
+                        $("a.export").attr('disabled', 'disabled');
                         var dt = new Date(selected);
                         dt.setDate(dt.getDate() + 1);
                         $("#endDate").datepicker("option", "minDate", dt);
@@ -108,6 +102,7 @@
                 });
                 $("#endDate").datepicker({
                     onSelect: function (selected) {
+                        $("a.export").attr('disabled', 'disabled');
                         var dt = new Date(selected);
                         dt.setDate(dt.getDate() - 1);
                         $("#startDate").datepicker("option", "maxDate", dt);

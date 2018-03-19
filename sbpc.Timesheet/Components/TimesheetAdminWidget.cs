@@ -25,6 +25,8 @@ namespace sbpc.Timesheet.Components
         public async Task<IViewComponentResult> InvokeAsync(DateTime startDate, DateTime endDate, string userId, string jobName)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
+            ViewBag.startDate = startDate;
+            ViewBag.endDate = endDate;
             var data = _timesheetRepository.GetTimesheet(startDate, endDate, userId, jobName);
             if (data == null) return View(new TimesheetViewModel { });
             return View(new TimesheetViewModel

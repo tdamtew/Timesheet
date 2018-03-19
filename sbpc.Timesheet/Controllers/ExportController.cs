@@ -32,6 +32,7 @@ namespace sbpc.Timesheet.Controllers
             if (data == null) return View();
             var model = data.GroupBy(x => new { x.EmployeeName, x.JobName }).Select(x => new ItemViewModel { Employee = x.Key.EmployeeName, Job = x.Key.JobName }).ToList();
             ViewBag.startDate = startDate;
+            ViewBag.endDate = endDate;
             ViewBag.exportAll = exportAll;
             return View(model);
         }
