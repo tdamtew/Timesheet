@@ -10,6 +10,7 @@ using sbpc.Timesheet.Data.Entity;
 using sbpc.Timesheet.Data.Repository;
 using AutoMapper;
 using sbpc.Timesheet.Helpers;
+using System;
 
 namespace sbpc.Timesheet
 {
@@ -28,6 +29,7 @@ namespace sbpc.Timesheet
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Timesheet")));
 
+            //configure password complexity
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     // Password settings
@@ -42,11 +44,21 @@ namespace sbpc.Timesheet
                 .AddSignInManager<ApplicationSignInManager>()
                 .AddDefaultTokenProviders();
 
+            //configure cookie expiration.
+            services.AddAuthentication().Services.ConfigureApplicationCookie(options =>
+            {
+                options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            });
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ITimesheetRepository, TimesheetRepository>();
             services.AddAutoMapper();
+
             services.AddMvc();
+
+            //configure role based authorization
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminRole", policy => policy.Requirements.Add(new AdminRequirement()));

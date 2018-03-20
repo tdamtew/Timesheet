@@ -11,7 +11,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
     </button>
-    <div class="navbar-collapse collapse">
+    <div class="navbar-collapse collapse" style="margin-top:5px;">
         @if (SignInManager.IsSignedIn(User))
         {
             @await Component.InvokeAsync("NavWidget", User)
