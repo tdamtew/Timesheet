@@ -3,8 +3,11 @@
 @using sbpc.Timesheet.Data.Entity
 @using sbpc.Timesheet.Helpers
 @inject UserManager<ApplicationUser> UserManager
-@{ 
+@{
     var exportAll = false;
+    var totalExpense = Model.Expenses == null ? 0 : Model.Expenses.Sum(x => x.Amount);
+    var totalReimbursable = Model.Expenses == null ? 0 : Model.Expenses.Where(a => a.Method == Constants.Method.Personal).Sum(x => x.Amount);
+    var totalMileageCost = Model.Mileages == null ? 0 : Model.Mileages.Sum(x => x.CalculatedCost);
 }
 
 <div class="row">
@@ -52,37 +55,37 @@
                             </thead>
                             @if (Model.Hours != null)
                             {
-                                <tbody>
-                                    @foreach (var item in Model.Hours)
+                            <tbody>
+                                @foreach (var item in Model.Hours)
                                     {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.EmployeeName)
-                                            </td>
-                                            <td>
-                                                @item.Date.ToString("MM/dd/yyyy")
-                                            </td>
-                                            <td>
-                                                @($"{item.Hours} ({item.OTHours})")
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.JobName)
-                                            </td>
-                                            <td>
-                                                @(item.IsTravel? "Yes" : "No")
-                                            </td>
-                                            <td>
-                                                @if (!string.IsNullOrEmpty(item.Note))
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                                        </td>
+                                        <td>
+                                            @item.Date.ToString("MM/dd/yyyy")
+                                        </td>
+                                        <td>
+                                            @($"{item.Hours} ({item.OTHours})")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.JobName)
+                                        </td>
+                                        <td>
+                                            @(item.IsTravel? "Yes" : "No")
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Note))
                                                 {
-                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
-                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
-                                                    </button>
+                                                <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                    @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                </button>
                                                 }
-                                            </td>
+                                        </td>
 
-                                        </tr>
+                                    </tr>
                                     }
-                                </tbody>
+                            </tbody>
                             }
                         </table>
                     </div>
@@ -116,40 +119,40 @@
                             </thead>
                             @if (Model.Expenses != null)
                             {
-                                <tbody>
-                                    @foreach (var item in Model.Expenses)
+                            <tbody>
+                                @foreach (var item in Model.Expenses)
                                     {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.EmployeeName)
-                                            </td>
-                                            <td>
-                                                @item.Date.ToString("MM/dd/yyyy")
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Category)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Method)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Amount)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.JobName)
-                                            </td>
-                                            <td>
-                                                @if (!string.IsNullOrEmpty(item.Note))
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                                        </td>
+                                        <td>
+                                            @item.Date.ToString("MM/dd/yyyy")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Category)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Method)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Amount)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.JobName)
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Note))
                                                 {
-                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
-                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
-                                                    </button>
+                                                <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                    @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                </button>
                                                 }
-                                            </td>
+                                        </td>
 
-                                        </tr>
+                                    </tr>
                                     }
-                                </tbody>
+                            </tbody>
                             }
                         </table>
                     </div>
@@ -177,34 +180,34 @@
                             </thead>
                             @if (Model.Mileages != null)
                             {
-                                <tbody>
-                                    @foreach (var item in Model.Mileages)
+                            <tbody>
+                                @foreach (var item in Model.Mileages)
                                     {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.EmployeeName)
-                                            </td>
-                                            <td>
-                                                @item.Date.ToString("MM/dd/yyyy")
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.mile)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.JobName)
-                                            </td>
-                                            <td>
-                                                @if (!string.IsNullOrEmpty(item.Note))
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                                        </td>
+                                        <td>
+                                            @item.Date.ToString("MM/dd/yyyy")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.mile)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.JobName)
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Note))
                                                 {
-                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
-                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
-                                                    </button>
+                                                <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                    @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                </button>
                                                 }
-                                            </td>
+                                        </td>
 
-                                        </tr>
+                                    </tr>
                                     }
-                                </tbody>
+                            </tbody>
                             }
                         </table>
                     </div>
@@ -239,7 +242,7 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Expenses (Reimbursable)
-                            <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00 ($0.00)" : $"{(Model.Expenses.Sum(x => x.Amount) + (Model.Mileages == null ? 0 : Model.Mileages.Sum(x => x.CalculatedCost))).ToString("C")} ({(Model.Expenses.Where(a => a.Method == Constants.Method.Personal).Sum(x => x.Amount) + (Model.Mileages == null ? 0 : Model.Mileages.Sum(x => x.CalculatedCost))).ToString("C")})")</span>
+                            <span class="badge badge-pill alert-success">@($"{(totalExpense + totalMileageCost).ToString("C")} ({(totalReimbursable + totalMileageCost).ToString("C")})")</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Mileage

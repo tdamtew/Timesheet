@@ -6,6 +6,8 @@
     var endOfWeek = startOfWeek.AddDays(7);
     var startOfMonth = new DateTime(Model.date.Year, Model.date.Month, 1);
     var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
+    var dailyExpense = Model.Expenses == null ? 0 : Model.Expenses.Where(x => x.Date.Date == Model.date.Date).Sum(x => x.Amount);
+    var dailyMileageCost = Model.Mileages == null ? 0 : Model.Mileages.Where(x => x.Date == Model.date.Date).Sum(x => x.CalculatedCost);
     var weeklyExpense = Model.Expenses == null ? 0 : Model.Expenses.Where(a => a.Date.Date >= startOfWeek.Date && a.Date.Date <= endOfWeek.Date).Sum(x => x.Amount);
     var weeklyMileageCost = Model.Mileages == null ? 0 : Model.Mileages.Where(a => a.Date.Date >= startOfWeek.Date && a.Date.Date <= endOfWeek.Date).Sum(x => x.CalculatedCost);
     var weeklyReimbursable = Model.Expenses == null ? 0 : Model.Expenses.Where(a => a.Method == Constants.Method.Personal && a.Date.Date >= startOfWeek.Date && a.Date.Date <= endOfWeek.Date).Sum(x => x.Amount);
@@ -46,7 +48,7 @@
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Expenses
-                                    <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00" : (Model.Expenses.Where(x => x.Date.Date == Model.date.Date).Sum(x => x.Amount) + (Model.Mileages == null ? 0 : Model.Mileages.Where(x => x.Date == Model.date.Date).Sum(x => x.CalculatedCost))).ToString("C"))</span>
+                                    <span class="badge badge-pill alert-success">@((dailyExpense + dailyMileageCost).ToString("C"))</span>
                                 </li>
                             </ul>
                         </div>
@@ -80,7 +82,7 @@
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Expenses (Reimbursable)
                                     <span class="badge badge-pill alert-success">
-                                        @(Model.Expenses == null ? "$0.00 ($0.00)" : $"{ (weeklyExpense + weeklyMileageCost).ToString("C")} ({ (weeklyReimbursable + weeklyMileageCost).ToString("C")})")
+                                        @($"{ (weeklyExpense + weeklyMileageCost).ToString("C")} ({ (weeklyReimbursable + weeklyMileageCost).ToString("C")})")
                                     </span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -118,7 +120,7 @@
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Expenses (Reimbursable)
-                                    <span class="badge badge-pill alert-success">@(Model.Expenses == null ? "$0.00 ($0.00)" : $"{(monthlyExpense + monthlyMileageCost).ToString("C")} ({(monthlyMileageCost + monthlyReimbursable).ToString("C")})")</span>
+                                    <span class="badge badge-pill alert-success">@($"{(monthlyExpense + monthlyMileageCost).ToString("C")} ({(monthlyMileageCost + monthlyReimbursable).ToString("C")})")</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Mileage

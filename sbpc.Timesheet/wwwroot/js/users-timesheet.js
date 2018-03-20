@@ -39,6 +39,7 @@
         event.preventDefault();
         $.get('/Timesheet/EditHour/?Id=' + $(this).data("hour"), function (data) {
             $("#HourWidget").html(data);
+            $("#summaryDate,#hourDate,#expenseDate,#mileageDate").datepicker();
             initValidator();
         });
     });
@@ -72,6 +73,7 @@
         event.preventDefault();
         $.get('/Timesheet/EditExpense/?Id=' + $(this).data("expense"), function (data) {
             $("#ExpenseWidget").html(data);
+            $("#summaryDate,#hourDate,#expenseDate,#mileageDate").datepicker();
             initValidator();
         });
     });
@@ -105,6 +107,7 @@
         event.preventDefault();
         $.get('/Timesheet/EditMileage/?Id=' + $(this).data("mileage"), function (data) {
             $("#MileageWidget").html(data);
+            $("#summaryDate,#hourDate,#expenseDate,#mileageDate").datepicker();
             initValidator();
         });
     });
