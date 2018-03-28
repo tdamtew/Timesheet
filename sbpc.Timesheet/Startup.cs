@@ -50,7 +50,6 @@ namespace sbpc.Timesheet
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             });
-
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ITimesheetRepository, TimesheetRepository>();

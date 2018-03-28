@@ -2,18 +2,18 @@
     $("body").on("click keypress", function () {
         ResetSession();
     });
-    var sessionTimeOut = 3000;
+    var sessionTimeOut = 1850;
     var ticker = 0;
     function ResetSession() {
         ticker = 0;
     }
     function StartSessionTimer() {
-        ticker++; 
+        ticker++;
         if (ticker > sessionTimeOut) {
             window.location.href = "/Timesheet/Index";
             return;
         }
-       setTimeout(StartSessionTimer(), 1000);
+        setTimeout(function () { StartSessionTimer(); }, 1000);
     }
     StartSessionTimer();
 });

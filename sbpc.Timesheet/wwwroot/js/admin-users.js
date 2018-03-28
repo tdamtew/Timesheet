@@ -60,9 +60,11 @@
 
     $(document).on("click", ".edit-user", function (event) {
         event.preventDefault();
-        $.get('/Admin/EditUser/?userId=' + $(this).data("user"), function (data) {
+        var user = $(this).data("user");
+        $.get('/Admin/EditUser/?userId=' + user, function (data) {
             $("#EmployeeWidget").html(data);
             InitValidator();
+            $("#Role").prop('disabled', $("span[title='Manage']").html().indexOf(user) > 0);
         });
     });
 
