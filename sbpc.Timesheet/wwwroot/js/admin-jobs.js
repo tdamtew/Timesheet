@@ -70,7 +70,7 @@
     function initValidator() {
         $.validator.addMethod("job",
             function (value, element) {
-                return this.optional(element) || /^[a-zA-Z(.:) ]+$/.test(value);
+                return this.optional(element) || /^[a-zA-Z0-9(.:) ]+$/.test(value);
             });
         $("form.job").validate({
             rules: {

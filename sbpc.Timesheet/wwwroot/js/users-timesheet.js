@@ -30,6 +30,7 @@
         $.post('/Timesheet/SaveHour?employee=' + $("#userId :selected").text(), $(this).serialize(), function (data) {
             $("#TimesheetWidget").html(data);
             $("#wait").modal("hide");
+            $("#IsTravel").removeAttr("checked");
             $("#submitHour").notify("Add/Update hour successful!", "success");
             init();
         });
@@ -44,16 +45,44 @@
         });
     });
 
+    $(document).on("click", "#confirmButton", function (event) {
+        event.preventDefault();
+        var action = $(this).data("action");
+        $("#wait").modal("show");
+        if (action == "hour") {
+            $.post('/Timesheet/DeleteHour', $(this).data("record"), function (data) {
+                $("form.hour")[0].reset();
+                $("#TimesheetWidget").html(data);
+                $("#wait").modal("hide");
+                $(".notify").notify("hour removed successfully!", "success");
+                init();
+            });
+        }
+        else if (action == "expense") {
+            $.post('/Timesheet/DeleteExpense', $(this).data("record"), function (data) {
+                $("#TimesheetWidget").html(data);
+                $('.nav-tabs a[href="#expense"]').tab('show');
+                $("#wait").modal("hide");
+                $(".notify").notify("expense removed successfully!", "success");
+                init();
+            });
+        }
+        else {
+            $.post('/Timesheet/DeleteMileage', $(this).data("record"), function (data) {
+                $("#TimesheetWidget").html(data);
+                $('.nav-tabs a[href="#mileage"]').tab('show');
+                $("#wait").modal("hide");
+                $(".notify").notify("mileage removed successfully!", "success");
+                init();
+            });
+        }
+        $("#confirmModal").modal("hide");
+    });
+
     $(document).on("click", ".delete-hour", function (event) {
         event.preventDefault();
-        $("#wait").modal("show");
-        $.post('/Timesheet/DeleteHour', { Id: $(this).data("hour"), date: $(this).data("date"), employee: $("#userId :selected").text() }, function (data) {
-            $("form.hour")[0].reset();
-            $("#TimesheetWidget").html(data);
-            $("#wait").modal("hide");
-            $(".notify").notify("hour removed successfully!", "success");
-            init();
-        });
+        $("#confirmButton").data("action", "hour").data("record", { Id: $(this).data("hour"), date: $(this).data("date"), employee: $("#userId :selected").text() });
+        $("#confirmModal").modal("show");
     });
 
     //handle crud operation on expense
@@ -80,14 +109,8 @@
 
     $(document).on("click", ".delete-expense", function (event) {
         event.preventDefault();
-        $("#wait").modal("show")
-        $.post('/Timesheet/DeleteExpense', { Id: $(this).data("expense"), date: $(this).data("date"), employee: $("#userId :selected").text() }, function (data) {
-            $("#TimesheetWidget").html(data);
-            $('.nav-tabs a[href="#expense"]').tab('show');
-            $("#wait").modal("hide");
-            $(".notify").notify("expense removed successfully!", "success");
-            init();
-        });
+        $("#confirmButton").data("action", "expense").data("record", { Id: $(this).data("expense"), date: $(this).data("date"), employee: $("#userId :selected").text() });
+        $("#confirmModal").modal("show");
     });
 
     //handle crud operations on mileage
@@ -114,22 +137,14 @@
 
     $(document).on("click", ".delete-mileage", function (event) {
         event.preventDefault();
-        $("#wait").modal("show")
-        $.post('/Timesheet/DeleteMileage', { Id: $(this).data("mileage"), date: $(this).data("date"), employee: $("#userId :selected").text() }, function (data) {
-            $("#TimesheetWidget").html(data);
-            $('.nav-tabs a[href="#mileage"]').tab('show');
-            $("#wait").modal("hide");
-            $(".notify").notify("mileage removed successfully!", "success");
-            init();
-        });
+        $("#confirmButton").data("action", "mileage").data("record", { Id: $(this).data("mileage"), date: $(this).data("date"), employee: $("#userId :selected").text() });
+        $("#confirmModal").modal("show");
     });
+
     function init() {
-        $("form.hour").find(":text,input[type='number'],input[type='checkbox']").each(function () {
+        $("form.hour").find(":text,input[type='number']").each(function () {
             if ($(this).attr("Id").indexOf("Date") < 0) {
                 $(this).val("");
-            }
-            if ($(this).is(":checked")) {
-                $(this).removeAttr("checked");
             }
         });
         $("form.hour").find("input[name='Id']").val(0);

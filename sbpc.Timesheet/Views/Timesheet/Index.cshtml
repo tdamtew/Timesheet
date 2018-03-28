@@ -3,6 +3,27 @@
     ViewData["Title"] = "Timesheet entry";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="modal fade" id="confirmModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="modal-title">Confirm</h2>
+            </div>
+            <div class="modal-body">
+                <div>
+                    Are you sure you want to delete the record?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirmButton">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="wait" class="modal" style="display:none; position:absolute; top:50%; left:50%;"><img src='~/images/pIkfp.gif' /></div>
 <div class="row">
     <div class="col-lg-8">

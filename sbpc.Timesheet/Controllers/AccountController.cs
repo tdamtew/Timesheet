@@ -9,6 +9,7 @@ using sbpc.Timesheet.Models.AccountViewModels;
 using sbpc.Timesheet.Services;
 using sbpc.Timesheet.Data.Entity;
 using sbpc.Timesheet.Helpers;
+using System.Linq;
 
 namespace sbpc.Timesheet.Controllers
 {
@@ -61,7 +62,6 @@ namespace sbpc.Timesheet.Controllers
                     _logger.LogInformation($"User {model.Email} logged in.");
                     //check if user has TempPassword set.
                     var user = await _userManager.FindByEmailAsync(model.Email);
-                    await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("Role", user.Role));
                     if (user.TempPassword)
                         return RedirectToAction("ChangePassword", "Manage", new { set = user.TempPassword });
                     return RedirectToLocal(returnUrl);

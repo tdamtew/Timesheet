@@ -84,12 +84,12 @@ namespace sbpc.Timesheet.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SaveHour(HourViewModel hour, string employee)
         {
+            hour.EmployeeName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee;
             if (ModelState.IsValid)
             {
-                hour.EmployeeName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee;
-                if(hour.IsTravel)
+                if (hour.IsTravel)
                 {
-                    if(!string.IsNullOrEmpty(hour.Note))
+                    if (!string.IsNullOrEmpty(hour.Note))
                     {
                         hour.Note = hour.Note.Contains("Travel") ? hour.Note : $"Travel {hour.Note}";
                     }
@@ -124,9 +124,9 @@ namespace sbpc.Timesheet.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SaveExpense(ExpenseViewModel expense, string employee)
         {
+            expense.EmployeeName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee;
             if (ModelState.IsValid)
             {
-                expense.EmployeeName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee;
                 var data = _mapper.Map<Expense>(expense);
                 _timesheetRepository.AddorUpdateExpense(data);
             }
@@ -151,9 +151,9 @@ namespace sbpc.Timesheet.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SaveMileage(MileageViewModel mileage, string employee)
         {
+            mileage.EmployeeName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee;
             if (ModelState.IsValid)
             {
-                mileage.EmployeeName = string.IsNullOrEmpty(employee) ? CurrentEmployee() : employee;
                 var data = _mapper.Map<Mileage>(mileage);
                 _timesheetRepository.AddorUpdateMileage(data);
             }

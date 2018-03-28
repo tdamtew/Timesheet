@@ -22,7 +22,7 @@
                             <th>
                                 Role
                             </th>
-                            <th>Status</th>
+                            <th>Active?</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -49,7 +49,7 @@
                                     </td>
                                     <td>
                                         <a href="#" data-user="@item.UserName" class="edit-user">Edit</a>
-                                        @if (string.Compare(item.Role, Constants.Role.MasterAdmin) != 0 && !item.IsEnabled)
+                                        @if (string.Compare(item.Role, Constants.Role.MasterAdmin) != 0 && !item.IsEnabled && string.Compare(item.UserName, User.Identity.Name) != 0)
                                         { <span>|</span>
                                         <a href="#" data-user="@item.UserName" class="delete-user">Delete</a>
                                         }

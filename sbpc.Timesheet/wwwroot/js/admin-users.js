@@ -100,7 +100,7 @@
     function InitValidator() {
         $.validator.addMethod("alphabet",
             function (value, element) {
-                return this.optional(element) || /^[a-zA-Z ]+$/.test(value);
+                return this.optional(element) || /^[a-zA-Z \'\-]+$/.test(value);
             });
         $.validator.addMethod("phone",
             function (value, element) {
