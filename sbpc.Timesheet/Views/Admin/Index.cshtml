@@ -109,7 +109,7 @@
                     }
                 });
             }
-            $(document).on("submit", "form.search", function () {
+            $(document).on("submit", "form.search", function (event) {
                 event.preventDefault();
                 val = Date.parse($("#startDate").val());
                 val1 = Date.parse($("#endDate").val());

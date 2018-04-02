@@ -2,7 +2,7 @@
     $("body").on("click keypress", function () {
         ResetSession();
     });
-    var sessionTimeOut = 1850;
+    var sessionTimeOut = 1803;
     var ticker = 0;
     function ResetSession() {
         ticker = 0;

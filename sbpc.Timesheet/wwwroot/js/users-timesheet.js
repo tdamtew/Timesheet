@@ -172,7 +172,7 @@
         //add custom validator
         jQuery.validator.addMethod("alphanumeric",
             function (value, element) {
-                return this.optional(element) || /^[a-zA-Z0-9 ]+$/.test(value);
+                return this.optional(element) || /^[a-zA-Z0-9 ,'-\\_;/()\$@]+$/.test(value);
             });
         //hour validation.
         $("form.hour").validate({
@@ -208,7 +208,7 @@
                     max: "maximum number of hours is 24."
                 },
                 Note: {
-                    alphanumeric: "Note can not contain special characters.",
+                    alphanumeric: "Note can not contain special characters, %,#,!,*,^,~.",
                     maxlength: "Note can not be more than 100 characters long."
                 }
             }
@@ -256,7 +256,7 @@
                     max: "maximum expense amount is $9,999,999.99."
                 },
                 Note: {
-                    alphanumeric: "Note can not contain special characters.",
+                    alphanumeric: "Note can not contain special characters, %,#,!,*,^,~.",
                     maxlength: "Note can not be more than 100 characters long."
                 }
             }
@@ -294,7 +294,7 @@
                     min: "minimum number of miles is 1."
                 },
                 Note: {
-                    alphanumeric: "Note can not contain special characters.",
+                    alphanumeric: "Note can not contain special characters, %,#,!,*,^,~.",
                     maxlength: "Note can not be more than 100 characters long."
                 }
             }

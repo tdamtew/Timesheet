@@ -23,7 +23,7 @@ namespace sbpc.Timesheet.Components
         {
             var jobs = _timesheetRepository.GetAllJobs().Where(x => x.Active);
             ViewBag.jobList = jobs == null ? null : jobs.ToList();
-            if (expenseId == 0) return View(new ExpenseViewModel { Date = DateTime.Now });
+            if (expenseId == 0) return View(new ExpenseViewModel { Date = date == null ? DateTime.Now : date });
             var data = _timesheetRepository.GetExpense(expenseId);
             return View(_mapper.Map<ExpenseViewModel>(data));
         }

@@ -70,7 +70,7 @@
     function initValidator() {
         $.validator.addMethod("job",
             function (value, element) {
-                return this.optional(element) || /^[a-zA-Z0-9(.:) ]+$/.test(value);
+                return this.optional(element) || /^[a-zA-Z0-9(.:)(\-) ]+$/.test(value);
             });
         $("form.job").validate({
             rules: {
@@ -93,8 +93,8 @@
             messages: {
                 Name: {
                     required: "please enter job name.",
-                    job: "job name can only contain letters and ':'.",
-                    maxlength: "job name can not be more than 30 characters."
+                    job: "job name can only contain letters, numbers and ':', '-'.",
+                    maxlength: "job name can not be more than 50 characters."
                 },
                 OverTimeRate: {
                     required: "please provide overtime rate.",
