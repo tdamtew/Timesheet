@@ -22,9 +22,13 @@ namespace sbpc.Timesheet.Controllers
             _timesheetRepository = timesheetRepository;
         }
 
-        public IActionResult Index(DateTime startDate, DateTime endDate, bool exportAll = false)
+        public IActionResult Index(DateTime startDate, DateTime endDate, string userId, string jobName, bool exportAll = false)
         {
             var data = _timesheetRepository.GetHours(startDate, endDate);
+            if (!string.IsNullOrEmpty(userId))
+                data = data.Where(x => x.EmployeeName == userId);
+            if (!string.IsNullOrEmpty(jobName))
+                data = data.Where(x => x.JobName == jobName);
             if (!exportAll && data != null && data.Any())
             {
                 data = data.Where(x => !x.IsExported);
@@ -33,20 +37,21 @@ namespace sbpc.Timesheet.Controllers
             var model = data.GroupBy(x => new { x.EmployeeName, x.JobName }).Select(x => new ItemViewModel { Employee = x.Key.EmployeeName, Job = x.Key.JobName }).ToList();
             ViewBag.startDate = startDate;
             ViewBag.endDate = endDate;
+            ViewBag.jobName = jobName;
             ViewBag.exportAll = exportAll;
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public FileResult Export(List<ItemViewModel> items, DateTime startDate, DateTime endDate, bool exportAll = false)
+        public FileResult Export(List<ItemViewModel> items, DateTime startDate, DateTime endDate, string jobName, bool exportAll = false)
         {
-            var data = GetDataToExport(items, startDate, endDate, exportAll);
+            var data = GetDataToExport(items, startDate, endDate, jobName, exportAll);
             var buffer = Encoding.ASCII.GetBytes(data);
             return File(buffer, "text/iif", $"timesheet_{startDate.ToString("MMddyyyy")}_{endDate.ToString("MMddyyyy")}.iif");
         }
 
-        private string GetDataToExport(List<ItemViewModel> model, DateTime startDate, DateTime endDate, bool exportAll)
+        private string GetDataToExport(List<ItemViewModel> model, DateTime startDate, DateTime endDate, string jobName, bool exportAll)
         {
             var _dataToExport = new StringBuilder();
 
@@ -62,7 +67,7 @@ namespace sbpc.Timesheet.Controllers
             foreach (var emp in employees)
             {
 
-                var data = GetData(emp, startDate, endDate, model.Where(x => x.Employee == emp), exportAll);
+                var data = GetData(emp, startDate, endDate, jobName, model.Where(x => x.Employee == emp), exportAll);
                 if (data == null || !data.Any())
                 {
                     continue;
@@ -75,9 +80,11 @@ namespace sbpc.Timesheet.Controllers
             return _dataToExport.ToString();
         }
 
-        private List<ExportViewModel> GetData(string employee, DateTime startDate, DateTime endDate, IEnumerable<ItemViewModel> items, bool exportAll)
+        private List<ExportViewModel> GetData(string employee, DateTime startDate, DateTime endDate, string jobName, IEnumerable<ItemViewModel> items, bool exportAll)
         {
             var data = _timesheetRepository.GetHours(startDate, endDate, employee);
+            if (!string.IsNullOrEmpty(jobName))
+                data = data.Where(x => x.JobName == jobName);
             if (!exportAll && data != null && data.Any())
             {
                 data = data.Where(x => !x.IsExported);

@@ -187,7 +187,7 @@
                 Hours: {
                     required: true,
                     number: true,
-                    min: 0.5,
+                    min: 0,
                     max: 24
                 },
                 Note: {
@@ -204,7 +204,7 @@
                 Hours: {
                     required: "please enter your hours.",
                     number: "hours can only be numbers.",
-                    min: "minimum number of hours is 0.5.",
+                    min: "minimum number of hours is 0.",
                     max: "maximum number of hours is 24."
                 },
                 Note: {

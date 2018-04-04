@@ -58,32 +58,32 @@
                             <tbody>
                                 @foreach (var item in Model.Hours)
                                     {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.EmployeeName)
-                                        </td>
-                                        <td>
-                                            @item.Date.ToString("MM/dd/yyyy")
-                                        </td>
-                                        <td>
-                                            @($"{item.Hours} ({item.OTHours})")
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.JobName)
-                                        </td>
-                                        <td>
-                                            @(item.IsTravel? "Yes" : "No")
-                                        </td>
-                                        <td>
-                                            @if (!string.IsNullOrEmpty(item.Note))
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                                    </td>
+                                    <td>
+                                        @item.Date.ToString("MM/dd/yyyy")
+                                    </td>
+                                    <td>
+                                        @($"{item.Hours} ({item.OTHours})")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.JobName)
+                                    </td>
+                                    <td>
+                                        @(item.IsTravel? "Yes" : "No")
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Note))
                                                 {
-                                                <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
-                                                    @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
-                                                </button>
+                                            <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                            </button>
                                                 }
-                                        </td>
+                                    </td>
 
-                                    </tr>
+                                </tr>
                                     }
                             </tbody>
                             }
@@ -122,35 +122,35 @@
                             <tbody>
                                 @foreach (var item in Model.Expenses)
                                     {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.EmployeeName)
-                                        </td>
-                                        <td>
-                                            @item.Date.ToString("MM/dd/yyyy")
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Category)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Method)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Amount)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.JobName)
-                                        </td>
-                                        <td>
-                                            @if (!string.IsNullOrEmpty(item.Note))
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                                    </td>
+                                    <td>
+                                        @item.Date.ToString("MM/dd/yyyy")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Category)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Method)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.JobName)
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Note))
                                                 {
-                                                <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
-                                                    @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
-                                                </button>
+                                            <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                            </button>
                                                 }
-                                        </td>
+                                    </td>
 
-                                    </tr>
+                                </tr>
                                     }
                             </tbody>
                             }
@@ -183,29 +183,29 @@
                             <tbody>
                                 @foreach (var item in Model.Mileages)
                                     {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.EmployeeName)
-                                        </td>
-                                        <td>
-                                            @item.Date.ToString("MM/dd/yyyy")
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.mile)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.JobName)
-                                        </td>
-                                        <td>
-                                            @if (!string.IsNullOrEmpty(item.Note))
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                                    </td>
+                                    <td>
+                                        @item.Date.ToString("MM/dd/yyyy")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.mile)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.JobName)
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Note))
                                                 {
-                                                <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
-                                                    @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
-                                                </button>
+                                            <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                            </button>
                                                 }
-                                        </td>
+                                    </td>
 
-                                    </tr>
+                                </tr>
                                     }
                             </tbody>
                             }
@@ -256,7 +256,7 @@
 </div>
 <div class="row">
     <div class="col-md-9 text-right">
-        <a href='@Url.Action("Index", "Export", new { startDate = ViewBag.startDate, endDate = ViewBag.endDate})' class="btn btn-primary export"><i class="fa fa-download"> Export</i></a> |
+        <a href='@Url.Action("Index", "Export", new { startDate = ViewBag.startDate, endDate = ViewBag.endDate, userId = ViewBag.userId, jobName = ViewBag.jobName })' class="btn btn-primary export"><i class="fa fa-download"> Export</i></a> |
         <label class="form-check-label small">
             @Html.CheckBox("exportAll", exportAll, new { @class = "form-check-input" })
             Include previously exported data

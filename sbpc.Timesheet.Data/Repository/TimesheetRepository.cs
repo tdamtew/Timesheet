@@ -38,7 +38,7 @@ namespace sbpc.Timesheet.Data.Repository
             {
                 foreach (var exp in expenses)
                 {
-                    exp.EmployeeName = $"{user.FirstName} {updateUser.MiddleName} {user.LastName}";
+                    exp.EmployeeName = $"{user.FirstName} {user.MiddleName} {user.LastName}";
                     _timesheetDbContext.Expenses.Update(exp);
                 }
             }
@@ -47,7 +47,7 @@ namespace sbpc.Timesheet.Data.Repository
             {
                 foreach (var hour in hours)
                 {
-                    hour.EmployeeName = $"{user.FirstName} {updateUser.MiddleName} {user.LastName}";
+                    hour.EmployeeName = $"{user.FirstName} {user.MiddleName} {user.LastName}";
                     _timesheetDbContext.Hours.Update(hour);
                 }
             }
@@ -56,7 +56,7 @@ namespace sbpc.Timesheet.Data.Repository
             {
                 foreach (var mile in mileages)
                 {
-                    mile.EmployeeName = $"{user.FirstName} {updateUser.MiddleName} {user.LastName}";
+                    mile.EmployeeName = $"{user.FirstName} {user.MiddleName} {user.LastName}";
                     _timesheetDbContext.Mileages.Update(mile);
                 }
             }
@@ -65,7 +65,8 @@ namespace sbpc.Timesheet.Data.Repository
             updateUser.LastName = user.LastName;
             updateUser.IsEnabled = user.IsEnabled;
             updateUser.PhoneNumber = user.PhoneNumber;
-            updateUser.Role = user.Role;
+            if (!string.IsNullOrEmpty(user.Role))
+                updateUser.Role = user.Role;
             _timesheetDbContext.Users.Update(updateUser);
             return _timesheetDbContext.SaveChanges();
         }

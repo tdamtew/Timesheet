@@ -27,6 +27,8 @@ namespace sbpc.Timesheet.Components
         {
             ViewBag.startDate = startDate;
             ViewBag.endDate = endDate;
+            ViewBag.userId = userId;
+            ViewBag.jobName = jobName;
             var data = _timesheetRepository.GetTimesheet(startDate, endDate, userId, jobName);
             if (data == null) return View(new TimesheetViewModel { });
             return View(new TimesheetViewModel
