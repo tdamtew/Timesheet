@@ -26,13 +26,6 @@ namespace sbpc.Timesheet.Helpers
             public static string RegularOT = "Hourly OT";
             public static string SBP = "SBP";
         }
-        public static class Item
-        {
-            public static string LeadEngineer = "Lead Engineer";
-            public static string Engineer = "Engineer";
-            public static string CATP = "CATP Tech";
-            public static string Driver = "Driver";
-        }
         public static class Category
         {
             public static string Miscellaneous = "Miscellaneous";
@@ -49,7 +42,6 @@ namespace sbpc.Timesheet.Helpers
         }
 
         public static IEnumerable<SelectListItem> Methods => typeof(Method).GetFields(BindingFlags.Public | BindingFlags.Static).Select(x => new SelectListItem { Text = x.GetValue(null).ToString(), Value = x.GetValue(null).ToString() });
-        public static IEnumerable<SelectListItem> Items => typeof(Item).GetFields(BindingFlags.Public | BindingFlags.Static).Select(x => new SelectListItem { Text = x.GetValue(null).ToString(), Value = x.GetValue(null).ToString() });
         public static IEnumerable<SelectListItem> Categories => typeof(Category).GetFields(BindingFlags.Public | BindingFlags.Static).Select(x => new SelectListItem { Text = x.GetValue(null).ToString(), Value = x.GetValue(null).ToString() });
         public static IEnumerable<SelectListItem> Roles => typeof(Role).GetFields(BindingFlags.Public | BindingFlags.Static).Select(x => new SelectListItem { Text = x.GetValue(null).ToString(), Value = x.GetValue(null).ToString() });
     }
