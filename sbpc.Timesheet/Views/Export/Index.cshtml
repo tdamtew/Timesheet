@@ -51,7 +51,7 @@
                                     @Html.TextBox($"Items[{i}].Job", Model[i].Job, new { @readonly = "readonly", @class = "form-control" })
                                 </td>
                                 <td>
-                                    @Html.DropDownList($"Items[{i}].Type", Constants.Items, null, new { @class = "form-control" })
+                                    @Html.DropDownList($"Items[{i}].Type",(IEnumerable<SelectListItem>)ViewBag.Items, null, new { @class = "form-control" })
                                 </td>
                             </tr>
                         }

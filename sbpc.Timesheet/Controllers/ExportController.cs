@@ -9,6 +9,7 @@ using System.Text;
 using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using static sbpc.Timesheet.Helpers.Constants;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace sbpc.Timesheet.Controllers
 {
@@ -16,10 +17,12 @@ namespace sbpc.Timesheet.Controllers
     public class ExportController : Controller
     {
         private readonly ITimesheetRepository _timesheetRepository;
+        private readonly IConfiguration _configuration;
 
         public ExportController(ITimesheetRepository timesheetRepository, IConfiguration configuration)
         {
             _timesheetRepository = timesheetRepository;
+            _configuration = configuration;
         }
 
         public IActionResult Index(DateTime startDate, DateTime endDate, string userId, string jobName, bool exportAll = false)
@@ -35,6 +38,7 @@ namespace sbpc.Timesheet.Controllers
             }
             if (data == null) return View();
             var model = data.GroupBy(x => new { x.EmployeeName, x.JobName }).Select(x => new ItemViewModel { Employee = x.Key.EmployeeName, Job = x.Key.JobName }).ToList();
+            ViewBag.Items = _configuration.GetSection("Data:Items").Get<IEnumerable<string>>().Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString() });
             ViewBag.startDate = startDate;
             ViewBag.endDate = endDate;
             ViewBag.jobName = jobName;
