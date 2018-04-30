@@ -188,7 +188,7 @@ namespace sbpc.Timesheet.Data.Repository
             }
             _timesheetDbContext.SaveChanges();
             var startOfWeek = hour.Date.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)hour.Date.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(7);
+            var endOfWeek = startOfWeek.AddDays(6);
             var weeklyHours = GetHours(startOfWeek, endOfWeek, hour.EmployeeName);
             CalculateOverTime(weeklyHours);
         }
@@ -218,7 +218,7 @@ namespace sbpc.Timesheet.Data.Repository
 
             //recalculate overtime for the week.
             var startOfWeek = hour.Date.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)hour.Date.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(7);
+            var endOfWeek = startOfWeek.AddDays(6);
             var weeklyHours = GetHours(startOfWeek, endOfWeek, hour.EmployeeName);
             CalculateOverTime(weeklyHours);
         }

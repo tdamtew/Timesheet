@@ -28,7 +28,7 @@ namespace sbpc.Timesheet.Components
             var startWeekOfStartOfMonth = startOfMonth.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)startOfMonth.DayOfWeek);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
             var startWeekOfEndOfMonth = endOfMonth.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)endOfMonth.DayOfWeek);
-            var endWeekOfEndOfMonth = startWeekOfEndOfMonth.AddDays(7);
+            var endWeekOfEndOfMonth = startWeekOfEndOfMonth.AddDays(6);
 
             var data = _timesheetRepository.GetTimesheet(startWeekOfStartOfMonth, endWeekOfEndOfMonth, userName);
             if (data == null) return View(new TimesheetViewModel { date = dateTime });
