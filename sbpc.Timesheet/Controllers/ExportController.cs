@@ -97,17 +97,20 @@ namespace sbpc.Timesheet.Controllers
             var exportView = new List<ExportViewModel>();
             foreach (var d in data.OrderBy(a => a.Date))
             {
-                exportView.Add(new ExportViewModel
+                if (d.Hours == 0 || (d.Hours - d.OTHours) > 0)
                 {
-                    Date = d.Date,
-                    Job = d.JobName,
-                    Employee = d.EmployeeName,
-                    Duration = d.Hours - d.OTHours,
-                    Item = items.Where(x => x.Job == d.JobName).Select(x => x.Type).FirstOrDefault(),
-                    PayableItem = d.Billable ? PItem.Hourly : PItem.SBP,
-                    BillingStatus = d.Billable ? 1 : 0,
-                    Note = d.Note
-                });
+                    exportView.Add(new ExportViewModel
+                    {
+                        Date = d.Date,
+                        Job = d.JobName,
+                        Employee = d.EmployeeName,
+                        Duration = d.Hours - d.OTHours,
+                        Item = items.Where(x => x.Job == d.JobName).Select(x => x.Type).FirstOrDefault(),
+                        PayableItem = d.Billable ? PItem.Hourly : PItem.SBP,
+                        BillingStatus = d.Billable ? 1 : 0,
+                        Note = d.Note
+                    });
+                }
                 if (d.OTHours > 0)
                 {
                     exportView.Add(new ExportViewModel
