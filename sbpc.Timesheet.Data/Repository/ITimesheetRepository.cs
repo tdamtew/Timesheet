@@ -18,6 +18,7 @@ namespace sbpc.Timesheet.Data
         int UpdateUser(ApplicationUser user);
         Hour GetHour(int Id);
         IEnumerable<Hour> GetHours(DateTime startDate, DateTime endDate, string employee = "");
+        IEnumerable<Expense> GetExpenses(DateTime startDate, DateTime endDate, string employee = "");
         int AddorUpdateJob(Job job);
         int RemoveJob(int Id);
         int AddorUpdateExpense(Expense expense);
@@ -29,5 +30,6 @@ namespace sbpc.Timesheet.Data
         int RemoveMileage(int Id);
         void RemoveHour(int Id);
         void UpdateExportFlag(Hour hour);
+        void UpdateExportFlag(Expense expense);
     }
 }

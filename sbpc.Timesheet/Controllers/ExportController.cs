@@ -6,10 +6,13 @@ using System.Linq;
 using sbpc.Timesheet.Models;
 using System.Collections.Generic;
 using System.Text;
-using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using static sbpc.Timesheet.Helpers.Constants;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IO;
+using NPOI.XSSF.UserModel;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 
 namespace sbpc.Timesheet.Controllers
 {
@@ -18,11 +21,13 @@ namespace sbpc.Timesheet.Controllers
     {
         private readonly ITimesheetRepository _timesheetRepository;
         private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public ExportController(ITimesheetRepository timesheetRepository, IConfiguration configuration)
+        public ExportController(ITimesheetRepository timesheetRepository, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             _timesheetRepository = timesheetRepository;
             _configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index(DateTime startDate, DateTime endDate, string userId, string jobName, bool exportAll = false)
@@ -44,6 +49,85 @@ namespace sbpc.Timesheet.Controllers
             ViewBag.jobName = jobName;
             ViewBag.exportAll = exportAll;
             return View(model);
+        }
+
+        public async Task<IActionResult> Expense(DateTime startDate, DateTime endDate, string userId, string jobName, bool exportAll = false)
+        {
+            var data = GetExpenseData(startDate, endDate, userId, jobName, exportAll);
+
+            string rootFolder = _hostingEnvironment.WebRootPath;
+            var fileName = $"sbptimesheet_expense_report.xlsx";
+            var file = new FileInfo(Path.Combine(rootFolder, fileName));
+            var memory = new MemoryStream();
+
+            using (var fs = new FileStream(Path.Combine(rootFolder, fileName), FileMode.Create, FileAccess.Write))
+            {
+                var workbook = new XSSFWorkbook();
+                var excelSheet = workbook.CreateSheet("Expense");
+                var headerfont = workbook.CreateFont();
+                headerfont.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.Bold;
+                headerfont.Underline = NPOI.SS.UserModel.FontUnderlineType.Single;
+                var cellStyle = workbook.CreateCellStyle();
+                cellStyle.SetFont(headerfont);
+
+                //create header rows.
+                var row = excelSheet.CreateRow(0);
+                var cell = row.CreateCell(0);
+                cell.CellStyle = cellStyle;
+                cell.SetCellValue("Date");
+
+                cell = row.CreateCell(1);
+                cell.CellStyle = cellStyle;
+                cell.SetCellValue("Job");
+
+                cell = row.CreateCell(2);
+                cell.CellStyle = cellStyle;
+                cell.SetCellValue("Employee");
+
+                cell = row.CreateCell(3);
+                cell.CellStyle = cellStyle;
+                cell.SetCellValue("Category");
+
+                cell = row.CreateCell(4);
+                cell.CellStyle = cellStyle;
+                cell.SetCellValue("Amount");
+
+                cell = row.CreateCell(5);
+                cell.CellStyle = cellStyle;
+                cell.SetCellValue("Method");
+
+                cell = row.CreateCell(6);
+                cell.CellStyle = cellStyle;
+                cell.SetCellValue("Note");
+
+                //insert data.
+                var rowCounter = 1;
+                if (data != null && data.Any())
+                {
+                    foreach (var d in data)
+                    {
+                        row = excelSheet.CreateRow(rowCounter);
+                        row.CreateCell(0).SetCellValue(d.Date.ToString("MM/dd/yyyy"));
+                        row.CreateCell(1).SetCellValue(d.Job);
+                        row.CreateCell(2).SetCellValue(d.Employee);
+                        row.CreateCell(3).SetCellValue(d.Category);
+                        row.CreateCell(4).SetCellValue(d.Amount.ToString("C"));
+                        row.CreateCell(5).SetCellValue(d.Method);
+                        row.CreateCell(6).SetCellValue(d.Note);
+                        rowCounter++;
+                    }
+                }
+                rowCounter = 0;
+                workbook.Write(fs);
+                fs.Close();
+            }
+            using (var stream = new FileStream(Path.Combine(rootFolder, fileName), FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+
         }
 
         [HttpPost]
@@ -125,6 +209,34 @@ namespace sbpc.Timesheet.Controllers
                         Note = d.Note
                     });
                 }
+                _timesheetRepository.UpdateExportFlag(d);
+                continue;
+            }
+            return exportView;
+        }
+        private List<ExportExpenseViewModel> GetExpenseData(DateTime startDate, DateTime endDate, string employee, string jobName, bool exportAll)
+        {
+            var data = _timesheetRepository.GetExpenses(startDate, endDate, employee);
+            if (!string.IsNullOrEmpty(jobName))
+                data = data.Where(x => x.JobName == jobName);
+            if (!exportAll && data != null && data.Any())
+            {
+                data = data.Where(x => !x.IsExported);
+            }
+            if (data == null || !data.Any()) return null;
+            var exportView = new List<ExportExpenseViewModel>();
+            foreach (var d in data.OrderBy(a => a.Date))
+            {
+                exportView.Add(new ExportExpenseViewModel
+                {
+                    Date = d.Date,
+                    Job = d.JobName,
+                    Employee = d.EmployeeName,
+                    Category = d.Category,
+                    Amount = d.Amount,
+                    Method = d.Method,
+                    Note = d.Note
+                });
                 _timesheetRepository.UpdateExportFlag(d);
                 continue;
             }

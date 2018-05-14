@@ -255,11 +255,14 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-9 text-right">
-        <a href='@Url.Action("Index", "Export", new { startDate = ViewBag.startDate, endDate = ViewBag.endDate, userId = ViewBag.userId, jobName = ViewBag.jobName })' class="btn btn-primary export"><i class="fa fa-download"> Export</i></a> |
+    <div class="col-md-8 text-right">
+        <a href='@Url.Action("Index", "Export", new { startDate = ViewBag.startDate, endDate = ViewBag.endDate, userId = ViewBag.userId, jobName = ViewBag.jobName })' class="btn btn-primary export"><i class="fa fa-download"> Export Hours</i></a> |
+        <a href='@Url.Action("Expense", "Export", new { startDate = ViewBag.startDate, endDate = ViewBag.endDate, userId = ViewBag.userId, jobName = ViewBag.jobName })' class="btn btn-primary export"><i class="fa fa-download"> Export Expenses</i></a>
+    </div>
+    <div class="col-md-8 text-right">
         <label class="form-check-label small">
             @Html.CheckBox("exportAll", exportAll, new { @class = "form-check-input" })
-            Include previously exported data
+            Include previously exported data.
         </label>
     </div>
 </div>

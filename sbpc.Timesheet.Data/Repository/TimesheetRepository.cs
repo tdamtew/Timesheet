@@ -259,6 +259,22 @@ namespace sbpc.Timesheet.Data.Repository
             return _timesheetDbContext.SaveChanges();
         }
 
+        public IEnumerable<Expense> GetExpenses(DateTime startDate, DateTime endDate, string employee = "")
+        {
+            var expenses = _timesheetDbContext.Expenses.Where(a => a.Date >= startDate.Date && a.Date <= endDate.Date);
+            if (!string.IsNullOrEmpty(employee))
+            {
+                expenses = expenses.Where(x => x.EmployeeName == employee);
+            }
+            return expenses;
+        }
+
+        public void UpdateExportFlag(Expense expense)
+        {
+            expense.IsExported = true;
+            _timesheetDbContext.Expenses.Update(expense);
+            _timesheetDbContext.SaveChanges();
+        }
         #endregion
 
         #region mileage
@@ -296,7 +312,6 @@ namespace sbpc.Timesheet.Data.Repository
                 _timesheetDbContext.Mileages.Remove(mileage);
             return _timesheetDbContext.SaveChanges();
         }
-
         #endregion
     }
 }
