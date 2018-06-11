@@ -50,9 +50,18 @@
                                 <td>
                                     @Html.TextBox($"Items[{i}].Job", Model[i].Job, new { @readonly = "readonly", @class = "form-control" })
                                 </td>
-                                <td>
-                                    @Html.DropDownList($"Items[{i}].Type",(IEnumerable<SelectListItem>)ViewBag.Items, null, new { @class = "form-control" })
-                                </td>
+                                @if (String.CompareOrdinal(Model[i].Job, Constants.PItem.PaidTimeOff) == 0)
+                                {
+                                    <td>
+                                        @Html.DropDownList($"Items[{i}].Type", (IEnumerable<SelectListItem>)ViewBag.Items, Constants.PItem.PaidTimeOff, new { @disabled = "disabled", @class = "form-control" })
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Html.DropDownList($"Items[{i}].Type", (IEnumerable<SelectListItem>)ViewBag.Items, null, new { @class = "form-control" })
+                                    </td>
+                                }
                             </tr>
                         }
                         <tr>

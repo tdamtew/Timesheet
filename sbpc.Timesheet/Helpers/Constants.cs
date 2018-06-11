@@ -22,6 +22,7 @@ namespace sbpc.Timesheet.Helpers
         }
         public static class PItem
         {
+            public static string PaidTimeOff = "Paid Time Off";
             public static string Hourly = "Hourly";
             public static string RegularOT = "Hourly OT";
             public static string SBP = "SBP";

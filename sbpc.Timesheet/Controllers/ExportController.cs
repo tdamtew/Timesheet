@@ -190,7 +190,7 @@ namespace sbpc.Timesheet.Controllers
                         Employee = d.EmployeeName,
                         Duration = d.Hours - d.OTHours,
                         Item = items.Where(x => x.Job == d.JobName).Select(x => x.Type).FirstOrDefault(),
-                        PayableItem = d.Billable ? PItem.Hourly : PItem.SBP,
+                        PayableItem = d.JobName == PItem.PaidTimeOff ? PItem.PaidTimeOff : d.Billable ? PItem.Hourly : PItem.SBP,
                         BillingStatus = d.Billable ? 1 : 0,
                         Note = d.Note
                     });

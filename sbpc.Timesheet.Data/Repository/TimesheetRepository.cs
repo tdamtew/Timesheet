@@ -195,7 +195,7 @@ namespace sbpc.Timesheet.Data.Repository
 
         private void CalculateOverTime(IEnumerable<Hour> weeklyHours)
         {
-            var workHours = weeklyHours.Where(x => !x.IsTravel);
+            var workHours = weeklyHours.Where(x => !x.IsTravel && x.JobName != "Paid Time Off");
             var numHours = workHours.Sum(x => x.Hours);
             foreach (var h in workHours.OrderByDescending(hour => hour.Date))
             {

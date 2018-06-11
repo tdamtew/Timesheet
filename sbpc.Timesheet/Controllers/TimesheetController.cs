@@ -99,7 +99,7 @@ namespace sbpc.Timesheet.Controllers
                     }
                 }
                 var data = _mapper.Map<Hour>(hour);
-                data.Billable = !hour.JobName.Contains(PItem.SBP);
+                data.Billable = !hour.JobName.Contains(PItem.SBP) && !hour.JobName.Contains(PItem.PaidTimeOff);
                 _timesheetRepository.AddorUpdateHour(data);
             }
             return ViewComponent("TimesheetWidget", new { userName = hour.EmployeeName, dateTime = hour.Date });
