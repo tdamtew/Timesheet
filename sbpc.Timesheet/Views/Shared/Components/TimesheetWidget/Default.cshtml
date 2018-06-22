@@ -146,6 +146,10 @@
                     <li class="nav-item">
                         <a class="nav-link" id="mileage-tab" data-toggle="tab" href="#mileage" role="tab" aria-controls="contact" aria-selected="false">Mileage</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="policy-tab" data-toggle="tab" href="#policy" role="tab" aria-controls="contact" aria-selected="false">Policy</a>
+                    </li>
+
                 </ul>
             </div>
             <div class="panel-body">
@@ -353,6 +357,80 @@
                             <div class="col-md-3" id="MileageWidget">
                                 @await Component.InvokeAsync("MileageWidget", new { date = Model.date, mileageId = 0 })
                             </div>
+                        </div>
+                    </div>
+
+                    <!--policy tab-->
+                    <div class="tab-pane fade" id="policy" role="tabpanel" aria-labelledby="policy-tab">
+                        <div class="row" style="padding: 10px;">
+                            <h3>SBP Timesheet Policy</h3>
+                            <br />
+                            <p>Please follow the below instructions carefully and thoroughly.</p>
+                            <br />
+                            <ol>
+                                <li>
+                                    You are responsible for entering any expense associated with you, no matter who paid for it.  If somebody else paid for it, you need to make sure it's in the timesheet under your name.
+                                </li>
+                                <li>
+                                    At the end of a project, whoever is the lead should go through the time and expenses for each person that worked on the project and make sure everything is in there.
+                                </li>
+                            </ol>
+                            <p>Examples are as follows:</p>
+                            <ol>
+                                <li>
+                                    Flights
+                                    <ol>
+                                        <li>
+                                            Put each person’s flight cost on their own timesheet, not all on one persons.  If the bill lumps it all together, split the cost among everyone.
+                                        </li>
+                                        <li>
+                                            Enter the expense on the day you fly
+                                        </li>
+                                        <li>
+                                            In the notes, put the from, to, and airports ex. BWI to MDW
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    Hotels
+                                    <ol>
+                                        <li>
+                                            Put each person’s hotel on their own timesheet, not all on one person’s
+                                        </li>
+                                        <li>
+                                            Enter the expense on the day you checkout
+                                        </li>
+                                        <li>
+                                            In the notes, put check in date to check out date ex. 10/29-11/3
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    Group Meals
+                                    <ol>
+                                        <li>
+                                            Whoever has the receipt puts in on their timesheet
+                                        </li>
+                                        <li>
+                                            In the notes, put how many people you paid for ex. 3 people
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    Rental Car
+                                    <ol>
+                                        <li>
+                                            Whoever returns the car and gets the receipt should enter the expense
+                                        </li>
+                                        <li>
+                                            Enter the expense on the day your return the car
+                                        </li>
+                                        <li>
+                                            In the notes, put the dates of the rental ex. 10/29-11/3
+                                        </li>
+                                    </ol>
+                                </li>
+                            </ol>
                         </div>
                     </div>
                 </div>
