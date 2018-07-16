@@ -94,7 +94,7 @@
     });
 
     function init() {
-        $("#usersTable").DataTable();
+        $("#usersTable").DataTable({"pageLength" : 50});
         $("form.employee").find(":text, input[type='tel'], input[type='email']").val("");
         InitValidator();
     }

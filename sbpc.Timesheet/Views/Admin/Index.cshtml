@@ -31,7 +31,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label"><strong>End Date:</strong></label>
-                        <input class="form-control" type="text" id="endDate" name="endDate" value="@ViewBag.endDate.ToString("MM/dd/yyyy")" readonly="readonly"/>
+                        <input class="form-control" type="text" id="endDate" name="endDate" value="@ViewBag.endDate.ToString("MM/dd/yyyy")" readonly="readonly" />
                     </div>
                     <!--choose job-->
                     <div class="form-group">
@@ -65,9 +65,10 @@
             init();
             function init()
             {
-                $("#hourtable").DataTable();
-                $("#expensetable").DataTable();
-                $("#mileagetable").DataTable();
+                $("#hourtable").DataTable({"pageLength" : 50});
+                $("#expensetable").DataTable({ "pageLength": 50 });
+                $("#mileagetable").DataTable({ "pageLength": 50 });
+                $("#summarytable").DataTable({ "pageLength": 50 });
                 $('[data-toggle="tooltip"]').tooltip();
                 $("form.search").validate({
                     rules: {

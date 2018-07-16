@@ -57,13 +57,13 @@ namespace sbpc.Timesheet.Controllers
 
             if (jobsData != null)
             {
-                var jobList = jobsData.Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToList();
+                var jobList = jobsData.Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).OrderBy(y => y.Value).ToList();
                 jobList.Add(new SelectListItem { Value = "", Text = "All", Selected = true });
                 ViewBag.jobList = jobList;
             }
             if (employeesData != null)
             {
-                var employeeList = employeesData.Select(x => new SelectListItem { Value = $"{x.FirstName} {x.MiddleName} {x.LastName}", Text = $"{x.FirstName} {x.MiddleName} {x.LastName}" }).ToList();
+                var employeeList = employeesData.Select(x => new SelectListItem { Value = $"{x.FirstName} {x.MiddleName} {x.LastName}", Text = $"{x.FirstName} {x.MiddleName} {x.LastName}" }).OrderBy(y => y.Value).ToList();
                 employeeList.Add(new SelectListItem { Value = "", Text = "All", Selected = true });
                 ViewBag.employeeList = employeeList;
             }
@@ -76,7 +76,7 @@ namespace sbpc.Timesheet.Controllers
         [HttpPost]
         public IActionResult Search(string userId, string jobName, DateTime startDate, DateTime endDate)
         {
-            return ViewComponent("TimesheetAdminWidget", new { startDate = startDate, endDate = endDate, userId = userId, jobName = jobName });
+            return ViewComponent("TimesheetAdminWidget", new { startDate, endDate, userId, jobName });
         }
 
         #region manage employees
@@ -167,7 +167,7 @@ namespace sbpc.Timesheet.Controllers
         [Route("Admin/EditUser")]
         public IActionResult EditUser(string userId)
         {
-            return ViewComponent("EmployeeWidget", new { userId = userId });
+            return ViewComponent("EmployeeWidget", new { userId });
         }
 
         [HttpPost]
@@ -223,7 +223,7 @@ namespace sbpc.Timesheet.Controllers
         [Route("Admin/EditJob")]
         public IActionResult EditJob(int jobId)
         {
-            return ViewComponent("JobWidget", new { jobId = jobId });
+            return ViewComponent("JobWidget", new { jobId });
         }
 
         [HttpPost]

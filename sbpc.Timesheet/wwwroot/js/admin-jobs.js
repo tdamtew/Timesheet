@@ -1,7 +1,9 @@
 ﻿$(function () {
     init();
     function init() {
-        $("#jobsTable").DataTable();
+        $("#jobsTable").DataTable({
+            "pageLength": 50
+        });
         $("form.job").find(":text").val("");
         initValidator();
     }

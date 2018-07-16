@@ -142,19 +142,19 @@
     });
 
     function init() {
-        $("form.hour").find(":text,input[type='number']").each(function () {
+        $("form.hour").find(":text,input[type='number'],select").each(function () {
             if ($(this).attr("Id").indexOf("Date") < 0) {
                 $(this).val("");
             }
         });
         $("form.hour").find("input[name='Id']").val(0);
-        $("form.expense").find(":text,input[type='number']").each(function () {
+        $("form.expense").find(":text,input[type='number'],select").each(function () {
             if ($(this).attr("Id").indexOf("Date") < 0) {
                 $(this).val("");
             }
         });
         $("form.expense").find("input[name='Id']").val(0);
-        $("form.mileage").find(":text,input[type='number']").each(function () {
+        $("form.mileage").find(":text,input[type='number'],select").each(function () {
             if ($(this).attr("Id").indexOf("Date") < 0) {
                 $(this).val("");
             }

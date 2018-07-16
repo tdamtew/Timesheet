@@ -1,6 +1,11 @@
 ﻿@model sbpc.Timesheet.Models.ExpenseViewModel
 @using sbpc.Timesheet.Helpers
+@{
 
+    var list = new SelectList(ViewBag.jobList, "Name", "Name");
+    var jobList = (from l in list select new SelectListItem { Text = l.Text, Value = l.Value }).ToList();
+    jobList.Add(new SelectListItem { Value = "", Text = "-- Select --", Selected = string.IsNullOrEmpty(Model.JobName) });
+}
 <div class="panel panel-primary">
     <div class="panel-heading"><i class="fa fa-edit"></i> <strong>Add/Edit Expense</strong></div>
     <div class="panel-body">
@@ -8,15 +13,15 @@
             @Html.HiddenFor(Model => Model.Id)
             <div class="form-group">
                 <label class="control-label"><strong>Choose a Date:</strong></label>
-                <input type ="text" class="form-control" id="expenseDate" name="Date" asp-for="Date" value="@Model.Date.ToString("MM/dd/yyyy")" readonly="readonly" />
+                <input type="text" class="form-control" id="expenseDate" name="Date" asp-for="Date" value="@Model.Date.ToString("MM/dd/yyyy")" readonly="readonly" />
             </div>
             <div class="form-group">
                 <span class="control-label">Select Job:</span>
-                @Html.DropDownListFor(model => model.JobName, new SelectList(ViewBag.jobList, "Name", "Name"), null, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.JobName, jobList.OrderBy(x => x.Text), null, new { @class = "form-control" })
             </div>
             <div class="form-group">
                 <span class="control-label">Expense:</span>
-                <input asp-for="Amount" class="form-control" placeholder="1234.56"/>
+                <input asp-for="Amount" class="form-control" placeholder="1234.56" />
             </div>
             <div class="form-group">
                 <span class="control-label">Category:</span>
@@ -28,7 +33,7 @@
             </div>
             <div class="form-group">
                 <span class="control-label">Note:</span>
-                <input asp-for="Note" class="form-control" placeholder="Note"  />
+                <input asp-for="Note" class="form-control" placeholder="Note" />
             </div>
             <div class="form-group">
                 <button type="submit" id="submitExpense" class="btn btn-primary" style="width:100px;"><i class="fa fa-save"></i> Save</button>

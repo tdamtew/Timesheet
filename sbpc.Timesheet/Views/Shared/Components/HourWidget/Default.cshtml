@@ -1,5 +1,10 @@
 ﻿@model sbpc.Timesheet.Models.HourViewModel
+@{
 
+    var list = new SelectList(ViewBag.jobList, "Name", "Name");
+    var jobList = (from l in list select new SelectListItem { Text = l.Text, Value = l.Value }).ToList();
+    jobList.Add(new SelectListItem { Value = "", Text = "-- Select --", Selected = string.IsNullOrEmpty(Model.JobName) });
+}
 <div class="panel panel-primary">
     <div class="panel-heading"><i class="fa fa-edit"></i> <strong>Add/Edit Hour</strong></div>
     <div class="panel-body">
@@ -7,11 +12,11 @@
             @Html.HiddenFor(Model => Model.Id)
             <div class="form-group">
                 <label class="control-label"><strong>Choose a Date:</strong></label>
-                <input type="text" class="form-control" id="hourDate" name="Date" asp-for="Date" value="@Model.Date.ToString("MM/dd/yyyy")" readonly="readonly"/>
+                <input type="text" class="form-control" id="hourDate" name="Date" asp-for="Date" value="@Model.Date.ToString("MM/dd/yyyy")" readonly="readonly" />
             </div>
             <div class="form-group">
                 <span class="control-label">Select Job:</span>
-                @Html.DropDownListFor(model => model.JobName, new SelectList(ViewBag.jobList, "Name", "Name"), new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.JobName, jobList.OrderBy(x => x.Text), new { @class = "form-control" })
             </div>
             <div class="form-group">
                 <span class="control-label">Hours:</span>

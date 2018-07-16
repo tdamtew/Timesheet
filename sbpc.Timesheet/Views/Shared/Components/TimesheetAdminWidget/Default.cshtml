@@ -8,6 +8,39 @@
     var totalExpense = Model.Expenses == null ? 0 : Model.Expenses.Sum(x => x.Amount);
     var totalReimbursable = Model.Expenses == null ? 0 : Model.Expenses.Where(a => a.Method == Constants.Method.Personal).Sum(x => x.Amount);
     var totalMileageCost = Model.Mileages == null ? 0 : Model.Mileages.Sum(x => x.CalculatedCost);
+
+    //summary view
+    var employeeSummary = new List<string>();
+    if (Model.Hours != null)
+    {
+        foreach (var item in Model.Hours)
+        {
+            if (!employeeSummary.Contains(item.EmployeeName))
+            {
+                employeeSummary.Add(item.EmployeeName);
+            }
+        }
+    }
+    if (Model.Expenses != null)
+    {
+        foreach (var item in Model.Expenses)
+        {
+            if (!employeeSummary.Contains(item.EmployeeName))
+            {
+                employeeSummary.Add(item.EmployeeName);
+            }
+        }
+    }
+    if (Model.Mileages != null)
+    {
+        foreach (var item in Model.Mileages)
+        {
+            if (!employeeSummary.Contains(item.EmployeeName))
+            {
+                employeeSummary.Add(item.EmployeeName);
+            }
+        }
+    }
 }
 
 <div class="row">
@@ -16,7 +49,10 @@
             <div class="panel-heading">
                 <ul class="nav nav-tabs">
                     <li class="nav-item active">
-                        <a class="nav-link" id="hour-tab" data-toggle="tab" href="#hour" role="tab" aria-controls="home" aria-selected="true">Hours</a>
+                        <a class="nav-link" id="summary-tab" data-toggle="tab" href="#summary" role="tab" aria-controls="summary" aria-selected="true">Summary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="hour-tab" data-toggle="tab" href="#hour" role="tab" aria-controls="home" aria-selected="false">Hours</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="expense-tab" data-toggle="tab" href="#expense" role="tab" aria-controls="profile" aria-selected="false">Expense</a>
@@ -28,8 +64,53 @@
             </div>
             <div class="panel-body">
                 <div class="tab-content">
+                    <!--Summary tab content-->
+                    <div class="tab-pane active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
+                        <table class="table table-hover" id="summarytable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Employee
+                                    </th>
+                                    <th>
+                                        Total hours (Overtime)
+                                    </th>
+                                    <th>
+                                        Total expenses (Reimbursable)
+                                    </th>
+                                    <th>
+                                        Total mileage
+                                    </th>
+                                </tr>
+                            </thead>
+                            @if (employeeSummary != null)
+                            {
+                                <tbody>
+                                    @foreach (var item in employeeSummary.OrderBy(x => x))
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item)
+                                            </td>
+                                            <td>
+                                                @(Model.Hours == null ? "0 (0)" : $"{Model.Hours.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(y => y.Hours)} " +
+                                                        $"({Model.Hours.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(y => y.OTHours)})")
+                                            </td>
+                                            <td>
+                                                @(Model.Expenses == null ? "$0 ($0)" : $"{Model.Expenses.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(y => y.Amount).ToString("C")} " +
+                                                        $"({Model.Expenses.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0 && x.Method == Constants.Method.Personal).Sum(y => y.Amount).ToString("C")})")
+                                            </td>
+                                            <td>
+                                                @(Model.Mileages == null ? "0" : $"{Model.Mileages.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(y => y.mile)}")
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            }
+                        </table>
+                    </div>
                     <!--Hours tab content-->
-                    <div class="tab-pane active" id="hour" role="tabpanel" aria-labelledby="hour-tab">
+                    <div class="tab-pane fade" id="hour" role="tabpanel" aria-labelledby="hour-tab">
                         <table class="table table-hover" id="hourtable">
                             <thead>
                                 <tr>
@@ -55,37 +136,37 @@
                             </thead>
                             @if (Model.Hours != null)
                             {
-                            <tbody>
-                                @foreach (var item in Model.Hours)
+                                <tbody>
+                                    @foreach (var item in Model.Hours)
                                     {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.EmployeeName)
-                                    </td>
-                                    <td>
-                                        @item.Date.ToString("MM/dd/yyyy")
-                                    </td>
-                                    <td>
-                                        @($"{item.Hours} ({item.OTHours})")
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.JobName)
-                                    </td>
-                                    <td>
-                                        @(item.IsTravel? "Yes" : "No")
-                                    </td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.Note))
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                                            </td>
+                                            <td>
+                                                @item.Date.ToString("MM/dd/yyyy")
+                                            </td>
+                                            <td>
+                                                @($"{item.Hours} ({item.OTHours})")
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.JobName)
+                                            </td>
+                                            <td>
+                                                @(item.IsTravel ? "Yes" : "No")
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Note))
                                                 {
-                                            <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
-                                                @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
-                                            </button>
+                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                    </button>
                                                 }
-                                    </td>
+                                            </td>
 
-                                </tr>
+                                        </tr>
                                     }
-                            </tbody>
+                                </tbody>
                             }
                         </table>
                     </div>
@@ -119,40 +200,40 @@
                             </thead>
                             @if (Model.Expenses != null)
                             {
-                            <tbody>
-                                @foreach (var item in Model.Expenses)
+                                <tbody>
+                                    @foreach (var item in Model.Expenses)
                                     {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.EmployeeName)
-                                    </td>
-                                    <td>
-                                        @item.Date.ToString("MM/dd/yyyy")
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Category)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Method)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Amount)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.JobName)
-                                    </td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.Note))
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                                            </td>
+                                            <td>
+                                                @item.Date.ToString("MM/dd/yyyy")
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Category)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Method)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Amount)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.JobName)
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Note))
                                                 {
-                                            <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
-                                                @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
-                                            </button>
+                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                    </button>
                                                 }
-                                    </td>
+                                            </td>
 
-                                </tr>
+                                        </tr>
                                     }
-                            </tbody>
+                                </tbody>
                             }
                         </table>
                     </div>
@@ -180,34 +261,34 @@
                             </thead>
                             @if (Model.Mileages != null)
                             {
-                            <tbody>
-                                @foreach (var item in Model.Mileages)
+                                <tbody>
+                                    @foreach (var item in Model.Mileages)
                                     {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.EmployeeName)
-                                    </td>
-                                    <td>
-                                        @item.Date.ToString("MM/dd/yyyy")
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.mile)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.JobName)
-                                    </td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.Note))
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                                            </td>
+                                            <td>
+                                                @item.Date.ToString("MM/dd/yyyy")
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.mile)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.JobName)
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Note))
                                                 {
-                                            <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
-                                                @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
-                                            </button>
+                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="left" title="@item.Note">
+                                                        @(item.Note.Length > 10 ? item.Note.Substring(0, 7) + "..." : item.Note)
+                                                    </button>
                                                 }
-                                    </td>
+                                            </td>
 
-                                </tr>
+                                        </tr>
                                     }
-                            </tbody>
+                                </tbody>
                             }
                         </table>
                     </div>
