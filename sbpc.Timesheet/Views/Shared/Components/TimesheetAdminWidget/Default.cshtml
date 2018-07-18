@@ -94,11 +94,13 @@
                                             </td>
                                             <td>
                                                 @(Model.Hours == null ? "0 (0)" : $"{Model.Hours.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(y => y.Hours)} " +
-                                                        $"({Model.Hours.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(y => y.OTHours)})")
+                                                                        $"({Model.Hours.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(y => y.OTHours)})")
                                             </td>
                                             <td>
-                                                @(Model.Expenses == null ? "$0 ($0)" : $"{Model.Expenses.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(y => y.Amount).ToString("C")} " +
-                                                        $"({Model.Expenses.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0 && x.Method == Constants.Method.Personal).Sum(y => y.Amount).ToString("C")})")
+                                                @(
+                                                    Model.Expenses == null && Model.Mileages == null ? "$0 ($0)" : Model.Expenses == null ? $"{Model.Mileages.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(x => x.CalculatedCost).ToString("C")} ({Model.Mileages.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(x => x.CalculatedCost).ToString("C")})" :
+                                                    $"{(Model.Expenses.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(y => y.Amount) + (Model.Mileages == null ? 0 : Model.Mileages.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(x => x.CalculatedCost))).ToString("C") } " +
+                                                    $"({(Model.Expenses.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0 && x.Method == Constants.Method.Personal).Sum(y => y.Amount) + (Model.Mileages == null ? 0 : Model.Mileages.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(x => x.CalculatedCost))).ToString("C")})")
                                             </td>
                                             <td>
                                                 @(Model.Mileages == null ? "0" : $"{Model.Mileages.Where(x => string.CompareOrdinal(x.EmployeeName, item) == 0).Sum(y => y.mile)}")
