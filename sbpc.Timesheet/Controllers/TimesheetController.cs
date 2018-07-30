@@ -60,7 +60,7 @@ namespace sbpc.Timesheet.Controllers
                     Value = $"{x.FirstName} {x.MiddleName} {x.LastName}",
                     Text = $"{x.FirstName} {x.MiddleName} {x.LastName}",
                     Selected = string.Compare($"{x.FirstName} {x.MiddleName} {x.LastName}", currentUser, true) == 0
-                }).ToList();
+                }).OrderBy(y => y.Value).ToList();
 
                 ViewBag.employeeList = employeeList;
             }
@@ -77,7 +77,7 @@ namespace sbpc.Timesheet.Controllers
         #region manage your hours
         public IActionResult EditHour(int Id, DateTime date)
         {
-            return ViewComponent("HourWidget", new { hourId = Id, date = date });
+            return ViewComponent("HourWidget", new { hourId = Id, date });
         }
 
         [HttpPost]
@@ -117,7 +117,7 @@ namespace sbpc.Timesheet.Controllers
         #region manage your expense
         public IActionResult EditExpense(int Id, DateTime date)
         {
-            return ViewComponent("ExpenseWidget", new { expenseId = Id, date = date });
+            return ViewComponent("ExpenseWidget", new { expenseId = Id, date });
         }
 
         [HttpPost]
@@ -144,7 +144,7 @@ namespace sbpc.Timesheet.Controllers
         #region manage your mileage
         public IActionResult EditMileage(int Id, DateTime date)
         {
-            return ViewComponent("MileageWidget", new { mileageId = Id, date = date });
+            return ViewComponent("MileageWidget", new { mileageId = Id, date });
         }
 
         [HttpPost]

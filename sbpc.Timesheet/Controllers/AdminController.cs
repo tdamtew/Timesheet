@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace sbpc.Timesheet.Controllers
 {
@@ -57,14 +58,14 @@ namespace sbpc.Timesheet.Controllers
 
             if (jobsData != null)
             {
-                var jobList = jobsData.Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).OrderBy(y => y.Value).ToList();
-                jobList.Add(new SelectListItem { Value = "", Text = "All", Selected = true });
+                var jobList = new List<SelectListItem> { new SelectListItem { Value = "", Text = "All", Selected = true } };
+                jobList.AddRange(jobsData.Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).OrderBy(y => y.Value).ToList());
                 ViewBag.jobList = jobList;
             }
             if (employeesData != null)
             {
-                var employeeList = employeesData.Select(x => new SelectListItem { Value = $"{x.FirstName} {x.MiddleName} {x.LastName}", Text = $"{x.FirstName} {x.MiddleName} {x.LastName}" }).OrderBy(y => y.Value).ToList();
-                employeeList.Add(new SelectListItem { Value = "", Text = "All", Selected = true });
+                var employeeList = new List<SelectListItem> { new SelectListItem { Value = "", Text = "All", Selected = true } };
+                employeeList.AddRange(employeesData.Select(x => new SelectListItem { Value = $"{x.FirstName} {x.MiddleName} {x.LastName}", Text = $"{x.FirstName} {x.MiddleName} {x.LastName}" }).OrderBy(y => y.Value).ToList());
                 ViewBag.employeeList = employeeList;
             }
             var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
