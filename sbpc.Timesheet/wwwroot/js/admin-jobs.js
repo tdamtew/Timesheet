@@ -5,6 +5,7 @@
             "pageLength": 50
         });
         $("form.job").find(":text").val("");
+        $("form.job").find("input[name='Id']").val(0);
         initValidator();
     }
     //Save jobs.
@@ -16,13 +17,13 @@
             type: "post",
             url: '/Admin/SaveJob',
             data: $(this).serialize(),
-            success: function (data, textStatus, xhr) {
+            success: function (data) {
                 $("#JobsWidget").html(data);
                 $("#wait").modal("hide");
                 $("#submitJob").notify("Job has been added/updated successfully!", "success");
                 init();
             },
-            error: function (jqXhr, textStatus, errorThrown) {
+            error: function () {
                 $("#wait").modal("hide");
                 $("#submitJob").notify("Error occurred while adding/updating job. Please try again later.", "error");
             }
@@ -56,13 +57,13 @@
                 jobId: $("#jobId").data("job"),
                 __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
             },
-            success: function (data, textStatus, xhr) {
+            success: function (data) {
                 $("#JobsWidget").html(data);
                 $("#wait").modal("hide");
                 $(".notify").notify("Job has been removed successfully!", "success");
                 init();
             },
-            error: function (jqXhr, textStatus, errorThrown) {
+            error: function (jqXhr) {
                 $("#wait").modal("hide");
                 $(".notify").notify(jqXhr.status == 400 ? "System was unable to find the job to remove." : "Error occurred while removing the job. Please try again later.", "error");
             }
